@@ -24,13 +24,11 @@ var io = require("socket.io").listen(server);
 users = [];
 connections = [];
 
-app.use(express.static(path.join(__dirname, '../client')));
-app.get('/', function(req, res) {
-    res.sendFile((__dirname + '../client/index.html'));
-});
-
 server.listen(process.env.PORT || 3000);
 console.log("Server running...");
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 io.sockets.on('connection', function(socket){
     connections.push(socket);
@@ -42,6 +40,11 @@ io.sockets.on('connection', function(socket){
         updateUsernames();
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s socket connected', connections.length)
+    });
+    // Send message
+    socket.on('send message', function(data){
+        console.log(socket.username + ': ' + data);
+        io.sockets.emit('new message', {msg: data, user: socket.username});
     });
 
     // New User
@@ -55,4 +58,5 @@ io.sockets.on('connection', function(socket){
     function updateUsernames() {
         io.sockets.emit('get users', users);
     }
+
 });
