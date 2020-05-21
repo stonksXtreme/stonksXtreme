@@ -12,6 +12,11 @@ $(function () {
     var $userForm = $('#userForm');
     var $users = $('#users');
     var $username = $('#username');
+    var $btnLobby1 = $('#btnLobby1');
+    var $btnLobby2 = $('#btnLobby2');
+    var $btnLobby3 = $('#btnLobby3');
+    var $btnLobby4 = $('#btnLobby4');
+
 
     $messageForm.submit(function (e) {
         e.preventDefault();
@@ -30,8 +35,7 @@ $(function () {
         } else {
             socket.emit('new user', $username.val(), function (data) {
                 if (data) {
-                    window.parent.document.getElementById('contentController').src = 'game/game.html';
-                    console.log('join game');
+                    window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
                 }
             });
         }
@@ -48,4 +52,24 @@ $(function () {
         }
         $users.html(html);
     })
+
+    $btnLobby1.click(function (e) {
+        e.preventDefault();
+        console.log('join lobby 1');
+    });
+
+    $btnLobby2.click(function (e) {
+        e.preventDefault();
+        console.log('join lobby 2');
+    });
+
+    $btnLobby3.click(function (e) {
+        e.preventDefault();
+        console.log('join lobby 3');
+    });
+
+    $btnLobby4.click(function (e) {
+        e.preventDefault();
+        console.log('join lobby 4');
+    });
 });

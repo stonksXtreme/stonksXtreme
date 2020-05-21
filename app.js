@@ -34,7 +34,6 @@ io.sockets.on('connection', function(socket){
         callback(true);
         socket.username = data;
         users.push(socket.username);
-        localStorage.setItem('users', users);
         console.log('user list: ' + users);
         updateUsernames();
     });
