@@ -17,10 +17,13 @@ $(function () {
     var $btnLobby3 = $('#btnLobby3');
     var $btnLobby4 = $('#btnLobby4');
 
+    socket.on('requestLobbyForUser', function(data) {
+        socket.emit("getUsers", localStorage.getItem('lobby'));
+    });
 
     $messageForm.submit(function (e) {
         e.preventDefault();
-        socket.emit('send message', $message.val());
+        socket.emit('send message', {msg: $message.val(), user:localStorage.getItem('username')});
         $message.val('');
     });
 
@@ -33,11 +36,9 @@ $(function () {
         if ($username.val().replace(/\s/g, "") === "") {
             alert("No username!")
         } else {
-            socket.emit('new user', $username.val(), function (data) {
-                if (data) {
-                    window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
-                }
-            });
+            localStorage.setItem('username', $username.val());
+            window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
+            
         }
 
         $username.val('');
@@ -56,20 +57,32 @@ $(function () {
     $btnLobby1.click(function (e) {
         e.preventDefault();
         console.log('join lobby 1');
+        localStorage.setItem('lobby', '1');
+        window.parent.document.getElementById('contentController').src = 'game/game.html';
+
+        socket.emit('new user', localStorage.getItem('username'), localStorage.getItem('lobby'), function (data) {
+            
+        });
     });
 
     $btnLobby2.click(function (e) {
         e.preventDefault();
         console.log('join lobby 2');
+        localStorage.setItem('lobby', '2');
+        window.parent.document.getElementById('contentController').src = 'game/game.html';
     });
 
     $btnLobby3.click(function (e) {
         e.preventDefault();
         console.log('join lobby 3');
+        localStorage.setItem('lobby', '3');
+        window.parent.document.getElementById('contentController').src = 'game/game.html';
     });
 
     $btnLobby4.click(function (e) {
         e.preventDefault();
         console.log('join lobby 4');
+        localStorage.setItem('lobby', '4');
+        window.parent.document.getElementById('contentController').src = 'game/game.html';
     });
 });

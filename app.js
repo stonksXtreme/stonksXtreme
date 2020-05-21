@@ -3,7 +3,8 @@ const app = express();
 const path = require('path');
 var server = require("http").Server(app);
 var io = require("socket.io").listen(server);
-users = [];
+usersLobby1 = [];
+usersLobby2 = [];
 connections = [];
 
 server.listen(process.env.PORT || 3000);
@@ -16,30 +17,57 @@ io.sockets.on('connection', function(socket){
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
 
+    socket.emit("requestLobbyForUser", function(lobby) {
+        
+    });
+
+    socket.on("getUsers", function(data) {
+        senduser(data);
+    });
+
     // Disconnect
     socket.on('disconnect', function(data){
-        users.splice(users.indexOf(socket.username), 1);
-        updateUsernames();
-        connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s socket connected', connections.length)
+
     });
+    
     // Send message
     socket.on('send message', function(data){
-        console.log(socket.username + ': ' + data);
-        io.sockets.emit('new message', {msg: data, user: socket.username});
+        console.log(data.user + ': ' + data);
+        io.sockets.emit('new message', {msg: data.msg, user: data.user});
     });
 
     // New User
-    socket.on('new user', function(data, callback){
+    socket.on('new user', function(username, lobby, callback){
         callback(true);
-        socket.username = data;
-        users.push(socket.username);
-        console.log('user list: ' + users);
-        updateUsernames();
+        switch(lobby) {
+            case 1:
+                usersLobby1.push(username);
+                break;
+
+            case 2:
+                usersLobby2.push(username);
+                break;
+            
+            default:
+                console.log('Invalid lobby');
+                break;
+        }
+        senduser(lobby);
     });
 
-    function updateUsernames() {
-        io.sockets.emit('get users', users);
-    }
+    function senduser(lobby) {
+        switch(lobby) {
+            case 1:
+                io.sockets.emit('get users', usersLobby1);
+                break;
 
+            case 2:
+                io.sockets.emit('get users', usersLobby2);
+                break;
+            
+            default:
+                console.log('Invalid lobby');
+                break;
+        }
+    }
 });
