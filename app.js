@@ -1,21 +1,3 @@
-/*
-const express = require('express');
-const path = require('path');
-const app = express();
-
-var server = require("http").Server(app);
-var io = require("socket.io").listen(server);
-users = [];
-connections = [];
-
-app.use(express.static(path.join(__dirname, '../client')));
-
-app.get('/', (req, res) => { res.sendFile('../client/index.html') });
-
-const port = 3000;
-app.listen(port, () => console.log(`stonksXtreme listening at http://localhost:${port}`));
-*/
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -52,6 +34,8 @@ io.sockets.on('connection', function(socket){
         callback(true);
         socket.username = data;
         users.push(socket.username);
+        localStorage.setItem('users', users);
+        console.log('user list: ' + users);
         updateUsernames();
     });
 
