@@ -71,6 +71,10 @@ a {
   flex-grow: 1;
 }
 
+#readyBTN {
+  float: right;
+}
+
 .form-group{
   margin: 1em;
 }
@@ -107,4 +111,10 @@ a {
   margin: 1em;
 }
 
+.ready {
+  background-color: darkgreen;
+}
 
+.notready {
+  background-color: red;
+}
