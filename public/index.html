@@ -50,7 +50,7 @@
       <form id="userForm">
         <div class="form-group">
           <label>Username</label>
-          <input class="form-control" id="username" placeholder="StonksBoi"/>
+          <input class="form-control" id="username" value="asdf" placeholder="StonksBoi"/>
           <br />
           <label>Lobby ID</label>
           <input class="form-control" id="" placeholder="1234"/>
@@ -67,7 +67,7 @@
     <div class="card field">
       <div class="card-body">
         <h5 class="card-title">Field</h5>
-        <img src="/img/SpielfeldPlaceholder.jpg"/>
+        <canvas id="canvas"></canvas>
       </div>
     </div>
     <div class="card users">
@@ -108,12 +108,8 @@
 </div>
 
 <script>
-
-  function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
-  }
-
   $(function() {
+    // onload
     var socket = io.connect();
     var $messageForm = $('#messageForm');
     var $message = $('#message');
@@ -124,6 +120,45 @@
     var $users = $('#users');
     var $username = $('#username');
 
+    var canvas = document.getElementById("canvas"),
+            context = canvas.getContext("2d");
+
+    canvas.width = 300;
+    canvas.height = 150;
+
+
+    var background = new Image();
+    background.src = "img/SpielfeldPlaceholder.jpg";
+
+    background.onload = function() {
+      context.drawImage(background, 0, 0, 3084, 1546,
+                                0, 0, canvas.width, canvas.height);
+    }
+
+    socket.on('update', users => {
+
+      console.log(users);
+      var html = '';
+      // draw on canvas
+      context.drawImage(background, 0, 0, 3084, 1546,
+              0, 0, canvas.width, canvas.height);
+      for(let i in users){
+        context.beginPath();
+        context.arc(users[i].x, users[i].y, 5, 0, 2 * Math.PI, true);
+        context.fillStyle = users[i].color;
+        context.fill();
+
+        // update list
+
+        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+
+
+
+      }
+
+      $users.html(html);
+    })
+
     $messageForm.submit(function(e) {
       e.preventDefault();
       socket.emit('send message', $message.val());
@@ -132,6 +167,7 @@
 
     socket.on('new message', function(data) {
       $chat.append(data.user+': '+data.msg+'\n');
+      $cha.scrollTop($chat.scrollHeight);
     });
 
     $userForm.submit(function(e) {
@@ -139,7 +175,7 @@
       if($username.val().replace(/\s/g,"") === ""){
         alert("No username!")
       }else{
-        socket.emit('new user', $username.val(), function(data) {
+        socket.emit('new user', $username.val(), data => {
           if(data) {
             $('.loginContent').hide();
             $('.mainContent').show();
@@ -149,15 +185,6 @@
 
       $username.val('');
     });
-
-    socket.on('get users', function(data) {
-      var html = '';
-      for(i = 0; i<data.length;i++){
-        html += '<li class="list-group-item">'+data[i]+'</li>';
-
-      }
-      $users.html(html);
-    })
   });
 </script>
 
