@@ -1,0 +1,166 @@
+<html>
+<head>
+  <title>stonksXtreme</title>
+
+  <!-- Style -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
+
+  <!-- JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  <script type='text/javascript' src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.ico">
+</head>
+<body>
+<div class="box">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
+  <a class="navbar-brand" href="#">stonksXtreme</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="loginContent">
+  <div id="userFormArea" class="card">
+    <div class="card-body">
+      <h5 class="card-title">Join game...</h5>
+      <form id="userForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input class="form-control" id="username" placeholder="StonksBoi"/>
+          <br />
+          <label>Lobby ID</label>
+          <input class="form-control" id="" placeholder="1234"/>
+          <br />
+          <input type="submit" class="btn btn-primary" value="Join" />
+          <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="mainContent">
+  <div id="messageArea">
+    <div class="card field">
+      <div class="card-body">
+        <h5 class="card-title">Field</h5>
+        <img src="/img/SpielfeldPlaceholder.jpg"/>
+      </div>
+    </div>
+    <div class="card users">
+      <div class="card-body">
+        <h5 class="card-title">Online users</h5>
+        <ul class="list-group" id="users"></ul>
+      </div>
+    </div>
+    <div class="card messages">
+      <div class="card-body">
+        <h5 class="card-title">Chat</h5>
+
+
+        <form id="messageForm">
+          <div class="form-group">
+            <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
+            <input type="text" class="form-control" id="message"/>
+            <br />
+            <input type="submit" class="btn btn-primary" value="Send Message" />
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="card pickup">
+      <div class="card-body">
+        <h5 class="card-title">Pickup cards</h5>
+        <img src="/img/KartenEinfach.png"/>
+        <img src="/img/KartenSchwer.png"/>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
+  <a class="navbar-brand" href="#">Copyright 2020</a>
+</nav>
+</div>
+
+<script>
+
+  function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+  }
+
+  $(function() {
+    var socket = io.connect();
+    var $messageForm = $('#messageForm');
+    var $message = $('#message');
+    var $chat = $('#chat');
+    var $messageArea = $('#messageArea');
+    var $userFormArea = $('#userFormArea');
+    var $userForm = $('#userForm');
+    var $users = $('#users');
+    var $username = $('#username');
+
+    $messageForm.submit(function(e) {
+      e.preventDefault();
+      socket.emit('send message', $message.val());
+      $message.val('');
+    });
+
+    socket.on('new message', function(data) {
+      $chat.append(data.user+': '+data.msg+'\n');
+    });
+
+    $userForm.submit(function(e) {
+      e.preventDefault();
+      if($username.val().replace(/\s/g,"") === ""){
+        alert("No username!")
+      }else{
+        socket.emit('new user', $username.val(), function(data) {
+          if(data) {
+            $('.loginContent').hide();
+            $('.mainContent').show();
+          }
+        });
+      }
+
+      $username.val('');
+    });
+
+    socket.on('get users', function(data) {
+      var html = '';
+      for(i = 0; i<data.length;i++){
+        html += '<li class="list-group-item">'+data[i]+'</li>';
+
+      }
+      $users.html(html);
+    })
+  });
+</script>
+
+
+</body>
+</html>

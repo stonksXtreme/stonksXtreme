@@ -3,7 +3,7 @@ the repository for the stonksXtreme online game
 ## Local Setup
 1. Install Node.js: https://nodejs.org/en/
 1. `git clone` the repository to your computer.
-2. `cd server` and `npm install`
+2. `npm install`
 3. `npm start` and go to http://localhost:3000/
 
 ### Links
