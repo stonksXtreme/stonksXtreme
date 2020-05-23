@@ -6,11 +6,6 @@ a {
   color: #00B7FF;
 }
 
-
-.mainContent {
-  /* display: none; */
-}
-
 .box {
   display: flex;
   flex-flow: column;
@@ -27,9 +22,9 @@ a {
   */
 }
 
-.box .loginContent {
+.loginContent {
   flex: 1 1 auto;
-  background-image: url("/img/SpielfeldPlaceholder.jpg");
+  background-image: url("../img/SpielfeldPlaceholder.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

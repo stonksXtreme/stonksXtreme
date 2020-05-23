@@ -14,55 +14,26 @@ console.log("Server running...");
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.sockets.on('connection', function(socket){
+
+    /* ======================================================= */
+    /* ======================= General ======================= */
+    /* ======================================================= */
+
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
-
-    socket.emit("requestLobbyForUser", function(lobby) {
-        
-    });
 
     socket.on("getUsers", function(data) {
         senduser(data);
     });
 
-    // Disconnect
-    socket.on('disconnect', function(data){
-
-    });
-    
-    // Send message
-    socket.on('send message', function(data){
-        console.log(data.user + ': ' + data);
-        io.sockets.emit('new message', {msg: data.msg, user: data.user});
-    });
-
-    // New User
-    socket.on('new user', function(username, lobby, callback){
-        callback(true);
-        switch(lobby) {
-            case 1:
-                usersLobby1.push(username);
-                break;
-
-            case 2:
-                usersLobby2.push(username);
-                break;
-            
-            default:
-                console.log('Invalid lobby');
-                break;
-        }
-        senduser(lobby);
-    });
-
     function senduser(lobby) {
         switch(lobby) {
-            case 1:
-                io.sockets.emit('get users', usersLobby1);
+            case 1, '1':
+                io.sockets.emit('receive_users', {lobbyId: 1, data: usersLobby1});
                 break;
 
-            case 2:
-                io.sockets.emit('get users', usersLobby2);
+            case 2, '2':
+                io.sockets.emit('receive_users', {lobbyId: 2, data: usersLobby2});
                 break;
             
             default:
@@ -70,4 +41,51 @@ io.sockets.on('connection', function(socket){
                 break;
         }
     }
+
+    // Send message
+    socket.on('send_message', function(data){
+        console.log(data.user + ' (Lobby '+ data.lobbyId + '): ' + data.msg);
+        io.sockets.emit('new_message', {lobbyId:data.lobbyId, msg: data.msg, user: data.user});
+    });
+
+    /* ======================================================= */
+    /* ======================= LOGIN ========================= */
+    /* ======================================================= */
+
+    
+
+    /* ======================================================= */
+    /* ==================== CHOOSE LOBBY ===================== */
+    /* ======================================================= */
+
+    // New User
+    socket.on('new_user', function(data) {
+        console.log('new user');
+        console.log(data);
+        switch(data.lobby) {
+            case 1, '1':
+                usersLobby1.push(data.username);
+                break;
+
+            case 2, '2':
+                usersLobby2.push(data.username);
+                break;
+            
+            default:
+                console.log('Invalid lobby');
+                break;
+        }
+        senduser(data.lobby);
+    });
+
+    /* ======================================================= */
+    /* ======================== LOBBY ======================== */
+    /* ======================================================= */
+
+    /* ======================================================= */
+    /* ======================= INGAME ======================== */
+    /* ======================================================= */
+    
+    
+
 });
