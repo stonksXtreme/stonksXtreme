@@ -10,7 +10,6 @@ function getPing() {
     img.onload = function() {
         var endTime = new Date();
         var ping = endTime. getTime() - startTime.getTime();
-        socket.emit('ping', ping);
     }
 }
 
