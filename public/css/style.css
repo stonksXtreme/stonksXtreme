@@ -42,14 +42,6 @@ a {
   padding: 10px;
 }
 
-#userFormArea{
-  width: 20em;
-  position: absolute;
-  top: 47%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 #messageArea {
   display: flex;
   flex-flow: row;
