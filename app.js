@@ -35,7 +35,7 @@ io.sockets.on('connection', function(socket){
             case 2, '2':
                 io.sockets.emit('receive_users', {lobbyId: 2, data: usersLobby2});
                 break;
-            
+
             default:
                 console.log('Invalid lobby');
                 break;
@@ -52,7 +52,7 @@ io.sockets.on('connection', function(socket){
     /* ======================= LOGIN ========================= */
     /* ======================================================= */
 
-    
+
 
     /* ======================================================= */
     /* ==================== CHOOSE LOBBY ===================== */
@@ -64,13 +64,29 @@ io.sockets.on('connection', function(socket){
         console.log(data);
         switch(data.lobby) {
             case 1, '1':
+                if (usersLobby1.length >= 6) {
+                    socket.emit('full_lobby', {lobbyId: 1});
+                    break;
+                }
                 usersLobby1.push(data.username);
+                if (usersLobby1.length >= 3) {
+                    console.log("Start game lobby 1");
+                    socket.emit('autostart');
+                }
                 break;
 
             case 2, '2':
+                if (usersLobby2.length >= 6) {
+                    socket.emit('full_lobby', {lobbyId: 2});
+                    break;
+                }
                 usersLobby2.push(data.username);
+                if (usersLobby2.length >= 3) {
+                    console.log("Start game lobby 2");
+                    socket.emit('autostart');
+                }
                 break;
-            
+
             default:
                 console.log('Invalid lobby');
                 break;
@@ -85,7 +101,7 @@ io.sockets.on('connection', function(socket){
     /* ======================================================= */
     /* ======================= INGAME ======================== */
     /* ======================================================= */
-    
-    
+
+
 
 });

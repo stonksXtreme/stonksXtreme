@@ -29,7 +29,7 @@ $(function () {
 
     if(sessionStorage.hasOwnProperty(STOAGE_USERNAME_KEY) && sessionStorage.hasOwnProperty(STOAGE_LOBBY_ID_KEY)) {
         socket.emit('getUsers', sessionStorage.getItem(STOAGE_LOBBY_ID_KEY), function (data) {
-            
+
         });
     }
 
@@ -38,7 +38,7 @@ $(function () {
             var html = '';
             for (i = 0; i < data.data.length; i++) {
                 html += '<li class="list-group-item">' + data.data[i] + '</li>';
-    
+
             }
             $users.html(html);
         }
@@ -64,7 +64,7 @@ $(function () {
         e.preventDefault();
         if ($username.val().replace(/\s/g, "") === "") {
             alert("No username!")
-        } 
+        }
         else {
             sessionStorage.setItem(STOAGE_USERNAME_KEY, $username.val());
             window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
@@ -85,7 +85,7 @@ $(function () {
         sessionStorage.setItem(STOAGE_LOBBY_ID_KEY, lobbyId);
 
         socket.emit('new_user',  {username: sessionStorage.getItem(STOAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STOAGE_LOBBY_ID_KEY)}, function () {
-            
+
         });
 
         window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
@@ -95,7 +95,14 @@ $(function () {
     /* ======================== LOBBY ======================== */
     /* ======================================================= */
 
+    socket.on("autostart", () => {
+        window.parent.document.getElementById('contentController').src = 'game/game.html';
+    });
 
+    socket.on("full_lobby", data => {
+        alert("Lobby " + data.lobbyId + " is already full!");
+        window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
+    });
 
     /* ======================================================= */
     /* ======================= INGAME ======================== */
