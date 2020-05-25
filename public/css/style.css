@@ -27,15 +27,6 @@ a {
   */
 }
 
-.loginContent {
-  flex: 1 1 auto;
-  background-image: url("../img/SpielfeldPlaceholder.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
 .box .mainContent {
   flex: 1 1 auto;
 }

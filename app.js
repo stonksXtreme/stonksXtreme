@@ -1,10 +1,27 @@
+/*
+const express = require('express');
+const path = require('path');
+const app = express();
+
+var server = require("http").Server(app);
+var io = require("socket.io").listen(server);
+users = [];
+connections = [];
+
+app.use(express.static(path.join(__dirname, '../client')));
+
+app.get('/', (req, res) => { res.sendFile('../client/index.html') });
+
+const port = 3000;
+app.listen(port, () => console.log(`stonksXtreme listening at http://localhost:${port}`));
+*/
+
 const express = require('express');
 const app = express();
 const path = require('path');
 var server = require("http").Server(app);
 var io = require("socket.io").listen(server);
-usersLobby1 = [];
-usersLobby2 = [];
+users = [];
 connections = [];
 
 server.listen(process.env.PORT || 3000);
@@ -14,78 +31,32 @@ console.log("Server running...");
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.sockets.on('connection', function(socket){
-
-    /* ======================================================= */
-    /* ======================= General ======================= */
-    /* ======================================================= */
-
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
 
-    socket.on("getUsers", function(data) {
-        senduser(data);
+    // Disconnect
+    socket.on('disconnect', function(data){
+        users.splice(users.indexOf(socket.username), 1);
+        updateUsernames();
+        connections.splice(connections.indexOf(socket), 1);
+        console.log('Disconnected: %s socket connected', connections.length)
     });
-
-    function senduser(lobby) {
-        switch(lobby) {
-            case 1, '1':
-                io.sockets.emit('receive_users', {lobbyId: 1, data: usersLobby1});
-                break;
-
-            case 2, '2':
-                io.sockets.emit('receive_users', {lobbyId: 2, data: usersLobby2});
-                break;
-            
-            default:
-                console.log('Invalid lobby');
-                break;
-        }
-    }
-
     // Send message
-    socket.on('send_message', function(data){
-        console.log(data.user + ' (Lobby '+ data.lobbyId + '): ' + data.msg);
-        io.sockets.emit('new_message', {lobbyId:data.lobbyId, msg: data.msg, user: data.user});
+    socket.on('send message', function(data){
+        console.log(socket.username + ': ' + data);
+        io.sockets.emit('new message', {msg: data, user: socket.username});
     });
-
-    /* ======================================================= */
-    /* ======================= LOGIN ========================= */
-    /* ======================================================= */
-
-    
-
-    /* ======================================================= */
-    /* ==================== CHOOSE LOBBY ===================== */
-    /* ======================================================= */
 
     // New User
-    socket.on('new_user', function(data) {
-        console.log('new user');
-        console.log(data);
-        switch(data.lobby) {
-            case 1, '1':
-                usersLobby1.push(data.username);
-                break;
-
-            case 2, '2':
-                usersLobby2.push(data.username);
-                break;
-            
-            default:
-                console.log('Invalid lobby');
-                break;
-        }
-        senduser(data.lobby);
+    socket.on('new user', function(data, callback){
+        callback(true);
+        socket.username = data;
+        users.push(socket.username);
+        updateUsernames();
     });
 
-    /* ======================================================= */
-    /* ======================== LOBBY ======================== */
-    /* ======================================================= */
-
-    /* ======================================================= */
-    /* ======================= INGAME ======================== */
-    /* ======================================================= */
-    
-    
+    function updateUsernames() {
+        io.sockets.emit('get users', users);
+    }
 
 });
