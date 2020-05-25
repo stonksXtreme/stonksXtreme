@@ -1,12 +1,21 @@
-function rulesDisplay() {
-    document.getElementById("rules").style.display="block";
-};
-
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
-  }
+}
 
-    $(function() {
+function getPing() {
+    var startTime = new Date();
+    var img = new  Image();
+    var random_string = Math.random().toString();
+    img.src = "/img/1x1.gif?" + random_string;
+    img.onload = function() {
+        var endTime = new Date();
+        var ping = endTime. getTime() - startTime.getTime();
+        alert(img.src + " loaded in " + ping + " ms");
+    }
+}
+
+
+$(function() {
     var socket = io.connect();
     var $messageForm = $('#messageForm');
     var $message = $('#message');
@@ -15,6 +24,7 @@ function isBlank(str) {
     var $userFormArea = $('#userFormArea');
     var $userForm = $('#userForm');
     var $users = $('#users');
+    var $userCount = $('#UserCount');
     var $username = $('#username');
     var $readyForm = $('#readyForm');
     var $readyBTN = $('#readyBTN');
@@ -66,9 +76,9 @@ function isBlank(str) {
     socket.on('get users', function(data) {
         var html = '';
         for(i = 0; i<data.length;i++){
-        html += '<li class="list-group-item">'+data[i]+'</li>';
-
+            html += '<li class="list-group-item">'+data[i]+'</li>';
         }
         $users.html(html);
+        $userCount.html(data.length + ' / 6')
     })
 });

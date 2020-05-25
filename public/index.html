@@ -34,10 +34,10 @@
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" onclick="javascript:rulesDisplay()">Rules</a>
+        <a class="nav-link" href="#" onclick="document.getElementById('rules').style.display='block';">Rules</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="#" onclick="getPing()">About</a>
       </li>
     </ul>
   </div>
@@ -67,6 +67,7 @@
   <div id="messageArea">
     <div class="card users">
       <div class="card-body">
+        <h5 style="float: right; font-size: medium;" id="UserCount"></h5>
         <h5 class="card-title">Online users</h5>
         <ul class="list-group" id="users"></ul>
         <form id="readyForm">
@@ -93,6 +94,7 @@
 </div>
 
 <div id="rules" class="card" style="display: none;">
+  <span id="rulesClose" onclick="document.getElementById('rules').style.display = 'None';">x</span>
   <div class="card-body">
     <h5 class="card-title">Regeln</h5>
     <p>

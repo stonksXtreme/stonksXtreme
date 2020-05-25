@@ -76,6 +76,12 @@ a {
   margin: 0 0 0 -35%;
 }
 
+#rulesClose {
+  float: right;
+  padding: 2px 5px;
+  font-size: medium;
+}
+
 .form-group{
   margin: 1em;
 }
