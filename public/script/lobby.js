@@ -10,10 +10,11 @@ function getPing() {
     img.onload = function() {
         var endTime = new Date();
         var ping = endTime. getTime() - startTime.getTime();
-        alert(img.src + " loaded in " + ping + " ms");
+        socket.emit('ping', ping);
     }
 }
 
+window.setInterval(getPing,2000);
 
 $(function() {
     var socket = io.connect();
@@ -76,7 +77,7 @@ $(function() {
     socket.on('get users', function(data) {
         var html = '';
         for(i = 0; i<data.length;i++){
-            html += '<li class="list-group-item">'+data[i]+'</li>';
+            html += '<li class="list-group-item">'+data[i]+'<span style="float: right;" id="ping-'+data[i]+'"></span></li>';
         }
         $users.html(html);
         $userCount.html(data.length + ' / 6')
