@@ -19,6 +19,7 @@
   <script src="script/lobby.js"></script>
 </head>
 <body>
+
 <div class="box">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
@@ -33,10 +34,7 @@
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
+        <a class="nav-link" href="#" onclick="javascript:rulesDisplay()">Rules</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">About</a>
@@ -55,7 +53,7 @@
           <input class="form-control" id="username" placeholder="StonksBoi" value="Debug"/>
           <br />
           <label>Lobby ID</label>
-          <input class="form-control" id="" placeholder="1234"/>
+          <input class="form-control" id="" placeholder="1234" value="1234"/>
           <br />
           <input type="submit" class="btn btn-primary" value="Join" />
           <input type="submit" class="btn btn-primary" value="Create" />
@@ -83,7 +81,7 @@
         <h5 class="card-title">Chat</h5>
         <form id="messageForm">
           <div class="form-group">
-            <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
+            <div class="chat form-control" id="chat" style="height: 300px; overflow: auto;"></div>
             <input type="text" class="form-control" id="message"/>
             <br />
             <input type="submit" class="btn btn-primary" value="Send Message" />
@@ -91,6 +89,45 @@
         </form>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="rules" class="card" style="display: none;">
+  <div class="card-body">
+    <h5 class="card-title">Regeln</h5>
+    <p>
+      Ziel des Spiels ist es, als erstes ins Ziel zu kommen.
+    </p>
+    <ul>
+      <li>Ein anderer Spieler zieht eine Karte für dich, liest sie vor und sagt dir, ob deine Antwort richtig ist.</li>
+      <li>Hast du die Frage richtig beantwortet darfst du würfeln, wie viele Felder du vorgehen kannst. Wenn du eine leichte Frage richtig beantwortet hast, darfst du mit einem Würfel würfeln, bei einer schweren Frage mit zwei. <br>Sollte die Frage falsch beantwortet werden, bleibst du auf dem aktuellen Feld stehen.</li>
+      <li>Wer zuerst auf das Feld 'Ende' kommt (oder darüber hinaus), hat gewonnen</li>
+    </ul>
+    <p>
+      <b>Extrafelder</b><br>
+      Bei allen Feldern, außer dem Black Friday und den Jackpot Felder, musst du keine Frage ziehen
+      <ul>
+        <li><b>Stonks:</b>
+          <ul>
+            <li>Rote Stonks: gehe zurück auf Feld x</li>
+            <li>Grüne Stonks: gehe vor auf Feld x</li>
+          </ul>
+        </li>
+        <li><b>Finanzkrise:</b> Würfle einmal wie viele Felder alle zurück gehen</li>
+        <li><b>Black Thursday:</b> Gehe zurück auf das erste Feld, grüner Stonk der einen direkt hinter das Feld bringen kann.</li>
+        <li><b>Black Friday:</b> verdopple deine Würfelzahl</li>
+        <li><b>Steuerhinterziehung &rarr; Gefängnis</b>
+          <ul>
+            <li>Landest du auf dem Feld 'Steuerhinterziehung' musst du in das Gefängnis gehen</li>
+            <li>Im Gefängnis angekommen darfst du drei Mal Würfeln, hast du eine 6, darfst du auf das nächste Feld. Hast du keine 6, wiederhole den Vorgang in der nächsten Runde.</li>
+          </ul>
+        </li>
+        <li><b>BEP nicht erreicht:</b> Gehe deine ganze Würfelzahl zurück</li>
+        <li><b>Jackpot:</b> Du darfst noch eine Frage beantworten</li>
+        <li><b>Identitätsdiebstahl:</b> Tausche den Platz mit einem anderen Spieler</li>
+        <li><b>Finanzbuchhaltung:</b> Setze eine oder zwei Runden aus (je nachdem, was das Feld sagt)</li>
+      </ul>
+    </p>
   </div>
 </div>
 

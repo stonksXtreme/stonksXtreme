@@ -27,15 +27,6 @@ a {
   */
 }
 
-.box .loginContent {
-  flex: 1 1 auto;
-  background-image: url("/img/SpielfeldPlaceholder.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
 .box .mainContent {
   flex: 1 1 auto;
 }
@@ -75,6 +66,16 @@ a {
   float: right;
 }
 
+#rules {
+  position: fixed;
+  z-index: 2;
+  border: 2px solid black;
+  top: 20%;
+  left: 50%;
+  width: 70%;
+  margin: 0 0 0 -35%;
+}
+
 .form-group{
   margin: 1em;
 }
@@ -112,9 +113,9 @@ a {
 }
 
 .ready {
-  background-color: darkgreen;
+  background-color: rgba(0,255,0, 0.3);
 }
 
 .notready {
-  background-color: red;
+  background-color: rgba(255,0,0,.3);
 }

@@ -1,3 +1,7 @@
+function rulesDisplay() {
+    document.getElementById("rules").style.display="block";
+};
+
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
   }
@@ -17,8 +21,11 @@ function isBlank(str) {
 
     $messageForm.submit(function(e) {
         e.preventDefault();
-        socket.emit('send message', $message.val());
-        $message.val('');
+        if($message.val() === "") {
+        } else {
+            socket.emit('send message', $message.val());
+            $message.val('');
+        }
     });
 
     $readyForm.submit(function(e) {
@@ -37,7 +44,7 @@ function isBlank(str) {
     });
 
     socket.on('new message', function(data) {
-        $chat.append(data.user+': '+data.msg+'\n');
+        $chat.append('<b>'+data.user+'</b>'+': '+data.msg+'<br>');
     });
 
     $userForm.submit(function(e) {
