@@ -27,26 +27,29 @@
 </head>
 
 <body>
-    <div class="card">
+<div id="messageArea">
+    <div class="card users">
         <div class="card-body">
-            <h5 class="card-title">Online users</h5>
-            <ul class="list-group" id="users"></ul>
+          <h5 style="float: right; font-size: medium;" id="UserCount"></h5>
+          <h5 class="card-title">Online users</h5>
+          <ul class="list-group" id="users"></ul>
         </div>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Chat</h5>
 
-            <form id="messageForm">
-                <div class="form-group">
-                    <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
-                    <input type="text" class="form-control" id="message" />
-                    <br />
-                    <input type="submit" class="btn btn-primary" value="Send Message" />
-                </div>
-            </form>
+    <div class="card  messages">
+        <div class="card-body">
+          <h5 class="card-title">Chat</h5>
+          <form id="messageForm">
+            <div class="form-group">
+              <div class="chat form-control" id="chat" style="height: 300px; overflow: auto;"></div>
+              <input type="text" class="form-control" id="message"/>
+              <br />
+              <input type="submit" class="btn btn-primary" value="Send Message" />
+            </div>
+          </form>
         </div>
     </div>
+</div>
 </body>
 
 </html>

@@ -10,6 +10,7 @@ $(function () {
 
     var $users = $('#users');
     var $yourUsername = $('#yourUsername');
+    var $userCount = $('#UserCount');
 
     var $messageForm = $('#messageForm');
     var $message = $('#message');
@@ -38,21 +39,21 @@ $(function () {
             var html = '';
             for (i = 0; i < data.data.length; i++) {
                 html += '<li class="list-group-item">' + data.data[i] + '</li>';
-    
             }
             $users.html(html);
+            $userCount.html(data.data.length + ' / 6');
         }
     });
 
     $messageForm.submit(function (e) {
         e.preventDefault();
-        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STOAGE_LOBBY_ID_KEY), msg: $message.val(), user:sessionStorage.getItem(STOAGE_USERNAME_KEY)});
+        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STOAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STOAGE_USERNAME_KEY)});
         $message.val('');
     });
 
     socket.on('new_message', function (data) {
         if(data.lobbyId == sessionStorage.getItem(STOAGE_LOBBY_ID_KEY)) {
-            $chat.append(data.user + ': ' + data.msg + '\n');
+            $chat.append('<b>'+data.user+'</b>'+': '+data.msg+'<br>');
         }
     });
 
