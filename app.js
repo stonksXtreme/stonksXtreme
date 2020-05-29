@@ -20,7 +20,7 @@ io.sockets.on('connection', socket => {
     // Disconnect
     socket.on('disconnect', data => {
         //positions.splice(positions.name.indexOf(socket.username), 1);
-        updateUsernames();
+        io.sockets.emit('update', users);
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s socket connected', connections.length)
     });
@@ -32,40 +32,57 @@ io.sockets.on('connection', socket => {
 
     // New User
     socket.on('new user', function(data, callback){
-        if(users.length < 6){
+        const colors = ["red", "green", "blue", "gray", "pink", "violet"]
+        if(users.length < 666){
             callback(true);
             socket.username = data;
             users.push({
                 name: socket.username,
-                color: "",
-                x: 0,
-                y: 0
+                color: colors[users.length],
+                x: 15,
+                y: 15
             });
-            updateUsernames();
+            io.sockets.emit('update', users);
         }
     });
 
-    const colors = ["red", "green", "blue", "gray", "pink", "violet"]
+    socket.on('card', hard => {
+        if(hard) {
 
-    function updateUsernames() {
-
-
-        for(let i in users){
-
-            var position = {
-                name: users[i].name,
-                color: colors[i],
-                x: 15 + i*30,
-                y: 15,
-            }
-
-            users[i] = position;
         }
 
-        console.log(users);
+        const question = {
+            text: "Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name?",
+            answers: ["A", "B", "C", "D"]
+        }
+        io.sockets.emit('question_return', question);
 
-        io.sockets.emit('update', users);
+    })
 
+    socket.on('answer_selected', index_of_answer =>{
 
+        if(true) {
+            const random = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+            const index = findUserIndexByName(socket.username)
+            console.log(socket.username + " hat " + random + " gewürfelt!")
+            if (index !== -1) {
+                users[index] = {
+                    name: users[index].name,
+                    color: users[index].color,
+                    x: users[index].x + (random * 30),
+                    y: users[index].y,
+                };
+                io.sockets.emit('update', users);
+            }
+        }
+    })
+    
+    function findUserIndexByName(username) {
+        for(let i in users){
+            if(users[i].name === username){
+                return i;
+            }
+        }
+        return -1;
     }
 })

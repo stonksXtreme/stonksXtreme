@@ -99,12 +99,51 @@ a {
   width: 10em;
 }
 
-.card canvas{
+.card canvas, img{
   width: 100%;
 }
 
 .card{
   margin: 1em;
+}
+
+canvas{
+  margin-bottom: 1em;
+}
+
+.pickup{
+  width: 420px;
+}
+
+.pickup > img:first-child{
+  float: left;
+}
+
+.pickup > img{
+  float: right;
+  width: 200px;
+}
+
+.dice{
+  float: right;
+  width: 113px;
+}
+
+.dice:active {
+  animation: rotate 1s ease-in-out 0s;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.blur{
+  filter: blur(4px);
+}
+
+.modal-dialog{
+  z-index: 200;
 }
 
 

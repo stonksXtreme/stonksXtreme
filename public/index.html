@@ -5,19 +5,22 @@
   <!-- Style -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
 
   <!-- JavaScript -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-  <script type='text/javascript' src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.ico">
 </head>
 <body>
 <div class="box">
 
+<!-- Header -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
   <a class="navbar-brand" href="#">stonksXtreme</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +45,7 @@
   </div>
 </nav>
 
+  <!-- Login -->
 
 <div class="loginContent">
   <div id="userFormArea" class="card">
@@ -62,12 +66,21 @@
     </div>
   </div>
 </div>
+
+<!-- Main -->
+
 <div class="mainContent">
   <div id="messageArea">
     <div class="card field">
       <div class="card-body">
         <h5 class="card-title">Field</h5>
         <canvas id="canvas"></canvas>
+        <img class="dice" src="https://schmidt-lehrmittel.de/media/image/e5/94/6e/Art199115d2c335111a09_600x600.jpg"/>
+
+        <div class="pickup">
+          <img class="easy_card" src="/img/KartenEinfach.png"/>
+          <img class="hard_card" src="/img/KartenSchwer.png"/>
+        </div>
       </div>
     </div>
     <div class="card users">
@@ -94,17 +107,33 @@
     <div class="card pickup">
       <div class="card-body">
         <h5 class="card-title">Pickup cards</h5>
-        <img src="/img/KartenEinfach.png"/>
-        <img src="/img/KartenSchwer.png"/>
+
       </div>
     </div>
 
   </div>
 </div>
 
+<!-- Footer -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
   <a class="navbar-brand" href="#">Copyright 2020</a>
 </nav>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Modal title
+        </h5>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -134,6 +163,31 @@
       context.drawImage(background, 0, 0, 3084, 1546,
                                 0, 0, canvas.width, canvas.height);
     }
+
+    socket.on('question_return', question => {
+      $('.modal-title').html(question.text);
+
+
+
+      var buttons = '';
+      for(let answer in question.answers){
+        buttons += '<button type="button" id="answer' + answer + '" class="btn btn-primary btn-lg btn-block onc answerButton">' + question.answers[answer] + '</button>'
+      }
+      $('.modal-body').html(buttons);
+
+      $('.box').addClass("blur");
+
+      $('#exampleModal').modal({
+        backdrop: 'static'
+      });
+
+      $(".answerButton").click(function (e){
+        e.preventDefault();
+        console.log(this.id.replace("answer", ""));
+      })
+
+      //TODO: Back to server
+    })
 
     socket.on('update', users => {
 
@@ -185,6 +239,22 @@
 
       $username.val('');
     });
+
+    $(".dice").click(function (e){
+      e.preventDefault();
+      socket.emit('dice');
+    })
+
+    $(".easy_card").click(function (e){
+      e.preventDefault();
+      socket.emit('card', false);
+    })
+
+    $(".hard_card").click(function (e){
+      e.preventDefault();
+      socket.emit('card', true);
+    })
+
   });
 </script>
 
