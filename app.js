@@ -19,7 +19,7 @@ io.sockets.on('connection', socket => {
 
     // Disconnect
     socket.on('disconnect', data => {
-        //positions.splice(positions.name.indexOf(socket.username), 1);
+        users.splice(findUserIndexByName(socket.username), 1);
         io.sockets.emit('update', users);
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s socket connected', connections.length)
@@ -33,7 +33,7 @@ io.sockets.on('connection', socket => {
     // New User
     socket.on('new user', function(data, callback){
         const colors = ["red", "green", "blue", "gray", "pink", "violet"]
-        if(users.length < 666){
+        if(users.length < 6){
             callback(true);
             socket.username = data;
             users.push({
@@ -46,16 +46,18 @@ io.sockets.on('connection', socket => {
         }
     });
 
+    // picked up card
     socket.on('card', hard => {
+        var dif = "easy"
         if(hard) {
-
+            dif = "hard"
         }
 
         const question = {
-            text: "Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name? Whats your name?",
+            text: "Hey " + socket.username + "! You have selected a " + dif + " card!",
             answers: ["A", "B", "C", "D"]
         }
-        io.sockets.emit('question_return', question);
+        socket.emit('question_return', question);
 
     })
 

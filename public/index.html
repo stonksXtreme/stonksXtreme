@@ -183,10 +183,9 @@
 
       $(".answerButton").click(function (e){
         e.preventDefault();
-        console.log(this.id.replace("answer", ""));
+        const index = this.id.replace("answer", "");
+        socket.emit('answer_selected', index);
       })
-
-      //TODO: Back to server
     })
 
     socket.on('update', users => {
