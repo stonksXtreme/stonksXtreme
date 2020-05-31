@@ -16,6 +16,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.sockets.on('connection', socket => {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
+    connections.forEach(value => {
+        console.log(value.name + ', ');
+    })
 
     // Disconnect
     socket.on('disconnect', data => {

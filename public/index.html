@@ -16,6 +16,7 @@
 
 
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <div class="box">
@@ -70,66 +71,52 @@
 <!-- Main -->
 
 <div class="mainContent">
-  <div id="messageArea">
-    <div class="card field">
+  <div class="mainArea">
+    <div class="card fieldCard">
       <div class="card-body">
-        <h5 class="card-title">Field</h5>
         <canvas id="canvas"></canvas>
-        <img class="dice" src="https://schmidt-lehrmittel.de/media/image/e5/94/6e/Art199115d2c335111a09_600x600.jpg"/>
-
-        <div class="pickup">
-          <img class="easy_card" src="/img/KartenEinfach.png"/>
-          <img class="hard_card" src="/img/KartenSchwer.png"/>
-        </div>
       </div>
     </div>
-    <div class="card users">
-      <div class="card-body">
-        <h5 class="card-title">Online users</h5>
-        <ul class="list-group" id="users"></ul>
-      </div>
-    </div>
-    <div class="card messages">
-      <div class="card-body">
-        <h5 class="card-title">Chat</h5>
+    <div class="sideBox ">
+      <div class="sideArea">
 
-
-        <form id="messageForm">
-          <div class="form-group">
-            <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
-            <input type="text" class="form-control" id="message"/>
-            <br />
-            <input type="submit" class="btn btn-primary" value="Send Message" />
+        <div class="card pickupCard">
+          <div class="card-body">
+            <div class="pickup">
+              <img class="easy_card" src="/img/KartenEinfach.png"/>
+              <img class="hard_card" src="/img/KartenSchwer.png"/>
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
-    <div class="card pickup">
-      <div class="card-body">
-        <h5 class="card-title">Pickup cards</h5>
+        </div>
+
+        <div class="card chatCard">
+          <div class="card-body">
+            <h5 class="card-title">Online users</h5>
+            <ul class="list-group" id="users"></ul>
+            <br/>
+            <h5 class="card-title">Chat</h5>
+            <form id="messageForm">
+              <div class="form-group">
+                <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
+                <input type="text" class="form-control" id="message"/>
+                <br />
+                <input type="submit" class="btn btn-primary" value="Send Message" />
+              </div>
+            </form>
+
+          </div>
+        </div>
 
       </div>
     </div>
-
   </div>
 </div>
-
-<!-- Footer -->
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark header">
-  <a class="navbar-brand" href="#">Copyright 2020</a>
-</nav>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Modal title
-        </h5>
-      </div>
       <div class="modal-body">
       </div>
     </div>
@@ -137,13 +124,28 @@
 </div>
 
 <script>
+
+  function resize(){
+    if ($(window).width() > 960) {
+      // desktop
+      $('canvas').addClass("desktopCanvas");
+      $('canvas').removeClass("mobileCanvas");
+    }
+    else {
+      // mobile
+      $('canvas').addClass("mobileCanvas");
+      $('canvas').removeClass("desktopCanvas");
+    }
+  }
+
   $(function() {
     // onload
+    //resize();
     var socket = io.connect();
     var $messageForm = $('#messageForm');
     var $message = $('#message');
     var $chat = $('#chat');
-    var $messageArea = $('#messageArea');
+    var $messageArea = $('#mainArea');
     var $userFormArea = $('#userFormArea');
     var $userForm = $('#userForm');
     var $users = $('#users');
@@ -152,17 +154,20 @@
     var canvas = document.getElementById("canvas"),
             context = canvas.getContext("2d");
 
-    canvas.width = 300;
-    canvas.height = 150;
+    canvas.width = 1000;
+    canvas.height = 1000;
 
 
     var background = new Image();
-    background.src = "img/SpielfeldPlaceholder.jpg";
+    background.src = "img/Spielbrett_small.png";
 
     background.onload = function() {
-      context.drawImage(background, 0, 0, 3084, 1546,
-                                0, 0, canvas.width, canvas.height);
+      context.drawImage(background, 0, 0);
     }
+
+    $(window).resize(function() {
+      //resize();
+    });
 
     socket.on('question_return', question => {
       $('.modal-title').html(question.text);
@@ -173,7 +178,7 @@
       for(let answer in question.answers){
         buttons += '<button type="button" id="answer' + answer + '" class="btn btn-primary btn-lg btn-block onc answerButton">' + question.answers[answer] + '</button>'
       }
-      $('.modal-body').html(buttons);
+      //$('.modal-body').html(buttons);
 
       $('.box').addClass("blur");
 
@@ -185,6 +190,8 @@
         e.preventDefault();
         const index = this.id.replace("answer", "");
         socket.emit('answer_selected', index);
+        $('.box').removeClass("blur");
+        $('#exampleModal').modal('hide');
       })
     })
 
@@ -193,11 +200,10 @@
       console.log(users);
       var html = '';
       // draw on canvas
-      context.drawImage(background, 0, 0, 3084, 1546,
-              0, 0, canvas.width, canvas.height);
+      context.drawImage(background, 0, 0);
       for(let i in users){
         context.beginPath();
-        context.arc(users[i].x, users[i].y, 5, 0, 2 * Math.PI, true);
+        context.arc(users[i].x, users[i].y, 15, 0, 2 * Math.PI, true);
         context.fillStyle = users[i].color;
         context.fill();
 

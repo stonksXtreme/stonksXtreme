@@ -15,8 +15,8 @@ a {
   display: flex;
   flex-flow: column;
   height: 100%;
+  width: 100%;
 }
-
 
 .box .header {
   flex: 0 1 auto;
@@ -29,7 +29,7 @@ a {
 
 .box .loginContent {
   flex: 1 1 auto;
-  background-image: url("/img/SpielfeldPlaceholder.jpg");
+  background-image: url("/img/Spielbrett_blur.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -40,15 +40,8 @@ a {
   flex: 1 1 auto;
 }
 
-.box .footer {
-  flex: 0 1 auto;
-}
-
 .center {
-  margin: auto;
-  width: 50%;
   border: 3px solid green;
-  padding: 10px;
 }
 
 #userFormArea{
@@ -59,91 +52,92 @@ a {
   transform: translate(-50%, -50%);
 }
 
-#messageArea {
+.mainArea {
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
+  justify-content: center;
+  align-content: stretch;
+}
+
+.fieldCard {
+  order: 0;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  height: calc(100vmin - 6em);
+  width: calc(100vmin - 6em);
+}
+
+.sideBox {
+  order: 1;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 600px;
+  min-width: 200px;
+}
+
+.sideArea {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
   height: 100%;
 }
 
-#messageArea .card {
-  flex: 1 1 auto;
+.pickupCard{
+  order: 0;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 500px;
+  min-width: 200px;
+}
+
+.chatCard{
+  order: 1;
   flex-grow: 1;
-}
-
-.form-group{
-  margin: 1em;
-}
-
-.card-title{
-  text-align: center;
-}
-
-.field {
-  width: 50em;
-}
-
-.users{
-  width: 10em;
-}
-
-.messages {
-  width: 10em;
-}
-
-.chat{
-  width: 100%
-}
-
-.pickup {
-  width: 10em;
-}
-
-.card canvas, img{
-  width: 100%;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 500px;
+  min-width: 200px;
 }
 
 .card{
-  margin: 1em;
+  margin: 1em 1em 0;
 }
 
-canvas{
-  margin-bottom: 1em;
-}
-
-.pickup{
-  width: 420px;
-}
-
-.pickup > img:first-child{
-  float: left;
+#canvas{
+  height: 100%;
 }
 
 .pickup > img{
-  float: right;
-  width: 200px;
+  width: 48%;
 }
 
-.dice{
-  float: right;
-  width: 113px;
+
+.mobileCanvas{
+  width: 100%;
 }
 
-.dice:active {
-  animation: rotate 1s ease-in-out 0s;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.desktopCanvas{
+  height: 100%;
 }
 
 .blur{
   filter: blur(4px);
 }
 
-.modal-dialog{
-  z-index: 200;
+.modal-xl{
+  width: 1060px;
+}
+
+.modal-body {
+  background-image: url("/img/Spielkarten_A.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 707px;
+  padding: 0;
 }
 
 
