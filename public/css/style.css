@@ -65,8 +65,13 @@ a {
   flex-grow: 0;
   flex-shrink: 1;
   flex-basis: auto;
-  height: calc(100vmin - 6em);
-  width: calc(100vmin - 6em);
+  height: calc(100vmin - 90px);
+  width: calc(100vmin - 90px);
+}
+
+.mobileField{
+  height: calc(100vmin - 30px);
+  width: calc(100vmin - 30px);
 }
 
 .sideBox {
@@ -115,13 +120,21 @@ a {
   width: 48%;
 }
 
-
-.mobileCanvas{
-  width: 100%;
+.easy_card{
+  float: left;
 }
 
-.desktopCanvas{
-  height: 100%;
+.hard_card{
+  float: right;
+}
+
+
+.sendButton{
+  height: calc(100% - 3px);
+}
+
+#messageForm{
+  margin-top: 10px;
 }
 
 .blur{

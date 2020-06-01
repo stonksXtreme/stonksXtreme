@@ -5,6 +5,7 @@
   <!-- Style -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
   <!-- JavaScript -->
@@ -95,12 +96,14 @@
             <ul class="list-group" id="users"></ul>
             <br/>
             <h5 class="card-title">Chat</h5>
+            <textarea class="form-control" id="chat" readonly rows="8"></textarea>
             <form id="messageForm">
-              <div class="form-group">
-                <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
-                <input type="text" class="form-control" id="message"/>
-                <br />
-                <input type="submit" class="btn btn-primary" value="Send Message" />
+              <div class="input-group">
+
+                <input type="text" class="form-control chatField" placeholder="Enter message here" id="message"/>
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary sendButton material-icons">send</button>
+                </div>
               </div>
             </form>
 
@@ -126,21 +129,20 @@
 <script>
 
   function resize(){
-    if ($(window).width() > 960) {
+    if ($(window).width() > 974) {
       // desktop
-      $('canvas').addClass("desktopCanvas");
-      $('canvas').removeClass("mobileCanvas");
+      $('.fieldCard').removeClass("mobileField");
     }
     else {
       // mobile
-      $('canvas').addClass("mobileCanvas");
-      $('canvas').removeClass("desktopCanvas");
+      $('.fieldCard').addClass("mobileField");
+
     }
   }
 
   $(function() {
     // onload
-    //resize();
+    resize();
     var socket = io.connect();
     var $messageForm = $('#messageForm');
     var $message = $('#message');
@@ -166,7 +168,7 @@
     }
 
     $(window).resize(function() {
-      //resize();
+      resize();
     });
 
     socket.on('question_return', question => {
@@ -226,7 +228,7 @@
 
     socket.on('new message', function(data) {
       $chat.append(data.user+': '+data.msg+'\n');
-      $cha.scrollTop($chat.scrollHeight);
+      $chat.scrollTop($chat.scrollHeight);
     });
 
     $userForm.submit(function(e) {
