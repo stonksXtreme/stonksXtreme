@@ -11,6 +11,7 @@ easy_questions = [];
 hard_questions = [];
 field_positions = [];
 current_question = null;
+current_question_hard = false;
 
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
@@ -107,7 +108,7 @@ io.sockets.on('connection', socket => {
 
     // picked up card
     socket.on('card', hard => {
-
+        current_question_hard = hard;
         let random;
         let usedQuestionIndices;
         if(hard) {
@@ -150,15 +151,26 @@ io.sockets.on('connection', socket => {
         if(correctIndex === parseInt(answerIndex)) {
             // waiting to see the answer before dice roll
             setTimeout(() => {
-                const random = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
-                console.log(socket.username + " hat " + random + " gewürfelt!")
-                socket.emit('roll_dice', [random, 6]);
+                let steps = 0;
+                if(current_question_hard){
+                    const random1 = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+                    const random2 = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+                    console.log(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!")
+                    socket.emit('roll_dice', [random1, random2]);
+                    steps = random1+random2;
+                }else{
+                    const random = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+                    console.log(socket.username + " hat " + random + " gewürfelt!")
+                    socket.emit('roll_dice', [random]);
+                    steps = random;
+                }
+
 
                 // wating for animation so set new position
                 setTimeout(() => {
                     const index = findUserIndexByName(socket.username)
                     if (index !== -1) {
-                        users[index].fieldIndex+=random;
+                        users[index].fieldIndex+=steps;
                         users[index].x = field_positions[users[index].fieldIndex].x;
                         users[index].y = field_positions[users[index].fieldIndex].y;
                         io.sockets.emit('update', users);

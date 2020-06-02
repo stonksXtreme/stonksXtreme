@@ -213,15 +213,17 @@
     socket.on('roll_dice', dices => {
       $('.modalCloseButton').removeClass("hidden");
 
-      if(dices.length === 2){
-        $('.modal-title').html('');
-        $('.modal-body').html(dices[0]+ ', ' + dices[1] + '<img src="https://www.animierte-gifs.net/data/media/710/animiertes-wuerfel-bild-0066.gif" border="0" alt="animiertes-wuerfel-bild-0066" />');
+      let html = '<div class="center">'
 
-      }
-      if(dices.length === 1){
+      if(dices.length > 0){
         $('.modal-title').html('');
-        $('.modal-body').html(dices[0] +'<img src="https://www.animierte-gifs.net/data/media/710/animiertes-wuerfel-bild-0066.gif" border="0" alt="animiertes-wuerfel-bild-0066" />');
+        html += '<video width="150" height="116" autoplay><source src="dices/animation' + dices[0] + '.mp4" type="video/mp4">Your browser does not support the video tag.</video>';
+        if(dices.length === 2){
+          html += '<video width="150" height="116" autoplay><source src="dices/animation' + dices[1] + '.mp4" type="video/mp4">Your browser does not support the video tag.</video>';
+        }
       }
+
+      $('.modal-body').html(html + '</div>');
 
     });
 
