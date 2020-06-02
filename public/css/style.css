@@ -6,6 +6,10 @@ a {
   color: #00B7FF;
 }
 
+.hidden{
+  display: none;
+}
+
 
 .mainContent {
   display: none;
@@ -142,15 +146,25 @@ a {
 }
 
 .modal-xl{
-  width: 1060px;
+  width: 90%;
 }
 
-.modal-body {
+.modal-body_not {
   background-image: url("/img/Spielkarten_A.png");
   background-repeat: no-repeat;
   background-position: center;
-  height: 707px;
-  padding: 0;
+  background-size: cover;
 }
 
+.btn[disabled]{
+  opacity: 1.0;
+}
+
+.greenButton[disabled]{
+  background-color: green;
+}
+
+.redButton[disabled]{
+  background-color: red;
+}
 

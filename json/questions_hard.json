@@ -1,0 +1,22 @@
+[
+  {
+    "question": "This is very hard: What is B?",
+    "answers": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "This is very hard: What is C?",
+    "answers": [
+      "Not C",
+      "B",
+      "A",
+      "C"
+    ],
+    "correctIndex": 3
+  }
+]

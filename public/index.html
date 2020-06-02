@@ -56,7 +56,7 @@
       <form id="userForm">
         <div class="form-group">
           <label>Username</label>
-          <input class="form-control" id="username" value="asdf" placeholder="StonksBoi"/>
+          <input class="form-control" id="username" placeholder="StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}"/>
           <br />
           <label>Lobby ID</label>
           <input class="form-control" id="" placeholder="1234"/>
@@ -118,8 +118,16 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Modal title
+        </h5>
+        <button type="button" class="close modalCloseButton hidden" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="modal-body">
       </div>
     </div>
@@ -152,6 +160,27 @@
     var $userForm = $('#userForm');
     var $users = $('#users');
     var $username = $('#username');
+    var pos = {
+      x: 20,
+      y: 900
+    }
+
+    document.onkeydown = function(e) {
+      switch(e.which) {
+        case 37: pos.x-=1;move();break;
+
+        case 38:pos.y-=1;move();break;
+
+        case 39:pos.x+=1;move();break;
+
+        case 40:pos.y+=1;move();break;
+
+        default: return; // exit this handler for other keys
+      }
+      e.preventDefault(); // prevent the default action (scroll / move caret)
+    };
+
+
 
     var canvas = document.getElementById("canvas"),
             context = canvas.getContext("2d");
@@ -167,12 +196,44 @@
       context.drawImage(background, 0, 0);
     }
 
+    function move() {
+      context.drawImage(background, 0, 0);
+      context.beginPath();
+      context.rect(pos.x-50, pos.y-1, 100, 3);
+      context.rect(pos.x-1, pos.y-50, 3, 100);
+      context.fillStyle = 'black';
+      context.fill();
+      console.log(pos);
+    }
+
     $(window).resize(function() {
       resize();
     });
 
+    socket.on('roll_dice', dices => {
+      $('.modalCloseButton').removeClass("hidden");
+
+      if(dices.length === 2){
+        $('.modal-title').html('');
+        $('.modal-body').html(dices[0]+ ', ' + dices[1] + '<img src="https://www.animierte-gifs.net/data/media/710/animiertes-wuerfel-bild-0066.gif" border="0" alt="animiertes-wuerfel-bild-0066" />');
+
+      }
+      if(dices.length === 1){
+        $('.modal-title').html('');
+        $('.modal-body').html(dices[0] +'<img src="https://www.animierte-gifs.net/data/media/710/animiertes-wuerfel-bild-0066.gif" border="0" alt="animiertes-wuerfel-bild-0066" />');
+      }
+
+    });
+
+    socket.on('show_correct_answer', correctIndex => {
+      $('.selectedButton').addClass("redButton");
+      $('#answer'+correctIndex).removeClass("redButton");
+      $('#answer'+correctIndex).addClass("greenButton");
+
+    });
+
     socket.on('question_return', question => {
-      $('.modal-title').html(question.text);
+      $('.modal-title').html(question.question);
 
 
 
@@ -180,30 +241,39 @@
       for(let answer in question.answers){
         buttons += '<button type="button" id="answer' + answer + '" class="btn btn-primary btn-lg btn-block onc answerButton">' + question.answers[answer] + '</button>'
       }
-      //$('.modal-body').html(buttons);
+      $('.modal-body').html(buttons);
 
       $('.box').addClass("blur");
 
       $('#exampleModal').modal({
+        keyboard: false,
         backdrop: 'static'
       });
 
       $(".answerButton").click(function (e){
         e.preventDefault();
         const index = this.id.replace("answer", "");
+        buttons = '';
+        for(let answer in question.answers){
+          buttons += '<button type="button" id="answer' + answer + '" class="btn btn-secondary btn-lg btn-block onc" disabled>' + question.answers[answer] + '</button>'
+        }
+        $('.modal-body').html(buttons);
+        $('#answer'+index).addClass("selectedButton");
         socket.emit('answer_selected', index);
-        $('.box').removeClass("blur");
-        $('#exampleModal').modal('hide');
       })
-    })
+    });
 
     socket.on('update', users => {
 
-      console.log(users);
       var html = '';
       // draw on canvas
       context.drawImage(background, 0, 0);
       for(let i in users){
+        context.beginPath();
+        context.arc(users[i].x, users[i].y, 17, 0, 2 * Math.PI, true);
+        context.fillStyle = 'white';
+        context.fill();
+
         context.beginPath();
         context.arc(users[i].x, users[i].y, 15, 0, 2 * Math.PI, true);
         context.fillStyle = users[i].color;
@@ -211,14 +281,20 @@
 
         // update list
 
-        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+        if(users[i].isConnected){
+          html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+        }else{
+          html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+        }
+
+
 
 
 
       }
 
       $users.html(html);
-    })
+    });
 
     $messageForm.submit(function(e) {
       e.preventDefault();
@@ -234,17 +310,17 @@
     $userForm.submit(function(e) {
       e.preventDefault();
       if($username.val().replace(/\s/g,"") === ""){
-        alert("No username!")
+        alert("Invalid Username")
       }else{
-        socket.emit('new user', $username.val(), data => {
-          if(data) {
-            $('.loginContent').hide();
-            $('.mainContent').show();
+        socket.emit('new user', $username.val(), error_Code => {
+          switch (error_Code) {
+            case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
+            case 1: alert("Invalid Username"); break;
+            case 2: alert("Username already in use"); break;
+            case 3: alert("Lobby full"); break;
           }
         });
       }
-
-      $username.val('');
     });
 
     $(".dice").click(function (e){
@@ -260,6 +336,11 @@
     $(".hard_card").click(function (e){
       e.preventDefault();
       socket.emit('card', true);
+    })
+
+    $(".modalCloseButton").click(function (e){
+      $('.box').removeClass("blur");
+      $('.modalCloseButton').addClass("hidden");
     })
 
   });
