@@ -221,17 +221,20 @@
         if(dices.length === 2){
           html += '<video width="150" height="116" autoplay><source src="dices/animation' + dices[1] + '.mp4" type="video/mp4">Your browser does not support the video tag.</video>';
         }
+        $('.modal-body').html(html + '</div>');
       }
 
-      $('.modal-body').html(html + '</div>');
+
 
     });
 
-    socket.on('show_correct_answer', correctIndex => {
+    socket.on('show_correct_answer', correctIndices => {
       $('.selectedButton').addClass("redButton");
-      $('#answer'+correctIndex).removeClass("redButton");
-      $('#answer'+correctIndex).addClass("greenButton");
 
+      for(let i in correctIndices){
+        $('#answer'+correctIndices[i]).removeClass("redButton");
+        $('#answer'+correctIndices[i]).addClass("greenButton");
+      }
     });
 
     socket.on('question_return', question => {

@@ -4,10 +4,10 @@
     "answers": [
       "A",
       "B",
-      "C",
+      "B",
       "D"
     ],
-    "correctIndex": 1
+    "correctIndices": [1, 2]
   },
   {
     "question": "This is very hard: What is C?",
@@ -17,6 +17,16 @@
       "A",
       "C"
     ],
-    "correctIndex": 3
+    "correctIndices": [3]
+  },
+  {
+    "question": "Select any",
+    "answers": [
+      "Me?",
+      "Hi",
+      "Select me",
+      "What's up"
+    ],
+    "correctIndices": [0, 1 ,2, 3]
   }
 ]

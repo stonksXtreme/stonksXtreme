@@ -143,12 +143,12 @@ io.sockets.on('connection', socket => {
 
     socket.on('answer_selected', answerIndex =>
     {
-        const correctIndex = current_question.correctIndex;
-        socket.emit('show_correct_answer', correctIndex);
+        const correctIndices = current_question.correctIndices;
+        socket.emit('show_correct_answer', correctIndices);
 
 
 
-        if(correctIndex === parseInt(answerIndex)) {
+        if(correctIndices.includes(parseInt(answerIndex))) {
             // waiting to see the answer before dice roll
             setTimeout(() => {
                 let steps = 0;

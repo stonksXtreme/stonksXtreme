@@ -4,10 +4,10 @@
     "answers": [
       "A",
       "B",
-      "C",
+      "B",
       "D"
     ],
-    "correctIndex": 1
+    "correctIndices": [1, 2]
   },
   {
     "question": "What is C?",
@@ -17,6 +17,6 @@
       "A",
       "C"
     ],
-    "correctIndex": 3
+    "correctIndices": [3]
   }
 ]
