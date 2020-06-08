@@ -285,12 +285,16 @@
         context.fill();
 
         // update list
-
-        if(users[i].isConnected){
-          html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+        if(users[i].activeTurn) {
+          html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
         }else{
-          html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+          if(users[i].isConnected){
+            html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+          }else{
+            html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+          }
         }
+
 
 
 
@@ -308,7 +312,12 @@
     });
 
     socket.on('new message', function(data) {
-      $chat.append(data.user+': '+data.msg+'\n');
+      if (data.user == "server"){
+        $chat.append(data.msg+'\n');
+      }else{
+        $chat.append(data.user+': '+data.msg+'\n');
+      }
+
       $chat.scrollTop($chat.scrollHeight);
     });
 
@@ -346,6 +355,7 @@
     $(".modalCloseButton").click(function (e){
       $('.box').removeClass("blur");
       $('.modalCloseButton').addClass("hidden");
+      socket.emit('next_player', null);
     })
 
   });

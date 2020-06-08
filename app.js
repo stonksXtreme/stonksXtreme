@@ -12,6 +12,7 @@ hard_questions = [];
 field_positions = [];
 current_question = null;
 current_question_hard = false;
+firstStart = false;
 
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
@@ -27,7 +28,6 @@ console.log("Server running on http://localhost:3000");
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
 io.sockets.on('connection', socket => {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
@@ -38,6 +38,7 @@ io.sockets.on('connection', socket => {
         if(index >= 0){
             //users.splice(index, 1);
             users[index].isConnected = false;
+            nextPlayer(index);
         }
 
         io.sockets.emit('update', users);
@@ -70,6 +71,7 @@ io.sockets.on('connection', socket => {
                 }else{
                     if(index === -1){
                         // new user
+                        console.log("New user: " + socket.username);
 
                         callback(0);
                         users.push({
@@ -80,7 +82,8 @@ io.sockets.on('connection', socket => {
                             fieldIndex: 0,
                             isConnected: true,
                             usedEasyQuestionIndices: [],
-                            usedHardQuestionIndices: []
+                            usedHardQuestionIndices: [],
+                            activeTurn: false
                         });
                         io.sockets.emit('update', users);
                     }else{
@@ -104,84 +107,97 @@ io.sockets.on('connection', socket => {
             // invalid username
             callback(1);
         }
+        // round starts
+        if(!firstStart && users.length >= 6){
+            firstStart = true;
+            const random = getRandomInt(0, users.length-1);
+            nextPlayer(random);
+        }
     });
 
     // picked up card
     socket.on('card', hard => {
-        current_question_hard = hard;
-        let random;
-        let usedQuestionIndices;
-        if(hard) {
-            usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
-            if(usedQuestionIndices < hard_questions.length){
-                do{
-                    random = Math.floor(Math.random() * hard_questions.length);
+        const userIndex = findUserIndexByName(socket.username);
+        if(userIndex !== -1 && users[userIndex].activeTurn){
+            current_question_hard = hard;
+            let random;
+            let usedQuestionIndices;
+            if(hard) {
+                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
+                if(usedQuestionIndices < hard_questions.length){
+                    do{
+                        random = getRandomInt(0, hard_questions.length);
+                    }
+                    while (usedQuestionIndices.includes(random))
+                    usedQuestionIndices.push(random);
+                    current_question = hard_questions[random];
+                    socket.emit('question_return', hard_questions[random]);
                 }
-                while (usedQuestionIndices.includes(random))
-                usedQuestionIndices.push(random);
-                current_question = hard_questions[random];
-                socket.emit('question_return', hard_questions[random]);
-            }
 
-        }else{
-            usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
-            if(usedQuestionIndices < easy_questions.length){
-                do{
-                    random = Math.floor(Math.random() * easy_questions.length);
+            }else{
+                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
+                if(usedQuestionIndices < easy_questions.length){
+                    do{
+                        random = getRandomInt(0, easy_questions.length);
+                    }
+                    while (usedQuestionIndices.includes(random))
+                    usedQuestionIndices.push(random);
+                    current_question = easy_questions[random];
+                    socket.emit('question_return', easy_questions[random]);
                 }
-                while (usedQuestionIndices.includes(random))
-                usedQuestionIndices.push(random);
-                current_question = easy_questions[random];
-                socket.emit('question_return', easy_questions[random]);
             }
         }
-
-
-
-
     })
 
     socket.on('answer_selected', answerIndex =>
     {
-        const correctIndices = current_question.correctIndices;
-        socket.emit('show_correct_answer', correctIndices);
+        const userIndex = findUserIndexByName(socket.username);
+        if(userIndex !== -1 && users[userIndex].activeTurn){
+            const correctIndices = current_question.correctIndices;
+            socket.emit('show_correct_answer', correctIndices);
 
 
-
-        if(correctIndices.includes(parseInt(answerIndex))) {
-            // waiting to see the answer before dice roll
-            setTimeout(() => {
-                let steps = 0;
-                if(current_question_hard){
-                    const random1 = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
-                    const random2 = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
-                    console.log(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!")
-                    socket.emit('roll_dice', [random1, random2]);
-                    steps = random1+random2;
-                }else{
-                    const random = Math.floor(Math.random() * 6) + 1; // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
-                    console.log(socket.username + " hat " + random + " gewürfelt!")
-                    socket.emit('roll_dice', [random]);
-                    steps = random;
-                }
-
-
-                // wating for animation so set new position
+            // if anser is right
+            if(correctIndices.includes(parseInt(answerIndex))) {
+                // waiting to see the answer before dice roll
                 setTimeout(() => {
-                    const index = findUserIndexByName(socket.username)
-                    if (index !== -1) {
-                        users[index].fieldIndex+=steps;
-                        users[index].x = field_positions[users[index].fieldIndex].x;
-                        users[index].y = field_positions[users[index].fieldIndex].y;
-                        io.sockets.emit('update', users);
+                    let steps = 0;
+                    if(current_question_hard){
+                        const random1 = getRandomInt(1, 6);
+                        const random2 = getRandomInt(1, 6);
+                        console.log(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!")
+
+                        socket.emit('roll_dice', [random1, random2]);
+                        steps = random1+random2;
+                    }else{
+                        const random = getRandomInt(1, 6);
+                        console.log(socket.username + " hat " + random + " gewürfelt!")
+                        socket.emit('roll_dice', [random]);
+                        steps = random;
                     }
+
+
+                    // wating for animation so set new position
+                    setTimeout(() => {
+                        const index = findUserIndexByName(socket.username)
+                        if (index !== -1) {
+                            users[index].fieldIndex+=steps;
+                            users[index].x = field_positions[users[index].fieldIndex].x;
+                            users[index].y = field_positions[users[index].fieldIndex].y;
+                            io.sockets.emit('update', users);
+                        }
+                    }, 3000);
+
+
                 }, 3000);
-
-
-            }, 3000);
-        }else{
-            socket.emit('roll_dice', []);
+            }else{
+                socket.emit('roll_dice', []);
+            }
         }
+    })
+
+    socket.on('next_player', data => {
+        nextPlayer(findUserIndexByName(socket.username));
     })
     
     function findUserIndexByName(username) {
@@ -205,5 +221,23 @@ io.sockets.on('connection', socket => {
 
     function isEmptyOrSpaces(str){
         return str === null || str.match(/^ *$/) !== null;
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+        // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+    }
+
+    function nextPlayer(activeIndex) {
+        users[activeIndex].activeTurn = false;
+        if(activeIndex >= users.length-1){
+            activeIndex = 0;
+        }else{
+            activeIndex++;
+        }
+        console.log("Next turn: " + users[activeIndex].name + " with Index: " + activeIndex);
+        users[activeIndex].activeTurn = true;
+        io.sockets.emit('new message', {msg: users[activeIndex].name +  " ist dran.", user: "server"});
+        io.sockets.emit('update', users);
     }
 })
