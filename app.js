@@ -71,7 +71,7 @@ io.sockets.on('connection', function(socket){
                 usersLobby1.push(data.username);
                 if (usersLobby1.length >= 3) {
                     console.log("Start game lobby 1");
-                    socket.emit('autostart');
+                    io.sockets.emit('autostart');
                 }
                 break;
 
@@ -83,7 +83,7 @@ io.sockets.on('connection', function(socket){
                 usersLobby2.push(data.username);
                 if (usersLobby2.length >= 3) {
                     console.log("Start game lobby 2");
-                    socket.emit('autostart');
+                    io.sockets.emit('autostart');
                 }
                 break;
 
