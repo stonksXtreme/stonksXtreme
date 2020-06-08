@@ -2,9 +2,9 @@
   {
     "question": "What is B?",
     "answers": [
-      "A",
-      "B",
-      "B",
+      "Aä",
+      "Bü",
+      "Bö",
       "D"
     ],
     "correctIndices": [1, 2]

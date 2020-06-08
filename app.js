@@ -38,7 +38,10 @@ io.sockets.on('connection', socket => {
         if(index >= 0){
             //users.splice(index, 1);
             users[index].isConnected = false;
-            nextPlayer(index);
+            if(users[index].activeTurn){
+               nextPlayer(index); 
+            }
+            
         }
 
         io.sockets.emit('update', users);
@@ -77,9 +80,9 @@ io.sockets.on('connection', socket => {
                         users.push({
                             name: socket.username,
                             color: colors[users.length],
-                            x: field_positions[0].x,
-                            y: field_positions[0].y,
-                            fieldIndex: 0,
+                            x: field_positions[1].x,
+                            y: field_positions[1].y,
+                            fieldIndex: 1,
                             isConnected: true,
                             usedEasyQuestionIndices: [],
                             usedHardQuestionIndices: [],
@@ -109,6 +112,7 @@ io.sockets.on('connection', socket => {
         }
         // round starts
         if(!firstStart && users.length >= 6){
+            alignPlayers();
             firstStart = true;
             const random = getRandomInt(0, users.length-1);
             nextPlayer(random);
@@ -165,13 +169,12 @@ io.sockets.on('connection', socket => {
                     if(current_question_hard){
                         const random1 = getRandomInt(1, 6);
                         const random2 = getRandomInt(1, 6);
-                        console.log(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!")
-
+                        sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
                         socket.emit('roll_dice', [random1, random2]);
                         steps = random1+random2;
                     }else{
                         const random = getRandomInt(1, 6);
-                        console.log(socket.username + " hat " + random + " gewürfelt!")
+                        sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
                         socket.emit('roll_dice', [random]);
                         steps = random;
                     }
@@ -180,8 +183,14 @@ io.sockets.on('connection', socket => {
                     // wating for animation so set new position
                     setTimeout(() => {
                         const index = findUserIndexByName(socket.username)
-                        if (index !== -1) {
-                            users[index].fieldIndex+=steps;
+                        if(index !== -1) {
+                            if(users[index].fieldIndex+steps >= field_positions.length-1){
+                                sendChatMessage(users[index].name + " hat gewonnen!");
+                                users[index].fieldIndex = field_positions.length - 1;
+                            }else{
+                                users[index].fieldIndex += steps;
+                            }
+
                             users[index].x = field_positions[users[index].fieldIndex].x;
                             users[index].y = field_positions[users[index].fieldIndex].y;
                             io.sockets.emit('update', users);
@@ -235,9 +244,50 @@ io.sockets.on('connection', socket => {
         }else{
             activeIndex++;
         }
-        console.log("Next turn: " + users[activeIndex].name + " with Index: " + activeIndex);
-        users[activeIndex].activeTurn = true;
-        io.sockets.emit('new message', {msg: users[activeIndex].name +  " ist dran.", user: "server"});
+        if(!users[activeIndex].isConnected){
+            nextPlayer(activeIndex);
+        }else{
+            sendChatMessage("Next turn: " + users[activeIndex].name);
+            users[activeIndex].activeTurn = true;
+            io.sockets.emit('update', users);
+        }
+    }
+
+    function sendChatMessage(msg){
+        console.log(msg);
+        io.sockets.emit('new message', {msg: msg, user: "server"});
+    }
+
+    function alignPlayers(){
+        for(let index in users){
+            switch (index) {
+                case 0:
+                    users[index].y -= 24;
+                    break;
+                case 1:
+                    users[index].x += 22;
+                    users[index].y -= 18;
+                    break;
+                case 2:
+                    users[index].x += 22;
+                    users[index].y += 18;
+                    break;
+                case 3:
+                    users[index].y += 24;
+                    break;
+                case 4:
+                    users[index].x -= 22;
+                    users[index].y += 18;
+                    break;
+                case 5:
+                    users[index].x -= 22;
+                    users[index].y -= 18;
+                    break;
+                default:
+                    break;
+            }
+        }
+        console.log(users);
         io.sockets.emit('update', users);
     }
 })

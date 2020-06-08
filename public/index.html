@@ -180,8 +180,6 @@
       e.preventDefault(); // prevent the default action (scroll / move caret)
     };
 
-
-
     var canvas = document.getElementById("canvas"),
             context = canvas.getContext("2d");
 
@@ -210,7 +208,7 @@
       resize();
     });
 
-    socket.on('roll_dice', dices => {
+    socket.on('roll_dice', function(dices){
       $('.modalCloseButton').removeClass("hidden");
 
       let html = '<div class="center">'
@@ -223,12 +221,9 @@
         }
         $('.modal-body').html(html + '</div>');
       }
-
-
-
     });
 
-    socket.on('show_correct_answer', correctIndices => {
+    socket.on('show_correct_answer', function(correctIndices){
       $('.selectedButton').addClass("redButton");
 
       for(let i in correctIndices){
@@ -237,10 +232,8 @@
       }
     });
 
-    socket.on('question_return', question => {
+    socket.on('question_return', function(question){
       $('.modal-title').html(question.question);
-
-
 
       var buttons = '';
       for(let answer in question.answers){
@@ -268,7 +261,7 @@
       })
     });
 
-    socket.on('update', users => {
+    socket.on('update', function(users){
 
       var html = '';
       // draw on canvas
@@ -294,12 +287,6 @@
             html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
           }
         }
-
-
-
-
-
-
       }
 
       $users.html(html);
@@ -326,7 +313,7 @@
       if($username.val().replace(/\s/g,"") === ""){
         alert("Invalid Username")
       }else{
-        socket.emit('new user', $username.val(), error_Code => {
+        socket.emit('new user', $username.val(), function(error_Code){
           switch (error_Code) {
             case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
             case 1: alert("Invalid Username"); break;
