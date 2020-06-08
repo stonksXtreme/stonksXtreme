@@ -27,7 +27,6 @@ console.log("Server running on http://localhost:3000");
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 io.sockets.on('connection', socket => {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
@@ -39,9 +38,9 @@ io.sockets.on('connection', socket => {
             //users.splice(index, 1);
             users[index].isConnected = false;
             if(users[index].activeTurn){
-               nextPlayer(index); 
+               nextPlayer(index);
             }
-            
+
         }
 
         io.sockets.emit('update', users);
@@ -56,7 +55,7 @@ io.sockets.on('connection', socket => {
 
     // New User
     socket.on('new user', function(data, callback){
-        const colors = ["red", "green", "blue", "gray", "pink", "violet"]
+        const colors = ["red", "green", "blue", "yellow", "black", "violet"]
         socket.username = data;
         if(!isEmptyOrSpaces(socket.username)){
             if(getConnectedUsers() < 6){
@@ -110,9 +109,10 @@ io.sockets.on('connection', socket => {
             // invalid username
             callback(1);
         }
+        alignPlayers();
         // round starts
         if(!firstStart && users.length >= 6){
-            alignPlayers();
+
             firstStart = true;
             const random = getRandomInt(0, users.length-1);
             nextPlayer(random);
@@ -191,8 +191,7 @@ io.sockets.on('connection', socket => {
                                 users[index].fieldIndex += steps;
                             }
 
-                            users[index].x = field_positions[users[index].fieldIndex].x;
-                            users[index].y = field_positions[users[index].fieldIndex].y;
+                            setPositionFromJson(index);
                             io.sockets.emit('update', users);
                         }
                     }, 3000);
@@ -208,7 +207,7 @@ io.sockets.on('connection', socket => {
     socket.on('next_player', data => {
         nextPlayer(findUserIndexByName(socket.username));
     })
-    
+
     function findUserIndexByName(username) {
         for(let i in users){
             if(users[i].name === username){
@@ -258,36 +257,157 @@ io.sockets.on('connection', socket => {
         io.sockets.emit('new message', {msg: msg, user: "server"});
     }
 
+    function setPositionFromJson(index) {
+        users[index].x = field_positions[users[index].fieldIndex].x;
+        users[index].y = field_positions[users[index].fieldIndex].y;
+    }
+
     function alignPlayers(){
-        for(let index in users){
-            switch (index) {
-                case 0:
-                    users[index].y -= 24;
-                    break;
-                case 1:
-                    users[index].x += 22;
-                    users[index].y -= 18;
-                    break;
-                case 2:
-                    users[index].x += 22;
-                    users[index].y += 18;
-                    break;
-                case 3:
-                    users[index].y += 24;
-                    break;
-                case 4:
-                    users[index].x -= 22;
-                    users[index].y += 18;
-                    break;
-                case 5:
-                    users[index].x -= 22;
-                    users[index].y -= 18;
-                    break;
-                default:
-                    break;
+        var fields = [];
+        for(let userIndex in users){
+            if(fields[users[userIndex].fieldIndex] == null){
+                fields[users[userIndex].fieldIndex] = [userIndex];
+            }else{
+                fields[users[userIndex].fieldIndex].push(userIndex);
             }
         }
-        console.log(users);
+
+        for(let arrayIndex in fields){
+            if(fields[arrayIndex] !== null){
+                console.log("Auf dem Feld " + arrayIndex + " stehen folgende spieler: " + fields[arrayIndex]);
+            }
+
+
+            switch (fields[arrayIndex].length) {
+                case 2: twoPlayersOnSameField(fields[arrayIndex]); break;
+                case 3: threePlayersOnSameField(fields[arrayIndex]); break;
+                case 4: fourPlayersOnSameField(fields[arrayIndex]); break;
+                case 5: fivePlayersOnSameField(fields[arrayIndex]); break;
+                case 6: sixPlayersOnSameField(fields[arrayIndex]); break;
+                default: break;
+            }
+        }
+
         io.sockets.emit('update', users);
+    }
+
+    function twoPlayersOnSameField(userIndices) {
+        for(let i in userIndices){
+            setPositionFromJson(userIndices[i]);
+            switch (parseInt(i)) {
+                case 0:
+                    users[userIndices[i]].x -= 14;
+                    users[userIndices[i]].y -= 14;
+                    break;
+                case 1:
+                    users[userIndices[i]].x += 14;
+                    users[userIndices[i]].y += 14;
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    function threePlayersOnSameField(userIndices) {
+        for(let i in userIndices){
+            setPositionFromJson(userIndices[i]);
+            switch (parseInt(i)) {
+                case 0:
+                    users[userIndices[i]].y -= 20;
+                    break;
+                case 1:
+                    users[userIndices[i]].x += 18;
+                    users[userIndices[i]].y += 12;
+                    break;
+                case 2:
+                    users[userIndices[i]].x -= 18;
+                    users[userIndices[i]].y += 12;
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    function fourPlayersOnSameField(userIndices) {
+        for(let i in userIndices){
+            setPositionFromJson(userIndices[i]);
+            const value = 18;
+            switch (parseInt(i)) {
+                case 0:
+                    users[userIndices[i]].x += value;
+                    users[userIndices[i]].y -= value;
+                    break;
+                case 1:
+                    users[userIndices[i]].x += value;
+                    users[userIndices[i]].y += value;
+                    break;
+                case 2:
+                    users[userIndices[i]].x -= value;
+                    users[userIndices[i]].y += value;
+                    break;
+                case 3:
+                    users[userIndices[i]].x -= value;
+                    users[userIndices[i]].y -= value;
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    function fivePlayersOnSameField(userIndices) {
+        for(let i in userIndices){
+            setPositionFromJson(userIndices[i]);
+            const value = 24;
+            switch (parseInt(i)) {
+                case 1:
+                    users[userIndices[i]].x += value;
+                    users[userIndices[i]].y -= value;
+                    break;
+                case 2:
+                    users[userIndices[i]].x += value;
+                    users[userIndices[i]].y += value;
+                    break;
+                case 3:
+                    users[userIndices[i]].x -= value;
+                    users[userIndices[i]].y += value;
+                    break;
+                case 4:
+                    users[userIndices[i]].x -= value;
+                    users[userIndices[i]].y -= value;
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    function sixPlayersOnSameField(userIndices) {
+        for(let i in userIndices){
+            setPositionFromJson(userIndices[i]);
+            switch (parseInt(i)) {
+                case 0:
+                    users[userIndices[i]].y -= 33;
+                    break;
+                case 1:
+                    users[userIndices[i]].x += 27;
+                    users[userIndices[i]].y -= 16;
+                    break;
+                case 2:
+                    users[userIndices[i]].x += 27;
+                    users[userIndices[i]].y += 16;
+                    break;
+                case 3:
+                    users[userIndices[i]].y += 33;
+                    break;
+                case 4:
+                    users[userIndices[i]].x -= 27;
+                    users[userIndices[i]].y += 16;
+                    break;
+                case 5:
+                    users[userIndices[i]].x -= 27;
+                    users[userIndices[i]].y -= 16;
+                    break;
+                default: break;
+            }
+        }
     }
 })
