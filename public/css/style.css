@@ -1,21 +1,20 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 .box {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
-
 .box .header {
-  flex: 0 1 auto;
-  /* The above is shorthand for:
+    flex: 0 1 auto;
+    /* The above is shorthand for:
   flex-grow: 0,
   flex-shrink: 1,
   flex-basis: auto
@@ -23,83 +22,108 @@ a {
 }
 
 .loginContent {
-  flex: 1 1 auto;
-  background-image: url("../img/SpielfeldPlaceholder.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+    flex: 1 1 auto;
+    background-image: url("../img/SpielfeldPlaceholder.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .box .mainContent {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .box .footer {
-  flex: 0 1 auto;
+    flex: 0 1 auto;
 }
 
 .center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
 }
 
-#userFormArea{
-  width: 20em;
-  position: absolute;
-  top: 47%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+#userFormArea {
+    width: 20em;
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #messageArea {
-  display: flex;
-  flex-flow: row;
-  flex-wrap: wrap;
-  height: 100%;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    height: 100%;
 }
 
 #messageArea .card {
-  flex: 1 1 auto;
-  flex-grow: 1;
+    flex: 1 1 auto;
+    flex-grow: 1;
 }
 
-.form-group{
-  margin: 1em;
+.form-group {
+    margin: 1em;
 }
 
-.card-title{
-  text-align: center;
+.card-title {
+    text-align: center;
 }
 
 .field {
-  width: 50em;
+    width: 50em;
 }
 
-.users{
-  width: 10em;
+.users {
+    width: 10em;
 }
 
 .messages {
-  width: 10em;
+    width: 10em;
 }
 
-.chat{
-  width: 100%
+.chat {
+    width: 100%
 }
 
 .pickup {
-  width: 10em;
+    width: 10em;
 }
 
-.card img{
-  width: 100%;
+.card img {
+    width: 100%;
 }
 
-.card{
-  margin: 1em;
+.card {
+    margin: 1em;
 }
 
+.lobbyUsername {
+    margin-top: 2%;
+    text-align: center;
+    font-size: 25px;
+}
 
+.divLobbyButton {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4%;
+    text-align: center;
+}
+
+.lobbyButton {
+    font-size: 20px;
+    background-color: green;
+    border-radius: 10px;
+    border-style: none;
+    color: white;
+    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    display: inline-block;
+}
