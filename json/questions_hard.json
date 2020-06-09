@@ -1,32 +1,902 @@
 [
   {
-    "question": "This is very hard: What is B?",
+    "question": "Was ist die institutionale Sicht der Betriebswirtschaftslehre?",
     "answers": [
-      "A",
-      "B",
-      "B",
-      "D"
+      "Gegenstand der Betriebswirtschaftslehre sind Betriebe und Betriebswirtschaften.",
+      "Gegenstand der Betriebswirtschaftslehre sind im Rahmen des Betriebes getroffene Entscheidungen und Handlungen.",
+      "Die Interpretation von Kant bezüglich der Zukunft der Betriebswirtschaftslehre.",
+      "Eine spezielle Art der Naturwissenschaften."
     ],
-    "correctIndices": [1, 2]
+    "correctIndices": [0]
   },
   {
-    "question": "This is very hard: What is C?",
+    "question": "Wie berechnet man die Fertigungskosten?",
     "answers": [
-      "Not C",
-      "B",
-      "A",
-      "C"
+      "Fertigungslöhne + Fertigungsgemeinkosten",
+      "Fertigungslöhne + Fertigungsgemeinkosten + Sondereinzelkosten der Fertigung",
+      "Fertigungslöhne + Fertigungsgemeinkosten * Sondereinzelkosten der Fertigung + Fertigungsmaterial",
+      "Fertigungsmaterial + Materialgemeinkosten"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wie berechnet man die Herstellkosten?",
+    "answers": [
+      "Fertigungslöhne + Fertigungsgemeinkosten + Sondereinzelkosten der Fertigung + Fertigungsmaterial",
+      "Fertigungsmaterial + Materialgemeinkosten",
+      "Materialkosten + Fertigungskosten",
+      "Materialkosten + Fertigungslöhne + Fertigungsgemeinkosten"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Was für eine Art von Gut sind Aktien?",
+    "answers": [
+      "Gebrauchsgut",
+      "Konsumgut",
+      "Verbrauchsgut",
+      "Investitionsgut"
+    ],
+    "correctIndices": [0,3]
+  },
+  {
+    "question": "Was für eine Art von Gut ist eine private Bohrmaschine?",
+    "answers": [
+      "Investitionsgut",
+      "Gebrauchsgut",
+      "Konsumgut",
+      "Verbrauchsgut"
+    ],
+    "correctIndices": [1,2]
+  },
+  {
+    "question": "Was ist ein bilaterales Monopol?",
+    "answers": [
+      "Angebot ist monopolistisch, Nachfrage atomistisch.",
+      "Angebot monopolistisch, Nachfrage oligopolistisch.",
+      "Angebot und Nachfrage sind monopolistisch.",
+      "Angebot atomistisch, Nachfrage monopolistisch."
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Was ist ein Angebotsoligopol?",
+    "answers": [
+      "Angebot und Nachfrage sind monopolistisch.",
+      "Angebot und Nachfrage oligopolistisch.",
+      "Angebot oligopolistisch, Nachfrage monopolistisch.",
+      "Nachfrage atomistisch, Angebot oligopolistisch."
     ],
     "correctIndices": [3]
   },
   {
-    "question": "Select any",
+    "question": "Was ist ein Nachfrageoligopol?",
     "answers": [
-      "Me?",
-      "Hi",
-      "Select me",
-      "What's up"
+      "Nachfrage oligopolistisch, Angebot atomistisch.",
+      "Angebot und Nachfrage sind oligopolistisch.",
+      "Nachfrage oligopolistisch, Angebot monopolistisch.",
+      "Angebot oligopolistisch, Nachfrage monopolistisch."
     ],
-    "correctIndices": [0, 1 ,2, 3]
+    "correctIndices": [0]
+  },
+  {
+    "question": "Was ist eine Reverse Auktion?",
+    "answers": [
+      "Ein Anbieter, mehrere Nachfrager.",
+      "Ein Nachfrager, mehrere Anbieter.",
+      "Mehrere Anbieter und mehrere Nachfrager.",
+      "Kein Anbieter und keine Nachfrager."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Welche Rechtsform benötigt keine Eintragung in das Handelsregister?",
+    "answers": [
+      "Kommanditgesellschaft",
+      "Einzelkaufleute",
+      "GbR",
+      "GmbH"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Welches ist das älteste deutsche Unternehmen?",
+    "answers": [
+      "Adidas",
+      "Weltenburg GmbH",
+      "Brüne GmbH",
+      "Weihenstephan"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Wann hat die Landwirtschaft in Gebieten der heutigen Länder (Deutschland, Österreich und Schweiz) angefangen?",
+    "answers": [
+      "Etwa 5000 Jahre vor unserer Zeitrechnung.",
+      "Etwa 2000 Jahre vor unserer Zeitrechnung.",
+      "Etwa 8000 Jahre vor unserer Zeitrechnung.",
+      "Etwa 700 Jahre vor unserer Zeitrechnung."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Wann wurde das erste mal eine Währung erfunden?",
+    "answers": [
+      "Etwa 100 Jahre vor unserer Zeitrechnung.",
+      "Etwa 700 Jahre vor unserer Zeitrechnung.",
+      "Um den Beginn unserer Zeitrechnung.",
+      "Etwa 300 Jahre nach Beginn unserer Zeitrechnung."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Welche Rechtsform benötigt eine notarielle Beurkundung?",
+    "answers": [
+      "Offene Handelsgesellschaft",
+      "Kommanditgesellschaft",
+      "Aktiengesellschaft",
+      "Unternehmensgesellschaft"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Was ist eine Ebene des klassischen 4-Ebenen-Modells?",
+    "answers": [
+      "Innovationsmanagement",
+      "Entscheidungstheorie",
+      "Unternehmensverfassung",
+      "Leistungserstellung"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Nennen Sie die zwei Kapitalgesellschaften (Rechtsformen)",
+    "answers": [
+      "GmbH, AG",
+      "KG, UG",
+      "OHG, GbR",
+      "GesmbH, AG"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Nennen Sie die zwei Mischformen (Rechtsformen)",
+    "answers": [
+      "GmbH, AG",
+      "KGaA, GmbH & Co. KG",
+      "KG, UG",
+      "OHG, GbR"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wie läuft der Gewinnanspruch bei einer Genossenschaft ab?",
+    "answers": [
+      "Anspruch auf zunächst 4 % des Kapitalanteils, Rest des Gewinns (bzw. Verlusts) nach einem angemessenen Verhältnis verteilt.",
+      "Der Gewinn ist frei verfügbar.",
+      "Gewinnverteilung wird von der Gesamtheit der Gesellschafter der Generalversammlung vorgenommen.",
+      "Gewinnverteilung im Verhältnis der eingezahlten Stammeinlagen, der Gesellschaftsvertrag kann andere Gewinnverteilung festlegen."
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Wie läuft der Gewinnanspruch bei einer Aktiengesellschaft ab?",
+    "answers": [
+      "Ein angemessener Teil der Gewinn- und Verlustbeteiligung kann im Gesellschaftsvertrag ausgeschlossen werden.",
+      "Anspruch auf zunächst 4% des Kapitalanteils, Rest des Gewinns (bzw. Verlusts) nach Köpfen verteilt.",
+      "Gewinnverteilung im Verhältnis der eingezahlten Stammeinlagen.",
+      "Gewinnverteilung im Verhältnis der Aktien-Nennbeträge, Satzung kann andere Art der Gewinnverteilung festlegen."
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Welche Rechtsform hat in der Regel die niedrigste Kreditwürdigkeit?",
+    "answers": [
+      "GmbH",
+      "Einzelunternehmen",
+      "Aktiengesellschaft",
+      "Kommanditgesellschaft"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Was trifft nicht auf einen Aktionär zu?",
+    "answers": [
+      "Recht auf einen Anteil am Liquidationserlös.",
+      "Finanzielle Nachschusspflicht bei wirtschaftlichen Schwierigkeiten.",
+      "Dividendenrecht.",
+      "Teilnahme an der Hauptversammlung und Stimmrecht."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was ist ein Avalkredit?",
+    "answers": [
+      "Kreditinstitut übernimmt Kautionszahlung des Kunden.",
+      "Kreditinstitut stellt liquide Mittel zur Verfügung.",
+      "Kreditinstitut übernimmt Bürgschaft für die Kreditwürdigkeit.",
+      "Kreditinstitut stellt Garantie über Kreditwürdigkeit."
+    ],
+    "correctIndices": [2,3]
+  },
+  {
+    "question": "Was sind die 4 Bestandteile des vollständigen Wirtschaftskreislaufes?",
+    "answers": [
+      "Haushalt, Staat, Kapitalsammelstellen und Unternehmen.",
+      "Haushalt, Unternehmen, Steuerbehörden und Staat.",
+      "Privatperson, Staat, Kapitalsammelstellen und Arbeitgeber.",
+      "Haushalt, Staat, Kapitalsammelstellen und Steuerbehörden."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Warum ist Wirtschaften notwendig?",
+    "answers": [
+      "Da sonst die Notwendigkeit von Unternehmen nicht mehr gegeben wäre.",
+      "Aufgrund von knappen Gütern und unbegrenzten Bedürfnissen der Menschen.",
+      "Lediglich um die Gesellschaft am Laufen zu halten.",
+      "Weil die Menschen ohne Wirtschaften unglücklich sind."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Nennen Sie mindestens 2 Eigenschaften des Homo Oeconomicus",
+    "answers": [
+      "Er kauft alles, was er sich leisten kann, unabhängig von der Notwendigkeit.",
+      "Er handelt sehr zurückhaltend und kauft nur das Nötigste.",
+      "Völlig zweckrationales Handeln, vollkommene Markstransparenz und Voraussicht.",
+      "Gewinn- bzw. Nutzenmaximierung, sowie sofortige Reaktion auf Datenänderungen."
+    ],
+    "correctIndices": [2,3]
+  },
+  {
+    "question": "Was ist ein Monopson?",
+    "answers": [
+      "Ein Nachfragemonopol (ein Nachfrager, viele Anbieter).",
+      "Ein Bilaterales Monopol.",
+      "Ein Angebotsmonopol.",
+      "Ein beschränktes Nachfragemonopol."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Was sind Unternehmen aus dem teriären Sektor?",
+    "answers": [
+      "Verarbeitungsbetriebe",
+      "Dienstleistungsunternehmen",
+      "Aufbereitungsbetriebe",
+      "Gewinnungsbetriebe"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was sind Unternehmen aus dem sekundären Sektor?",
+    "answers": [
+      "Gewinnungsbetriebe",
+      "Aufbereitungsbetriebe",
+      "Verarbeitungsbetriebe",
+      "Dienstleistungsunternehmen"
+    ],
+    "correctIndices": [1,2]
+  },
+  {
+    "question": "Was sind Unternehmen aus dem primären Sektor?",
+    "answers": [
+      "Dienstleistungsunternehmen",
+      "Verarbeitungsbetriebe",
+      "Aufbereitungsbetriebe",
+      "Gewinnungsbetriebe"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was beschreibt die Elastizität des Preises?",
+    "answers": [
+      "Umfang der Reaktion von Kunden auf Preisschwankungen, ggf. den Wechsel zur Konkurrenz.",
+      "Die Spanne vom kleinsten bis zum größten Preis.",
+      "Die Intensität der Reaktion von Kunden auf günstigere Preise.",
+      "Die Dehnbarkeit des Preises im Zusammenhang mit sonstigen Einnahmen."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Was bedeutet 'Diversifikation'?",
+    "answers": [
+      "Begriff aus dem Poker",
+      "Ausweitung auf neue Produkte und neue Märkte",
+      "Monopoleintritt",
+      "Viele kleinere Unternehmen aufkaufen"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wie kann die Produktentwicklungsstrategie umgesetzt werden?",
+    "answers": [
+      "Umstieg auf die 50h Woche",
+      "Mindesteinlage von 50k€",
+      "Änderung der Programmbreite/Programmtiefe",
+      "Mehr Maschinen in der Produktionsstelle"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Arten der Diversifikationsstrategie?",
+    "answers": [
+      "Senkrecht",
+      "Waagerecht",
+      "Diversifikation ist per Definition nicht in verschiedene Arten unterteilt",
+      "Horizontal, Vertikal, Lateral"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Erkläre 'Horizontale Diversifikation'",
+    "answers": [
+      "Erweiterung um ähnliche Produkte",
+      "Simple Methode zur Kapitalisierung",
+      "Aktienmanipulation",
+      "Gehaltsvorschuss eines CEOs"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Erkläre 'vertikale Diversifikation'",
+    "answers": [
+      "Aktienmanipulation",
+      "Vor/Nachschaltung bestehender Produkten in der Wertschöpfungskette",
+      "Simple Methode zur Kapitalisierung",
+      "Gehaltsvorschuss eines CEOs"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Erkläre 'laterale Diversifikation'",
+    "answers": [
+      "Verteilung des eigenen Portfolios",
+      "Gewichtung des verkauften Produkts",
+      "Vorstoß in völlig neue Produkt-oder Marktbereiche",
+      "Gehaltsvorschuss eines CEOs"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Nenne zwei Marktstimulierungsstrategien",
+    "answers": [
+      "Angebot-Nachfrage Stimulierung, Preis-Nachfrage-Strategie",
+      "Preis-Produkt Strategie, Nachfragenkonsens",
+      "Einzelpersonstrategie, Multipersonenstrategie",
+      "Präferenzstraegie, Preis-Mengen-Strategie"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was ist Voraussetzung für die Preis-Mengen-Strategie?",
+    "answers": [
+      "Kostenführerschaft",
+      "Hohe Produktionsleistung",
+      "Viel Eigenkapital",
+      "Qualitatives Produkt"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Nenne zwei Marktparzellierungsstrategien",
+    "answers": [
+      "Aufteilung in Regionen, Absatzaufteilung",
+      "Massenmarktstrategie, Marktsegmentierungsstrategie",
+      "Einzelmarktstrategie (Standardprodukte), Marktteilsegmentierungsstrategie",
+      "Senkrechte Aufteilung, waagerechte Strategie"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Nenne eine Segmentierungskategorie",
+    "answers": [
+      "Zielgruppen",
+      "Teilmärkte",
+      "Kaufverhalten",
+      "Geschäftsfelder"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Wofür sind folgende Analysen geeignet: Regressionsanalyse, Varianzanalyse, Diskriminanzanalyse, Conjointanalyse?",
+    "answers": [
+      "Computerprobleme",
+      "Pferde",
+      "Wettervorhersage",
+      "Analysen von Abhängigkeiten"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Welche Mittel können zur Analyse von Dependenzen herangezogen werden?",
+    "answers": [
+      "Regressionsanalyse,Varianzanalyse, Diskriminanzanalyse",
+      "KGV-Analyse, UV- Vergleich, REM-Auswertung",
+      "Marktweite Studie zu diversen Themenbereichen",
+      "Dependenzen können nicht analysiert werden"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Wofür sind folgende Analysen geeignet: Clusteranalyse, Faktoranalyse, Mehrdimensionale Skalierung?",
+    "answers": [
+      "Analyse von Unternehmen (International)",
+      "Analyse von Beziehungen (Interdependenzen)",
+      "Analyse von Aktienmustern (Forex-Handel)",
+      "Astrologie"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Welche Analysen sind für die Analyse von Interdependenzen geeignet?",
+    "answers": [
+      "Beziehungsanalyse",
+      "ID-Analyse",
+      "Clusteranalyse/Faktoranalyse",
+      "Internationale Analyse"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Nenne Marktarealstrategien",
+    "answers": [
+      "Nationale (domestic) Strategien: lokale, regionale, überregionale, nationale Markterschließung",
+      "Schnelle Übernahme möglichst vieler Areale",
+      "Langsame Übernahme möglichst vieler Areale",
+      "Übernationale (globale) Strategien: Multinationale, internationale, Weltmarkterschließung"
+    ],
+    "correctIndices": [0,3]
+  },
+  {
+    "question": "Erkläre 'Wasserfall Strategie'",
+    "answers": [
+      "Sukzessiver Markteinritt, Ein Land nach dem anderen",
+      "Kontinuierliche Marktübernahme",
+      "Reihenweise Anbringen von Werbeplakaten",
+      "Bestmögliche Diversifikation von Aktien"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Erkläre 'Sprinkler Strategie'",
+    "answers": [
+      "Sprinkler so auf Rasen platzieren, dass mehrere Pflanzen gleichzeitig bewässert werden",
+      "Simultaner Markteintritt, Mehrere Länder/Regionenzeitgleich",
+      "Größtmögliche Verbreitung der eigenen Produktion",
+      "Werbung schalten in den 5 größten Städten der Welt"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Nenne eine Markteintrittsstrategie",
+    "answers": [
+      "Industrieeintritt",
+      "Monopoleintritt",
+      "'First-to-market' (Pionerstrategie)",
+      "Automatisierungseintritt"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Nenne qualitative Prognoseverfahren",
+    "answers": [
+      "Marketingprognose",
+      "Tertiäre Prognose",
+      "Historische Prognose",
+      "Umfragen, Brainstorming"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Erkläre 'Open Innovation'",
+    "answers": [
+      "Aktive Nutzung der Ideen externer Quellen",
+      "Frei verfügbare Idee, Wettlauf um Patent",
+      "Innovation, welche man im Internet finden kann",
+      "Innovation, welche durch kein Passwort gesichert ist"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Erkläre 'Crowdsourcing'",
+    "answers": [
+      "Event mit mindestens 1000 Besuchern",
+      "Auslagerung von Aufgaben an eine Menge von freiwilligen Nutzern",
+      "Bug in einem Computerprogramm",
+      "Versammlung mehrerer Menschen"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Erkläre 'Inkrementelle Innovation'",
+    "answers": [
+      "Leichter Gewinnanstieg",
+      "Anheben der Produktqualität welche einen Umsatzanstieg zur Folge hat",
+      "geringes Risiko, geringes Gewinnpotential",
+      "Innovation, welche so noch nie da war"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Erkläre 'Radikale Innovation'",
+    "answers": [
+      "Innovation, welche innerhalb von wenigen Wochen umgesetzt und im Markt eingeführt wird",
+      "Idee im Bereich der Politik",
+      "Jahrhundertidee",
+      "großes Risiko, großes Gewinnpotential"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was sind Crowdsourcing Kategorien?",
+    "answers": [
+      "Marktplatz für eigene Ideen, Öffentliche Initiativen",
+      "Freelancerplattformen, Entwicklung, Ideen, Design",
+      "Inland/Auslands-freelancer",
+      "Medien, IT, Support"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Nenne die 5 Phasen des Produktlebenszyklus in Reihenfolge",
+    "answers": [
+      "Reifephase, Entwicklung, Wachstum, Markteinführung, Absatzrückgang",
+      "Entwicklung, Markteinführung, Wachstum, Reifephase, Absatzrückgang",
+      "Absatzrückgang, Entwicklung, Reifephase, Wachstum, Markteinführung",
+      "Entwicklung, Reifephase, Wachstum, Absatzrückgang, Markteinführung"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Nenne die 4 Crowdsourcing Kategorien",
+    "answers": [
+      "Freelancerplattformen, Entwicklung, Ideen, Design",
+      "Innovation, Effizienz, Effektivität, Ideen",
+      "Entwicklungsplattformen, Designplattformen, Freelancerplattform, Ideenplattformen",
+      "Crowdsourcing gehört nicht zu Marketing"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Beschreibe den Ablauf des Crowdsourcing",
+    "answers": [
+      "Spendenlink aufsetzen, Abwarten, Projekt durchführen",
+      "Vorbereitung, Durchführung, Initiierung, Verwertung",
+      "Initiierung, Vorbereitung, Durchführung, Auswertung",
+      "Vorbereitung, Initiierung, Durchführung, Auswertung, Verwertung"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Welche Marketingausrichtungen gibt es?",
+    "answers": [
+      "Dienstleistungsmarketing",
+      "Geomarketing",
+      "Gender Marketing",
+      "Angebot basiertes Marketing"
+    ],
+    "correctIndices": [0,1,2]
+  },
+  {
+    "question": "Welche Marketingdefinitionen gibt es nicht?",
+    "answers": [
+      "Aktivitätsorientierte Definition",
+      "Inaktivitätsorientierte Definition",
+      "Beziehungsorientierte Defintion",
+      "Führungsorientierte Definition"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wann sprach man zum ersten mal vom Begriff 'Marketing'?",
+    "answers": [
+      "ca seit dem 18. Jahrhundert",
+      "Es gibt kein Datum welches man nennen kann",
+      "zwischen 1905 und 1920",
+      "1746"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Als Projektleiter sollen Sie eine Marketingstrategie für einen Vergnügungspark planen. Zu Ihrem ersten Kick-Off-Meeting haben Sie alle betroffenen Stakeholder eingeladen Während der Sitzung stellen Sie fest, dass die Stakeholder unterschiedliche konkurrierende Interessen haben. Was tun Sie?",
+    "answers": [
+      "Das Meeting abbrechen und das nächste mal nur Stakeholder mit gleichen Interessen einladen.",
+      "Das Meeting in diesem Stadium abbrechen und sich mit dem oberen Management beraten",
+      "Die Stakeholder unterstützen, die nach Ihrer Meinung die vernünftigsten Interessen vertreten.",
+      "Eine Kosten- Nutzen-Analyse der verschiedenen Interessenvorschläge durchführen."
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Die primäre Verantwortung des Projektleiters liegt…",
+    "answers": [
+      "in der Integration.",
+      "im Systementwurf.",
+      "im Kundenkontakt.",
+      "im Statusberichtswesen."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Im Rahmen der Planung Ihres Projektes erstellen Sie einen Projektstrukturplan. Nach welchen Kriterien sollten Sie diesen gliedern?",
+    "answers": [
+      "Nach den Funktionseinheiten, welche die Arbeit durchführen",
+      "Nach den Hauptliefergegenständen",
+      "Nach dem Kontenrahmen der Buchhaltung",
+      "Nach den Stakeholdern, gemäß der Berichtswege"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Sie entwickeln mit Ihrem Team eine Verpackung für ein neues Putzmittel. Sie sind im Verzug und es droht eine hohe Konventionalstrafe. Im letzten Test zeigte sich, dass sich der Deckel bei hoher Hitze verformen kann und Putzmittel austritt. Wie verhalten Sie sich in der nächsten Sitzung beim Kunden?",
+    "answers": [
+      "Sie sagen dem Kunden nichts und versuchen das Problem bis zur Abnahme in den Griff zu bekommen.",
+      "Der Kunde wird das Problem bei der Abnahme hoffentlich nicht bemerken. Sie sagen nichts.",
+      "Sie untersuchen die Ursache, schildern das Problem und legen Lösungen vor.",
+      "Sie stoppen das Projekt und fangen mit der Planung noch einmal an."
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Sie haben als Projektleiter bei einem Kunden eine neue Projektmanagement-Methode eingesetzt und das Projekt sehr erfolgreich beendet. Ein Mitglied Ihres lokalen Projektmanagement-Institut Chapters fragt Sie, ob Sie einen detaillierten Bericht auf dem nächsten Treffen halten könnten. Was ist tun Sie?",
+    "answers": [
+      "Sie geben gerne Ihr Wissen an die Chapters weiter und sagen zu.",
+      "Ablehnen, da Sie durch Ihr Wissen einen Wettbewerbsvorteil haben.",
+      "Ablehnen, da Sie in einem Sicherheitsbereich gearbeitet und vertrauliche Infos erhalten haben.",
+      "Mit dem Kunden den Detaillierungsgrad Ihres Berichtes vorab abstimmen."
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Sie planen eine Telefonkonferenz. Bei der Terminfestsetzung stellen Sie fest, dass an dem von Ihnen geplanten Termin ein benötigter Fachexperte seit langem Urlaub eingeplant hat, weil seine Tochter eingeschult wird. Was machen Sie?",
+    "answers": [
+      "Sie versuchen einen anderen Termin für die Telefonkonferenz zu finden.",
+      "Sie führen das Meeting ohne den Fachexperten durch.",
+      "Sie fragen den Mitarbeiter, ob er seinen Urlaub verschieben kann.",
+      "Sie erklären dem Mitarbeiter, dass der Erfolg des Projektes wichtiger als die Einschulung seiner Tochter ist."
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "In einer Verhandlung über eine große Beschaffung meint ein potentieller Auftragnehmer, Sie sollten die Besprechung doch in einer angenehmen Atmosphäre fortsetzen, und lädt Sie und Ihre Frau zu einem Theaterbesuch mit Gala-Dinner ein. Was machen Sie?",
+    "answers": [
+      "Sie nehmen das Angebot dankend an, denn Sie legen Wert auf eine gute Zusammenarbeit mit Ihren Sublieferanten.",
+      "Sie lehnen dankend ab und dokumentieren den persönlichen Vorteil.",
+      "Sie nehmen das Angebot an und fragen , ob Sie nicht einen Kollegen statt Ihrer Frau mitnehmen können.",
+      "Sie nehmen es an, schließen den Auftraggeber aber wegen Bestechung von weiteren Verhandlungen aus."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Stufen der Teamentwicklung: Nach Bruce W. Tuckmann folgt der Teamentwicklungsprozess einer bestimmten Reihenfolge. Bitte markieren Sie die Aussage/n, von denen Sie glauben, dass sie richtig ist/sind.",
+    "answers": [
+      "Norming, Performing, Adjourning, Forming, Storming",
+      "Performing, Adjourning, Forming, Storming, Norming.",
+      "Forming, Storming, Norming, Performing, Adjourning",
+      "Storming, Norming, Performing, Forming, Adjourning."
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Kommunikation bei Kontroverse: Die Veränderungen in den Unternehmen verlangen von Projektleitern besondere kommunikative Fähigkeiten. Wie sollte ein Projektleiter in einer heftig geführten fachlichen Diskussion vorgehen?",
+    "answers": [
+      "Darauf achten, dass die unterschiedlichen Positionen zu Wort kommen.",
+      "Er sollte bei strittigen Fragen die Diskussion schnell beenden.",
+      "Da er aufgrund seiner Rolle in Fachfragen kompetenter ist, sollte er zügig entscheiden",
+      "Darauf achten, dass sich niemand verletzt fühlt und trotzdem seine Position deutlich machen kann."
+    ],
+    "correctIndices": [0,3]
+  },
+  {
+    "question": "Vorteile eines PM-Handbuchs: Ein PM-Handbuch hat eine Reihe von Vorteilen. Welche der folgenden Aussagen sind richtig?",
+    "answers": [
+      "Ein PM-Handbuch optimiert und standardisiert das Projektmanagement in einem Unternehmen",
+      "Ein PM-Handbuch erleichtert die Projektarbeit.",
+      "Ein PM-Handbuch schafft eine rechtliche Grundlage für die Projektarbeit im Unternehmen",
+      "Ein PM-Handbuch ist ein vertrauliches Dokument und darf nur vom Projektleiter eingesehen werden"
+    ],
+    "correctIndices": [0,1]
+  },
+  {
+    "question": "Kreativität in Einzelarbeit: Welche Kreativitätstechnik kann jemand allein einsetzen, um eine Lösung für ein Problem zu finden?",
+    "answers": [
+      "Synektik",
+      "Mindmapping",
+      "Morphologischer Kasten",
+      "Brainstorming"
+    ],
+    "correctIndices": [1,2]
+  },
+  {
+    "question": "Kreativitätstechnik auswählen: Ein Projektleiter möchte eine Kreativitätstechnik zur Problemlösung im Projekt einzusetzen. Welche Techniken stehen für diesen Zweck in der nachfolgenden Liste zur Auswahl?",
+    "answers": [
+      "Balkendiagramm",
+      "Brainwriting",
+      "Synektik",
+      "Feasibility Study"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Schwierige internationale Projekte: Internationale Projekt stellen hohe Anforderungen an den Projektleiter. Bitte nennen Sie einige zutreffende Gründe.",
+    "answers": [
+      "Dank den Online-Übersetzungsmöglichkeiten von heute muss der Projektleiter kein Englisch können.",
+      "Eventuell mehrere Sprachen im Projekt können die Verständigung zwischen den Projektbeteiligten erschweren.",
+      "Aufgrund der unterschiedlichen kulturellen Hintergründe kann es zu Missverständnissen kommen.",
+      "Zeitverschiebungen können die Kommunikation erschweren."
+    ],
+    "correctIndices": [1,2,3]
+  },
+  {
+    "question": "Unterschiedliche Kulturen im Team: Ein Projektleiter, der ein Projekt mit internationaler Besetzung leitet, sollte eine Reihe von Eigschaften verfügen. Bitte markieren Sie diese Eigenschaften, von denen Sie glauben, dass sie ihm bei seiner Aufgabe helfen.",
+    "answers": [
+      "In Abstimmung mit seinem Team stellt er die Regeln der Zusammenarbeit auf.",
+      "Er bemüht sich, die Mitglieder aus allen Landeskulturen gleich zu behandeln.",
+      "Er versucht, die deutsche Arbeitsgepflogenheiten zügig in die Projektarbeit einzuführen.",
+      "Er weist oft auf die Vorteile der deutschen Art des Projektmanagements hin."
+    ],
+    "correctIndices": [0,1]
+  },
+  {
+    "question": "Zielländer für deutsche Exporte: Welches waren die drei Hauptzielländer deutscher Exporte in 2015? Bitte markieren Sie die richtige Reihenfolge nach Exportvolumen in €.",
+    "answers": [
+      "China, USA, Niederland",
+      "USA, Frankreich, UK",
+      "USA, China, UK",
+      "Italien, USA, Russland"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Management ist ein Prozess des Setzen und Einhalten von Zielen durch: Planung, Organisation, Lenkung und ...",
+    "answers": [
+      "Spaß",
+      "Kommunizieren",
+      "Kontrolle",
+      "Kommandieren"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Die Komplexität eines Projektes kann anahande der Menge von ... bestimmt werden.",
+    "answers": [
+      "Aufgaben",
+      "Ressourcen",
+      "Vorschriften",
+      "Abhängigkeiten"
+    ],
+    "correctIndices": [0,1,3]
+  },
+  {
+    "question": "Was ist nicht Teil der Voruntersuchung?",
+    "answers": [
+      "Risikoanalyse",
+      "Machbarkeitsanalyse",
+      "Alternativpläne",
+      "Vorläufiger Projektplan"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Wodurch wird in der Software-Entwicklung wird das zu erstellende Produkt aus Sicht des Anwenders beschrieben?",
+    "answers": [
+      "Interne Referenz Spezifikationen (IRS)",
+      "Externe Referenz Spezifikation (ERS)",
+      "Lastenheft",
+      "Pflichtenheft"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wodurch werden projektinterne Details zur Realisierung der ERS festgehalten?",
+    "answers": [
+      "Lastenheft",
+      "Pflichtenheft",
+      "Interne Referenz Spezifikationen (IRS)",
+      "Externe Referenz Spezifikation (ERS)"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Ein weit verbreiteter PM-Standard des Project Management Institute ist...",
+    "answers": [
+      "ISO 21500 'Guidance on project management'",
+      "BKPM-Guide",
+      "DIN 69901 'Projektmanagement – Projektmanagementsysteme'",
+      "'A Guide to the Project Managment Body of Knowledge'"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Woraus besteht der Kontrollprozess?",
+    "answers": [
+      "Überwachung und Messung des Fortschritts und falls nötig das Einleiten von korrektiven Maßnahmen",
+      "Überwachung der Mitarbeiter",
+      "Überwachung und Messung der Meilensteine",
+      "Auswertung des Projektfortschritts"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Welcher PM Wissensbereich ist für die Erfüllung der Vorgaben zuständig?",
+    "answers": [
+      "Zeitmanagement",
+      "Qualitätsmanagement",
+      "Scope-Management",
+      "Ressourcenmanagement"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Welche Prozesse gehören nicht zum Risikomanagement?",
+    "answers": [
+      "Entwicklung von Gegenmaßnahmen",
+      "Identifizierung und Quantifizierung von Risiken",
+      "Erstellung von Alternativplänen",
+      "Risiko-Reaktion"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Was ist nicht in RACI enthalten?",
+    "answers": [
+      "Accountable",
+      "Approver",
+      "Informed",
+      "Reasonable"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Wofür steht das 'S' RASIC?",
+    "answers": [
+      "Supporting",
+      "Supervising",
+      "Signatory",
+      "Scope"
+    ],
+    "correctIndices": [0]
+  },
+  {
+    "question": "Wie lassen sich die Zuständigkeiten mehrerer Projektbeteiligter anschaulich darstellen?",
+    "answers": [
+      "ERS",
+      "Projekthandbuch",
+      "Projektstrukturplan",
+      "RAPID-Tabelle"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Zwischen welchen Bereichen wird im Stakeholdermanagement unterschieden?",
+    "answers": [
+      "Primäres, Sekundäres & Tertiäre Umfeld",
+      "Primäres & Sekundäres Umfeld",
+      "Es wird nicht unterschieden",
+      "Intern & Extern"
+    ],
+    "correctIndices": [1,3]
+  },
+  {
+    "question": "Wie errechnet man den Freien Puffer?",
+    "answers": [
+      "FAZ(Nachfolger) - FEZ(Vorgänger)",
+      "FAZ(Nachfolger) - FEZ(Vorgänger)",
+      "FEZ(Nachfolger) - FAZ(Vorgänger)",
+      "SAZ-FAZ"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wie errechnet man den Gesamtpuffer?",
+    "answers": [
+      "SAZ-FAZ",
+      "SAZ-FEZ",
+      "FEZ-SEZ",
+      "FAZ-FEZ"
+    ],
+    "correctIndices": [0,2]
   }
 ]

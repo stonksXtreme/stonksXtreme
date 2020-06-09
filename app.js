@@ -127,6 +127,7 @@ io.sockets.on('connection', socket => {
             if(hard) {
                 usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
                 if(usedQuestionIndices < hard_questions.length){
+                    sendChatMessage(socket.username + " hat eine schwere Karte ausgewählt.");
                     do{
                         random = getRandomInt(0, hard_questions.length);
                     }
@@ -139,6 +140,7 @@ io.sockets.on('connection', socket => {
             }else{
                 usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
                 if(usedQuestionIndices < easy_questions.length){
+                    sendChatMessage(socket.username + " hat eine einfache Karte ausgewählt.");
                     do{
                         random = getRandomInt(0, easy_questions.length);
                     }
@@ -159,7 +161,7 @@ io.sockets.on('connection', socket => {
             socket.emit('show_correct_answer', correctIndices);
 
 
-            // if anser is right
+            // if answer is right
             if(correctIndices.includes(parseInt(answerIndex))) {
                 // waiting to see the answer before dice roll
                 setTimeout(() => {
@@ -196,6 +198,7 @@ io.sockets.on('connection', socket => {
 
                 }, 3000);
             }else{
+                sendChatMessage(socket.username + " hat die Frage falsch beantwortet.");
                 socket.emit('roll_dice', []);
             }
         }

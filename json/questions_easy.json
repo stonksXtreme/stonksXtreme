@@ -1,22 +1,565 @@
 [
   {
-    "question": "What is B?",
+    "question": "Was bildet die Spitze der Bedürfnispyramide?",
     "answers": [
-      "Aä",
-      "Bü",
-      "Bö",
-      "D"
-    ],
-    "correctIndices": [1, 2]
-  },
-  {
-    "question": "What is C?",
-    "answers": [
-      "Not C",
-      "B",
-      "A",
-      "C"
+      "Soziale Bedürfnisse",
+      "Selbstvertrauen",
+      "Selbstverwirklichung",
+      "Erfolg"
     ],
     "correctIndices": [3]
+  },
+  {
+    "question": "Was ist eine Eigenschaft von Gütern?",
+    "answers": [
+      "Güter sind immer knapp (bis auf freie Güter).",
+      "Güter sind außschließlich physisch.",
+      "Güter sind permanent verfügbar.",
+      "Für Güter existiert immer eine Nachfrage."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wie lautet das Modell eines ausschließlich 'wirtschaftlich' denkenden Menschens?",
+    "answers": [
+      "Homo Cooperativus",
+      "Homo Consumens",
+      "Homo Oecologicus",
+      "Homo Oeconomicus"
+    ],
+    "correctIndices": [4]
+  },
+  {
+    "question": "Auf welche Bestandteile ist der einfache Wirtschaftskreisauf reduziert?",
+    "answers": [
+      "Unternehmen und Staat",
+      "Haushalt und Banken",
+      "Haushalt und Unternehmen",
+      "Banken und Staat"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was bedeutet Liquidität (BWL)?",
+    "answers": [
+      "Das 'verfließen' von finanziellen Mitteln.",
+      "Die Fähigkeit den zukünftigen und bestehenden Zahlungsverpflichtungen nachzukommen.",
+      "Die Flüssigkeit eines Stoffes.",
+      "Einer Zahlungsverpflichtung nachzukommen."
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Welche Rechtsform benötigt ein Mindestkapital?",
+    "answers": [
+      "Unternehmensgesellschaft",
+      "Einzelunternehmen",
+      "Kommanditgesellschaft",
+      "Offene Handelsgesellschaft"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Wozu wid die Erfassung von Aufwendungen und Erträgen benötigt?",
+    "answers": [
+      "Lagerbuchhaltung",
+      "Debitorenbuchhaltung",
+      "Finanzierung",
+      "Gewinn und Verlustrechnung"
+    ],
+    "correctIndices": [4]
+  },
+  {
+    "question": "Was ist ein Bespiel für einen Ertrag?",
+    "answers": [
+      "Zinserträge",
+      "Krediterträge",
+      "Provisionserträge",
+      "Umsatzerlöse"
+    ],
+    "correctIndices": [1 , 2 , 4]
+  },
+  {
+    "question": "Nenne Beispiele für Aufwendugen",
+    "answers": [
+      "Werbeaufwand, Zinsaufwand",
+      "Mietaufwand, Personalaufwand",
+      "Kraftaufwand, Leistungsaufwand",
+      "Steuern, Büromaterial"
+    ],
+    "correctIndices": [1 , 2 , 4]
+  },
+  {
+    "question": "Erkläre das Maximumprinzip",
+    "answers": [
+      "Erziele die beste Leistung, mit dem niedrigsten Aufwand.",
+      "Arbeite immer mit 110%.",
+      "Handle so, dass die angestrebten Leistungen mit einem Minimum an Mitteln erreicht werden.",
+      "Handle so, dass die Leistungen bei gegebenem Mitteleinsatz möglichst groß werden."
+    ],
+    "correctIndices": [4]
+  },
+  {
+    "question": "Erkläre das Minimumprinzip",
+    "answers": [
+      "Handle so, dass die angestrebten Leistungen mit einem Minimum an Mitteln erreicht werden.",
+      "Erziele die beste Leistung mit dem niedrigsten Aufwand.",
+      "Arbeite stets mit minimalstem Aufwand.",
+      "Handle so, dass die Leistungen bei gegebenem Mitteleinsatz möglichst groß werden."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Welches dieser Güter ist ein freies Gut?",
+    "answers": [
+      "Internet",
+      "Sonnenlicht",
+      "Wasser",
+      "Luft"
+    ],
+    "correctIndices": [2 , 3 , 4]
+  },
+  {
+    "question": "Was ist die ABC-Analyse?",
+    "answers": [
+      "Auflistung der Produkte nach dem Alphabet.",
+      "Einteilung der Produkte nach Quantität.",
+      "Die Analyse des Alphabets.",
+      "Einteilung der Produkte nach prozentualem Anteil am Gewinn."
+    ],
+    "correctIndices": [4]
+  },
+  {
+    "question": "Was ist chronologisch zuerst aufgetreten?",
+    "answers": [
+      "Erstellung einer Bilanz",
+      "Verfassung eines Lehrbuchs für Buchführung",
+      "Erste Belege für eine doppelte Buchführung",
+      "Erstellung eines Jahresabschlusses"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was ist ein Investitionsgut?",
+    "answers": [
+      "Ein anderes Wort für ein Vorleistungsgut.",
+      "Einrichtungsgegenstände.",
+      "Ein kurzlebiges Gut.",
+      "Investitionsgüter befriedigen indirekt menschliche Bedürfnisse."
+    ],
+    "correctIndices": [4]
+  },
+  {
+    "question": "Was hiervon ist ein immaterielles Gut / Güter?",
+    "answers": [
+      "Verbrauchsgüter",
+      "Investitionsgüter",
+      "Patente",
+      "Holz"
+    ],
+    "correctIndices": [1 , 2 , 3]
+  },
+  {
+    "question": "Was hiervon ist ein materielles Gut / Güter?",
+    "answers": [
+      "Verbrauchsgüter",
+      "Investitionsgut",
+      "Versicherungen",
+      "Aktien"
+    ],
+    "correctIndices": [2]
+  },
+  {
+    "question": "Was ist ein Bedarf (BWL)?",
+    "answers": [
+      "Mit Kaufkraft ausgestattetes Bedürfnis.",
+      "Die Art und/oder Menge der aus objektiver Sicht benötigten Güter/Dienstleistungen.",
+      "Der Wunsch nach einem finanziell unerreichbaren Gut.",
+      "Der Drang mehr Geld zu besitzen."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was ist ein Bedürfnis (BWL)?",
+    "answers": [
+      "Das Empfinden eines Mangels.",
+      "Der Drang etwas zu kaufen mit ausreichenden finanziellen Mitteln.",
+      "Der Wunsch nach einem neuen Gut und der daraus folgende Kauf.",
+      "Der explizite Wunsch nach körperlichen Grundbedürfnissen."
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was bildet die Basis der Bedürftnispyramide?",
+    "answers": [
+      "WLAN",
+      "Akku",
+      "Grundbedürfnisse zum Leben",
+      "Sicherheit und Geborgenheit"
+    ],
+    "correctIndices": [3]
+  },
+  {
+    "question": "Was ist Marketing?",
+    "answers": [
+      "Verbindungselement zwischen Produktion und Verbrauch / Konsum Unternehmen und Kundenbedürfnissen",
+      "Eine Sportart",
+      "Eigenbasierte Unternehmensführung zur Befriedigung der Bedürfnisse und Erwartungen von Kunden",
+      "Werbung"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was ist ökologisch orientiertes Marketing?",
+    "answers": [
+      "Negative Umwelteinflüsse minimieren",
+      "Maximale Umsatzerzielung",
+      "Naturnahes Planen von Veranstaltungen",
+      "Werbung mit Bäumen"
+    ],
+    "correctIndices": [1]
+  },
+  {
+    "question": "Was ist das SOSTAC Modell?",
+    "answers": [
+      "Situation Analysis, Objectives, Strategy, Tactics, Afford, Control",
+      "Situation, Objective, Strategy, Tactics, Action, Control",
+      "Situation Analysis, Objection, Strategy, Tactics, Action, Control",
+      "Situation Analysis, Objectives, Strategy, Tactics, Action, Control"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Was sind die 4 Ps von Marketing?",
+    "answers": [
+      "Politik, Produkt, Preis, Promotion",
+      "Preis, Produkt, Promotion, Place (Distributionspolitik)",
+      "Preis, Produkt, Platzieren, Preisdifferenzierung",
+      "Preis, PR, Produkt,  Produktion"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Was macht eine Marketing Agentur?",
+    "answers": [
+      "Produkt- bis Vertriebspolitik / Kommunikationsmaßnahme",
+      "Beratung bezüglich maximaler Umsatzerzielung",
+      "3 Tage Woche",
+      "Ausgestalten einer Werbeveranstaltung"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Was ist der Vorteil von Direktverkauf?",
+    "answers": [
+      "Bessere Marge",
+      "Kundenkontakt",
+      "Zeitmanagement",
+      "Es gitb keine nennenswerten Vorteile"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Was beinhaltet die Preispolitik (Preisfindung/Preisdefinition)?",
+    "answers": [
+      "Mehrwöchige Sitzungen im Bundestag",
+      "Preisermittlung via Formel (AP = Faktor x HEL + additives Glied)",
+      "Preispolitik ist ein ausgedachter Begriff",
+      "Ausgangspreise bestimmen und Preisdifferenzierung"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Was beinhaltet die Produktpolitik (Bestimmung des Produktes/Sortiments)?",
+    "answers": [
+      "Optimierung der Marge",
+      "Leistungsumfang der einzelnen Produkte und Service",
+      "Übernahme von Unternehmen, welche vergleichbare Produkte anbieten",
+      "Testen des Produkts"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Was beinhaltet die Distributionspolitik (Definition der Vertriebswege)?",
+    "answers": [
+      "Verkauf von Produkten über Mittelsmänner",
+      "Verteilung von Innovationen (Gaußsche Kurve)",
+      "Direkter Vertrieb an Endkunden",
+      "Lange Geschäftsreisen"
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Was beinhaltet die Kommunikationspolitik (Kontaktierung der Kunden)?",
+    "answers": [
+      "Politische Entscheidungen im Bundestag",
+      "Small Talk beim Kunden",
+      "Workshop beim Kunden mit dem Thema Kommunikation",
+      "PR/Öffentlichkeitsarbeit"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Warum ist Namensfindung wichtig?",
+    "answers": [
+      "Innere Ruhe",
+      "Differenzierung, Aufmerksamkeitserregung",
+      "Etablierung einer Marke",
+      "Nicht wichtig"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Was sind die Ebenen der Konzeptionspyramide?",
+    "answers": [
+      "Es gibt keine Konzeptionspyramide",
+      "Marketinganfang (Start), Marketingtaktiken (Ziel), Marketingvisier (Zwischenebene)",
+      "Marketingziele (Wunschorte), Marketingstrategien (Route), Marketingmix (Instrumente)",
+      "Situation Analysis, Objection, Strategy, Tactics, Action, Control"
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Was ist das verkürzte ökologische Konzept?",
+    "answers": [
+      "Anknüpfen an konkrete umweltrelevante Produkteigenschaften",
+      "Kurzfristige ökologische Besserung",
+      "Verringerung des CO2 Ausstoßes um 30%",
+      "Reduzierung des eigenen ökologischen Fußabdrucks für 2 Jahre"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Was ist das echte ökologische Konzept?",
+    "answers": [
+      "Lebenslange Reduzierung des eigenen ökologischen Fußabdrucks",
+      "Langfristige ökologische Besserung",
+      "Verringerung des CO2 Ausstoßes um 50%",
+      "Umsetzung eines ganzheitlichen ökologischen Konzepts"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Was ist Erlebnismarketing?",
+    "answers": [
+      "Bewerben durch Abenteuer",
+      "Kostenloser Eintritt im Freizeitpark",
+      "Freie Produkte kostenlos testen",
+      "Psychologische Produkt-/ und Markendifferenzerung"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Definiere 'Marketingstrategie'",
+    "answers": [
+      "Permanente Werbung mithilfe aller Kommunikationswege",
+      "Strategien legen den Handlungsrahmen bzw. eine Route mit zielgerichteten Instrumenten fest",
+      "Taktisches Vorgehen, Analyse des gesamten Unternehmens, Individuelle Strategie zur Kundengewinnung",
+      "Der Begriff ist ausgedacht"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Was ist ein Merkmal von 'Strategie'?",
+    "answers": [
+      "Durchgeklügelte Herangehensweise um Kunden zu gewinnen",
+      "100% Erfolgsquote",
+      "Strukturbestimmend (konstruktiv)",
+      "Einfach, Schnell"
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Was ist ein Merkmal von 'Taktik'?",
+    "answers": [
+      "Ablaufbestimmend (situativ)",
+      "Zeitbestimmt",
+      "Funktioniert meistens nicht",
+      "Erfahrungsbasierend"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Welche Strategie gibt es (Marketing)?",
+    "answers": [
+      "Choke-Point-Strategie",
+      "Frontalmarketingstrategie",
+      "Zwei-Fronten-Strategie",
+      "Marktfeldstrategie"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Welche Marktfeldstrategie gibt es?",
+    "answers": [
+      "Penetrationsstrategie",
+      "Produktinnovationsstrategie",
+      "Marktdurchdringungsstrategie",
+      "Developement Strategie"
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Um eine hohe Kundenzufriedenheit zu erreichen, müssen Sie vor allem…",
+    "answers": [
+      "alle Wünsche des Kunden erfüllen.",
+      "die Anforderungen des Kunden genau definieren.",
+      "den Kunden zu allen Projektbesprechungen einladen, damit er immer ausreichend informiert ist.",
+      "den Kunden während der Projektlaufzeit mit Berichten verschonen und am Ende das Projektprodukt abliefern."
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Sie planen für einen Kunden den Neubau eines Bürogebäudes. Für Ihre Planung wäre es hilfreich, wenn Sie Luftaufnahmen des betroffenen Baugebietes zur Verfügung hätten. Aufgrund von gesetzlichen Bestimmungen ist ein Überfliegen des Gebietes im Normalfall verboten. Was ist Ihre nächste Handlung?",
+    "answers": [
+      "Sie fragen bei der zuständigen Behörde an ob Sie eine Ausnahmegenehmigung erhalten.",
+      "Sie planen den Neubau ohne Luftaufnahmen.",
+      "Sie versuchen ein Flugunternehmen zu engagieren, das trotz Verbot das Gebiet überfliegt und Aufnahmen macht.",
+      "Sie laden den verantwortlichen Beamten und seine Familie zum Essen ein und versuchen ihn umzustimmen."
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Damit Teams aus unterschiedlichen Kulturen erfolgreich zusammenarbeiten, ist alles unabdingbar, außer dass…",
+    "answers": [
+      "gegenseitiges Vertrauen besteht.",
+      "die kulturellen Unterschiede berücksichtigt werden.",
+      "die Teammitglieder entsprechend geschult sind bzw. werden.",
+      "das Team an einem gemeinsamen Ort zusammenarbeitet."
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Einer der am häufigsten verwendeten Projektlebenszyklen lässt sich in folgende Phasen unterteilen:",
+    "answers": [
+      "Konzept, Ausführung und Berichtswesen.",
+      "Konzept, Entwicklung, Durchführung und Abschluss.",
+      "Konzept, Planung, Entwicklung, Ausführung und Berichtswesen.",
+      "Planung, Steuerung, Definition und Abschluss."
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Mit welchem Problem hat ein Projektleiter in einer „Projektorientierten Organisation“ am ehesten zu rechnen?",
+    "answers": [
+      "Unklare Personalverantwortung",
+      "Schlechte Kundenansprache",
+      "Überstunden",
+      "Unsicherheit bei den Mitarbeitern"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Der Projektmanagementplan…",
+    "answers": [
+      "stellt das Erreichen der Terminziele des Projektes sicher.",
+      "stellt das Erreichen der Kostenziele des Projektes sicher.",
+      "verbessert die Kommunikation innerhalb des Projektteams.",
+      "dokumentiert die wesentlichen technischen Alternativen, die zu Berücksichtigen sind."
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Inhalts- und Umfangsmanagement ist …",
+    "answers": [
+      "sich mit den Grenzen des Projektes zu befassen.",
+      "sich hauptsächlich mit dem Management der täglichen Vorgänge des Projektes zu befassen.",
+      "ein Teilgebiet des umfassenden Änderungsmanagements.",
+      "in der Verantwortung des Kunden."
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Welche Aufgaben umfasst das Projektportfoliomanagement?",
+    "answers": [
+      "Es soll dazu dienen, die knappen Ressourcen für die Projektarbeit effizient einzusetzen.",
+      "Es soll dazu dienen, Erfahrungen aus einzelnen Projekten systematisch zu nutzen.",
+      "Es soll dazu dienen, die Abhängigkeiten zwischen den Projekten zu erkennen.",
+      "Es soll dazu dienen, die Erfahrungsberichte aller Projekte im Unternehmen zu archivieren."
+    ],
+    "correctIndices": [1 , 2 , 3]
+  },  {
+    "question": "Der autoritäre Führungsstil zeichnet sich durch mehrere Merkmale aus. Welche Aussage(n) trifft/treffen zu?",
+    "answers": [
+      "Der Projektleiter beteiligt seine Mitarbeiter an den wichtigen Projektentscheidungen.",
+      "Der Projektleiter entscheidet allein über mögliche Handlungsoptionen im Projekt.",
+      "Der Projektleiter delegiert Entscheidungen.",
+      "Der Projektleiter lässt keine Kritik an seinen Maßnahmen zu."
+    ],
+    "correctIndices": [1 , 3]
+  },  {
+    "question": "Für die Arbeit in Projekten verwendet man üblicherweise den Begriff Team, was ist ein Team?",
+    "answers": [
+      "Ein Team ist definitionsgemäß harmonisch und konfliktfrei.",
+      "Ein Team besteht aus einer Gruppe von Personen.",
+      "Ein Team besteht über die Dauer des Projektes hinaus.",
+      "Ein Team hat ein gemeinsames Ziel."
+    ],
+    "correctIndices": [2 , 4]
+  },  {
+    "question": "Die Genauigkeit der Planung sollte proportional sein zu…",
+    "answers": [
+      "der Komplexität des Projekts.",
+      "dem Budget des Projekts.",
+      "der Teamgröße des Projekts.",
+      "den Aufgaben des Projekts."
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Die 'Goldene Regel' des PM:",
+    "answers": [
+      "Aufgabenteilung, Kontrolle, Plan",
+      "Organisation, Steuerung, Aufgabenteilung",
+      "Plan, Kontrolle, Überwachung",
+      "Plan, Organisation, Steuerung"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Wer erstellt das Lastenheft?",
+    "answers": [
+      "Auftragnehmer",
+      "der Praktikant",
+      "Auftraggeber",
+      "beide Parteien"
+    ],
+    "correctIndices": [3]
+  },  {
+    "question": "Wer erstellt das Pflichtenheft?",
+    "answers": [
+      "Auftragnehmer",
+      "der Praktikant",
+      "Auftraggeber",
+      "beide Parteien"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Welches Dokument beinhaltet die Gesamtheit der Forderungen des Auftraggebers an die Lieferungen und Leistungen seines Auftragnehmers?",
+    "answers": [
+      "Pflichtenheft",
+      "Lastenheft",
+      "Auftrag",
+      "Kaufvertrag"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Terminplanung, Kostenplanung, Ressourcenplanung und Risikoplanung bilden …",
+    "answers": [
+      "den Projektplan",
+      "den Projektstrukturplan",
+      "das Projekttagebuch",
+      "die Interne Referenz Spezifikation"
+    ],
+    "correctIndices": [1]
+  },  {
+    "question": "Zentrales Kommunikationsmittel zwischen Teammitgliedern ist …",
+    "answers": [
+      "die Kaffepause",
+      "das Projekttagebuch",
+      "die Teambesprechung",
+      "der Gruppenchat"
+    ],
+    "correctIndices": [2]
+  },  {
+    "question": "Wer sind die Stakeholder in einem Projekt?",
+    "answers": [
+      "Alle die aktiv am Projekt beteiligt sind, alle deren Interessen Einfluss auf das Projekt haben.",
+      "Jemand, der ein Steak hält.",
+      "Die Projektmitglieder.",
+      "Vom Projekt beeinflusste."
+    ],
+    "correctIndices": [1 , 3 , 4]
+  },  {
+    "question": "Was beschreibt die Vorgangsliste?",
+    "answers": [
+      "Termine für die Fertigstellung der Vorgänge",
+      "Zuständigkeiten",
+      "Alle zum Projekt zugehörigen Vorgänge",
+      "Abhängigkeiten und Dauer einzelner Vorgänge"
+    ],
+    "correctIndices": [4]
+  },  {
+    "question": "Was ist der 'kritische Pfad/Weg'?",
+    "answers": [
+      "Ein Vorgang, dessen Verzögerung eine Verzögerung des Gesamtprojektes bewirkt.",
+      "Die Abfolge von Vorgängen, bei denen aus Verzögerung eines Elementes ein Verzug des Gesamtprojektes folgt.",
+      "Die Vorgänge mit dem niderigsten Freien Puffer.",
+      "Eine Serie von Fehlentscheidungen, die zum Scheitern des Projekts führt."
+    ],
+    "correctIndices": [2]
   }
 ]
