@@ -3,7 +3,7 @@ function isBlank(str) {
 }
 
 $(function () {
-    var STOAGE_USERNAME_KEY = "username";
+    var STORAGE_USERNAME_KEY = "username";
     var STORAGE_LOBBY_ID_KEY = "lobby";
 
     var socket = io.connect();
@@ -24,11 +24,11 @@ $(function () {
     /* ======================= General ======================= */
     /* ======================================================= */
 
-    if(sessionStorage.hasOwnProperty(STOAGE_USERNAME_KEY)) {
-        $yourUsername.html(sessionStorage.getItem(STOAGE_USERNAME_KEY));
+    if(sessionStorage.hasOwnProperty(STORAGE_USERNAME_KEY)) {
+        $yourUsername.html(sessionStorage.getItem(STORAGE_USERNAME_KEY));
     }
 
-    if(sessionStorage.hasOwnProperty(STOAGE_USERNAME_KEY) && sessionStorage.hasOwnProperty(STORAGE_LOBBY_ID_KEY)) {
+    if(sessionStorage.hasOwnProperty(STORAGE_USERNAME_KEY) && sessionStorage.hasOwnProperty(STORAGE_LOBBY_ID_KEY)) {
         socket.emit('getUsers', sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), function (data) {
 
         });
@@ -48,7 +48,7 @@ $(function () {
 
     $messageForm.submit(function (e) {
         e.preventDefault();
-        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STOAGE_USERNAME_KEY)});
+        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STORAGE_USERNAME_KEY)});
         $message.val('');
     });
 
@@ -68,7 +68,7 @@ $(function () {
             alert("No username!")
         }
         else {
-            sessionStorage.setItem(STOAGE_USERNAME_KEY, $username.val());
+            sessionStorage.setItem(STORAGE_USERNAME_KEY, $username.val());
             window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
         }
 
@@ -86,7 +86,7 @@ $(function () {
         console.log('join lobby ' + lobbyId);
         sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
 
-        socket.emit('new_user',  {username: sessionStorage.getItem(STOAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function () {
+        socket.emit('new_user',  {username: sessionStorage.getItem(STORAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function () {
 
         });
 
