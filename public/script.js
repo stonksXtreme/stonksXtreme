@@ -48,7 +48,7 @@ $(function () {
 
     $messageForm.submit(function (e) {
         e.preventDefault();
-        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STORAGE_USERNAME_KEY)});
+        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), msg: $("<p>"+$message.val()+"</p>").text(), user:sessionStorage.getItem(STORAGE_USERNAME_KEY)});
         $message.val('');
     });
 
