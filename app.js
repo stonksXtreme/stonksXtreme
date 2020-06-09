@@ -79,15 +79,15 @@ io.sockets.on('connection', socket => {
                         users.push({
                             name: socket.username,
                             color: colors[users.length],
-                            x: field_positions[1].x,
-                            y: field_positions[1].y,
-                            fieldIndex: 1,
+                            x: field_positions[0].x,
+                            y: field_positions[0].y,
+                            fieldIndex: 0,
                             isConnected: true,
                             usedEasyQuestionIndices: [],
                             usedHardQuestionIndices: [],
                             activeTurn: false
                         });
-                        io.sockets.emit('update', users);
+                        alignPlayers();
                     }else{
                         if(index >= 0 && !users[index].isConnected){
                             // restore user
@@ -109,10 +109,8 @@ io.sockets.on('connection', socket => {
             // invalid username
             callback(1);
         }
-        alignPlayers();
         // round starts
         if(!firstStart && users.length >= 6){
-
             firstStart = true;
             const random = getRandomInt(0, users.length-1);
             nextPlayer(random);
@@ -190,9 +188,8 @@ io.sockets.on('connection', socket => {
                             }else{
                                 users[index].fieldIndex += steps;
                             }
-
                             setPositionFromJson(index);
-                            io.sockets.emit('update', users);
+                            alignPlayers();
                         }
                     }, 3000);
 
