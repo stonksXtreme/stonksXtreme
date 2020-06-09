@@ -4,7 +4,7 @@ function isBlank(str) {
 
 $(function () {
     var STOAGE_USERNAME_KEY = "username";
-    var STOAGE_LOBBY_ID_KEY = "lobby";
+    var STORAGE_LOBBY_ID_KEY = "lobby";
 
     var socket = io.connect();
 
@@ -28,14 +28,14 @@ $(function () {
         $yourUsername.html(sessionStorage.getItem(STOAGE_USERNAME_KEY));
     }
 
-    if(sessionStorage.hasOwnProperty(STOAGE_USERNAME_KEY) && sessionStorage.hasOwnProperty(STOAGE_LOBBY_ID_KEY)) {
-        socket.emit('getUsers', sessionStorage.getItem(STOAGE_LOBBY_ID_KEY), function (data) {
+    if(sessionStorage.hasOwnProperty(STOAGE_USERNAME_KEY) && sessionStorage.hasOwnProperty(STORAGE_LOBBY_ID_KEY)) {
+        socket.emit('getUsers', sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), function (data) {
 
         });
     }
 
     socket.on('receive_users', function (data) {
-        if(data.lobbyId == sessionStorage.getItem(STOAGE_LOBBY_ID_KEY)) {
+        if(data.lobbyId == sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)) {
             var html = '';
             for (i = 0; i < data.data.length; i++) {
                 html += '<li class="list-group-item">' + data.data[i] + '</li>';
@@ -48,12 +48,12 @@ $(function () {
 
     $messageForm.submit(function (e) {
         e.preventDefault();
-        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STOAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STOAGE_USERNAME_KEY)});
+        socket.emit('send_message', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), msg: $($message.val()).text(), user:sessionStorage.getItem(STOAGE_USERNAME_KEY)});
         $message.val('');
     });
 
     socket.on('new_message', function (data) {
-        if(data.lobbyId == sessionStorage.getItem(STOAGE_LOBBY_ID_KEY)) {
+        if(data.lobbyId == sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)) {
             $chat.append('<b>'+data.user+'</b>'+': '+data.msg+'<br>');
         }
     });
@@ -84,9 +84,9 @@ $(function () {
         let lobbyId = buttonId.replace(/[^\d.-]/g, ''); // get number
 
         console.log('join lobby ' + lobbyId);
-        sessionStorage.setItem(STOAGE_LOBBY_ID_KEY, lobbyId);
+        sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
 
-        socket.emit('new_user',  {username: sessionStorage.getItem(STOAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STOAGE_LOBBY_ID_KEY)}, function () {
+        socket.emit('new_user',  {username: sessionStorage.getItem(STOAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function () {
 
         });
 
@@ -97,8 +97,10 @@ $(function () {
     /* ======================== LOBBY ======================== */
     /* ======================================================= */
 
-    socket.on("autostart", () => {
-        window.parent.document.getElementById('contentController').src = 'game/game.html';
+    socket.on("autostart", data => {
+        if(data == sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)) {
+            window.parent.document.getElementById('contentController').src = 'game/game.html';
+        }
     });
 
     socket.on("full_lobby", data => {

@@ -4,7 +4,9 @@ const path = require('path');
 var server = require("http").Server(app);
 var io = require("socket.io").listen(server);
 usersLobby1 = [];
+counterLobby1 = 0;
 usersLobby2 = [];
+counterLobby2 = 0;
 connections = [];
 
 server.listen(process.env.PORT || 3000);
@@ -69,10 +71,6 @@ io.sockets.on('connection', function(socket){
                     break;
                 }
                 usersLobby1.push(data.username);
-                if (usersLobby1.length >= 3) {
-                    console.log("Start game lobby 1");
-                    io.sockets.emit('autostart');
-                }
                 break;
 
             case 2, '2':
@@ -81,10 +79,6 @@ io.sockets.on('connection', function(socket){
                     break;
                 }
                 usersLobby2.push(data.username);
-                if (usersLobby2.length >= 3) {
-                    console.log("Start game lobby 2");
-                    io.sockets.emit('autostart');
-                }
                 break;
 
             default:
@@ -97,6 +91,21 @@ io.sockets.on('connection', function(socket){
     /* ======================================================= */
     /* ======================== LOBBY ======================== */
     /* ======================================================= */
+
+    socket.on("ready_user", function(data) {
+        switch(data) {
+            case '1':
+                counterLobby1++;
+                if (counterLobby1==usersLobby1.length) {
+                    io.sockets.emit('autostart', 1)
+                }
+            case '2':
+                counterLobby2++;
+                if (counterLobby2==usersLobby2.length) {
+                    io.sockets.emit('autostart', 2)
+                }
+        }
+    })
 
     /* ======================================================= */
     /* ======================= INGAME ======================== */
