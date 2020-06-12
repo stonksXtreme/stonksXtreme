@@ -127,7 +127,7 @@ $(function () {
             
         });
 
-        window.parent.document.getElementById('contentController').contentWindow.document.getElementById('usrRdyBtn').style.visibility = "hidden";
+        document.getElementById('usrRdyBtn').style.visibility = "hidden";
     });
 
     socket.on("autostart", data => {
