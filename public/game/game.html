@@ -1,61 +1,97 @@
 <html>
+
 <head>
   <title>Game | stonksXtreme</title>
-    <!-- Style -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
-  
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script type='text/javascript' src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.ico">
-    <script type='text/javascript' src="../script.js"></script>
+  <!-- Style -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
+
+  <!-- JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script type='text/javascript' src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.ico">
+  <script type='text/javascript' src="../script.js"></script>
 </head>
+
 <body>
 
-<div class="mainContent">
-  <div id="messageArea">
-    <div class="card field">
-      <div class="card-body">
-        <h5 class="card-title">Field</h5>
-        <img src="/img/SpielfeldPlaceholder.jpg"/>
+  <div class="mainContent">
+    <div class="mainArea">
+      <div class="card fieldCard">
+        <div class="card-body">
+          <canvas id="canvas"></canvas>
+        </div>
       </div>
-    </div>
-    <div class="card users">
-      <div class="card-body">
-        <h5 class="card-title">Online users</h5>
-        <ul class="list-group" id="users"></ul>
-      </div>
-    </div>
-    <div class="card messages">
-      <div class="card-body">
-        <h5 class="card-title">Chat</h5>
+      <div class="sideBox ">
+        <div class="sideArea">
 
-
-        <form id="messageForm">
-          <div class="form-group">
-            <textarea class="chat form-control" id="chat" readonly rows="10"></textarea>
-            <input type="text" class="form-control" id="message"/>
-            <br />
-            <input type="submit" class="btn btn-primary" value="Send Message" />
+          <div class="card pickupCard">
+            <div class="card-body">
+              <div class="pickup">
+                <img class="easy_card" src="/img/KartenEinfach.png" />
+                <img class="hard_card" src="/img/KartenSchwer.png" />
+              </div>
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
-    <div class="card pickup">
-      <div class="card-body">
-        <h5 class="card-title">Pickup cards</h5>
-        <img src="/img/KartenEinfach.png"/>
-        <img src="/img/KartenSchwer.png"/>
-      </div>
-    </div>
 
+          <div class="card chatCard">
+            <div class="card-body">
+              <h5 class="card-title">Online users</h5>
+              <ul class="list-group" id="users"></ul>
+              <br />
+              <h5 class="card-title">Chat</h5>
+              <textarea class="form-control" id="chat" readonly rows="8"></textarea>
+              <form id="messageForm">
+                <div class="input-group">
+
+                  <input type="text" class="form-control chatField" placeholder="Enter message here" id="message" />
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary sendButton material-icons">send</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Modal title
+          </h5>
+          <button type="button" class="close modalCloseButton hidden" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
+
 </html>

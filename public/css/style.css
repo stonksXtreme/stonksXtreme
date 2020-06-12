@@ -10,6 +10,18 @@ a {
     display: flex;
     flex-flow: column;
     height: 100%;
+  color: #00B7FF;
+}
+
+.hidden{
+  display: none;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
 }
 
 .box .header {
@@ -30,6 +42,15 @@ a {
     background-attachment: fixed;
 }
 
+.box .loginContent {
+  flex: 1 1 auto;
+  background-image: url("/img/Spielbrett_blur.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .box .mainContent {
     flex: 1 1 auto;
 }
@@ -43,6 +64,10 @@ a {
     width: 50%;
     border: 3px solid green;
     padding: 10px;
+}
+
+.center {
+  text-align: center;
 }
 
 #userFormArea {
@@ -133,6 +158,122 @@ a {
 .lobbyRdyBtn{
     text-align: center;
     margin-top: 10px;
+}
+
+.mainArea {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: stretch;
+}
+
+.fieldCard {
+  order: 0;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  height: calc(100vmin - 90px);
+  width: calc(100vmin - 90px);
+}
+
+.mobileField{
+  height: calc(100vmin - 30px);
+  width: calc(100vmin - 30px);
+}
+
+.sideBox {
+  order: 1;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 600px;
+  min-width: 200px;
+}
+
+.sideArea {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.pickupCard{
+  order: 0;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 500px;
+  min-width: 200px;
+}
+
+.chatCard{
+  order: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 500px;
+  min-width: 200px;
+}
+
+.card{
+  margin: 1em 1em 0;
+}
+
+#canvas{
+  height: 100%;
+}
+
+.pickup > img{
+  width: 48%;
+}
+
+.easy_card{
+  float: left;
+}
+
+.hard_card{
+  float: right;
+}
+
+
+.sendButton{
+  height: calc(100% - 3px);
+}
+
+#messageForm{
+  margin-top: 10px;
+}
+
+.blur{
+  filter: blur(4px);
+}
+
+.modal-xl{
+  width: 90%;
+}
+
+.modal-body_not {
+  background-image: url("/img/Spielkarten_A.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.btn[disabled]{
+  opacity: 1.0;
+}
+
+.greenButton[disabled]{
+  background-color: green;
+}
+
+.redButton[disabled]{
+  background-color: red;
+}
+
+.list-group-item:nth-child(4){
+  color: black;
 }
 
 .rdyBtn{
