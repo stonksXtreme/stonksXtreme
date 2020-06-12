@@ -50,6 +50,31 @@ io.sockets.on('connection', function(socket){
         io.sockets.emit('new_message', {lobbyId:data.lobbyId, msg: data.msg, user: data.user});
     });
 
+    socket.on('CustomDisconnect', function(data) {
+        console.log("disco");
+        let index;
+        switch(data.lobbyId) {
+            case 1, '1':
+                index = usersLobby1.indexOf(data.user);
+                if (index > -1) {
+                    usersLobby1.splice(index, 1);
+                }
+                io.sockets.emit('receive_users', {lobbyId: 1, data: usersLobby1});
+                break;
+
+            case 2, '2':
+                index = usersLobby2.indexOf(data.user);
+                if (index > -1) {
+                    usersLobby2.splice(index, 1);
+                }
+                io.sockets.emit('receive_users', {lobbyId: 2, data: usersLobby2});
+                break;
+
+            default:
+                console.log('Invalid lobby');
+                break;
+        }
+    });
     /* ======================================================= */
     /* ======================= LOGIN ========================= */
     /* ======================================================= */
@@ -96,12 +121,12 @@ io.sockets.on('connection', function(socket){
         switch(data) {
             case '1':
                 counterLobby1++;
-                if (counterLobby1==usersLobby1.length) {
+                if (counterLobby1==usersLobby1.length && usersLobby1.length>=3) {
                     io.sockets.emit('autostart', 1)
                 }
             case '2':
                 counterLobby2++;
-                if (counterLobby2==usersLobby2.length) {
+                if (counterLobby2==usersLobby2.length && usersLobby2.length>=3) {
                     io.sockets.emit('autostart', 2)
                 }
         }

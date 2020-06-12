@@ -19,10 +19,24 @@ $(function () {
     var $username = $('#username');
     var $userForm = $('#userForm');
 
+    let $adjectives = [];
+
+    fetch("/adjectives.json").then(response => response.json()).then(json =>  {
+        json.adjectives.forEach(element => {
+            $adjectives.push(element);
+        });
+    });
+        
 
     /* ======================================================= */
     /* ======================= General ======================= */
     /* ======================================================= */
+
+    window.parent.addEventListener("beforeunload", e => {
+        // e.preventDefault();
+        e.returnValue = "";
+        socket.emit('CustomDisconnect', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), user:sessionStorage.getItem(STORAGE_USERNAME_KEY)});
+    });
 
     if(sessionStorage.hasOwnProperty(STORAGE_USERNAME_KEY)) {
         $yourUsername.html(sessionStorage.getItem(STORAGE_USERNAME_KEY));
@@ -86,6 +100,7 @@ $(function () {
         console.log('join lobby ' + lobbyId);
         sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
 
+        sessionStorage.setItem(STORAGE_USERNAME_KEY, $adjectives[Math.floor(Math.random() * $adjectives.length)] + "_" + sessionStorage.getItem(STORAGE_USERNAME_KEY)); // returns a random integer from 1 to 100 ]
         socket.emit('new_user',  {username: sessionStorage.getItem(STORAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function () {
 
         });
@@ -96,6 +111,17 @@ $(function () {
     /* ======================================================= */
     /* ======================== LOBBY ======================== */
     /* ======================================================= */
+
+    $('button[class=rdyBtn]').click(function() {
+
+        // sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
+
+        socket.emit('ready_user',  sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), function () {
+
+        });
+
+        window.parent.document.getElementById('contentController').contentWindow.document.getElementById('usrRdyBtn').style.visibility = "hidden";
+    });
 
     socket.on("autostart", data => {
         if(data == sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)) {
