@@ -21,7 +21,7 @@ a {
   */
 }
 
-.loginContent {
+#loginContent {
     flex: 1 1 auto;
     background-image: url("../img/SpielfeldPlaceholder.jpg");
     background-repeat: no-repeat;
@@ -145,4 +145,12 @@ a {
     color: Black;
     background-color: #FF80C7;
     text-align: center;
+}
+
+#chooseLobby {
+    display: none;
+}
+
+#lobby {
+    display: none;
 }

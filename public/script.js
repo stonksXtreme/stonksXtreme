@@ -32,7 +32,7 @@ $(function () {
     /* ======================= General ======================= */
     /* ======================================================= */
 
-    window.parent.addEventListener("beforeunload", e => {
+    document.addEventListener("beforeunload", e => {
         // e.preventDefault();
         e.returnValue = "";
         socket.emit('CustomDisconnect', {lobbyId: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), user:sessionStorage.getItem(STORAGE_USERNAME_KEY)});
@@ -82,11 +82,11 @@ $(function () {
             alert("No username!")
         }
         else {
+            console.log("Test")
             sessionStorage.setItem(STORAGE_USERNAME_KEY, $username.val());
-            window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
+            document.getElementById("loginContent").style.display = "none";
+            document.getElementById("chooseLobby").style.display = "block";
         }
-
-        $username.val('');
     });
 
     /* ======================================================= */
@@ -103,7 +103,8 @@ $(function () {
         sessionStorage.setItem(STORAGE_USERNAME_KEY, $adjectives[Math.floor(Math.random() * $adjectives.length)] + "_" + sessionStorage.getItem(STORAGE_USERNAME_KEY)); // returns a random integer from 1 to 100 ]
         socket.emit('new_user',  {username: sessionStorage.getItem(STORAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function (callback) {
             if(callback) {
-                window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
+                document.getElementById("chooseLobby").style.display = "none";
+                document.getElementById("lobby").style.display = "block";
             }
             else {
                 alert("Lobby is already full!");
