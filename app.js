@@ -5,8 +5,11 @@ var server = require("http").Server(app);
 var io = require("socket.io").listen(server);
 usersLobby1 = [];
 counterLobby1 = 0;
+lobby1ingame = 0;
 usersLobby2 = [];
 counterLobby2 = 0;
+lobby2ingame = 0;
+
 connections = [];
 
 server.listen(process.env.PORT || 3000);
@@ -51,7 +54,6 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('CustomDisconnect', function(data) {
-        console.log("disco");
         let index;
         switch(data.lobbyId) {
             case 1, '1':
@@ -86,28 +88,47 @@ io.sockets.on('connection', function(socket){
     /* ======================================================= */
 
     // New User
-    socket.on('new_user', function(data) {
+    socket.on('new_user', function(data, callback) {
         console.log('new user');
         console.log(data);
         switch(data.lobby) {
             case 1, '1':
-                if (usersLobby1.length >= 6) {
-                    socket.emit('full_lobby', {lobbyId: 1});
+                if (usersLobby1.length >= 6 || lobby1ingame == 1) {
+                    //socket.emit('full_lobby', {lobbyId: 1});
+                    callback(false);
+                    console.log('full_lobby');
                     break;
                 }
+                callback(true);
                 usersLobby1.push(data.username);
+                if(usersLobby1.length == 6) {
+                    setTimeout( function () {
+                        io.sockets.emit('autostart', 1);
+                        lobby1ingame = 1;
+                    }, 1000);
+                }
                 break;
 
             case 2, '2':
-                if (usersLobby2.length >= 6) {
-                    socket.emit('full_lobby', {lobbyId: 2});
+                if (usersLobby2.length >= 6 || lobby2ingame == 1) {
+                    // socket.emit('full_lobby', {lobbyId: 2});
+                    callback(false);
                     break;
                 }
+                callback(true);
                 usersLobby2.push(data.username);
+
+                if(usersLobby2.length == 6) {
+                    setTimeout( function () {
+                        io.sockets.emit('autostart', 2);
+                        lobby2ingame = 1;
+                    }, 1000);
+                }
                 break;
 
             default:
                 console.log('Invalid lobby');
+                callback(false);
                 break;
         }
         senduser(data.lobby);
@@ -122,15 +143,19 @@ io.sockets.on('connection', function(socket){
             case '1':
                 counterLobby1++;
                 if (counterLobby1==usersLobby1.length && usersLobby1.length>=3) {
-                    io.sockets.emit('autostart', 1)
+                    io.sockets.emit('autostart', 1);
+                    lobby1ingame = 1;
                 }
+                break;
             case '2':
                 counterLobby2++;
                 if (counterLobby2==usersLobby2.length && usersLobby2.length>=3) {
-                    io.sockets.emit('autostart', 2)
+                    io.sockets.emit('autostart', 2);
+                    lobby2ingame = 1;
                 }
+                break;
         }
-    })
+    });
 
     /* ======================================================= */
     /* ======================= INGAME ======================== */

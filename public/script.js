@@ -101,11 +101,17 @@ $(function () {
         sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
 
         sessionStorage.setItem(STORAGE_USERNAME_KEY, $adjectives[Math.floor(Math.random() * $adjectives.length)] + "_" + sessionStorage.getItem(STORAGE_USERNAME_KEY)); // returns a random integer from 1 to 100 ]
-        socket.emit('new_user',  {username: sessionStorage.getItem(STORAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function () {
-
+        socket.emit('new_user',  {username: sessionStorage.getItem(STORAGE_USERNAME_KEY), lobby: sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)}, function (callback) {
+            if(callback) {
+                window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
+            }
+            else {
+                alert("Lobby is already full!");
+                window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
+            }
         });
 
-        window.parent.document.getElementById('contentController').src = 'lobby/lobby.html';
+        
     });
 
     /* ======================================================= */
@@ -117,7 +123,7 @@ $(function () {
         // sessionStorage.setItem(STORAGE_LOBBY_ID_KEY, lobbyId);
 
         socket.emit('ready_user',  sessionStorage.getItem(STORAGE_LOBBY_ID_KEY), function () {
-
+            
         });
 
         window.parent.document.getElementById('contentController').contentWindow.document.getElementById('usrRdyBtn').style.visibility = "hidden";
@@ -127,11 +133,6 @@ $(function () {
         if(data == sessionStorage.getItem(STORAGE_LOBBY_ID_KEY)) {
             window.parent.document.getElementById('contentController').src = 'game/game.html';
         }
-    });
-
-    socket.on("full_lobby", data => {
-        alert("Lobby " + data.lobbyId + " is already full!");
-        window.parent.document.getElementById('contentController').src = 'lobby/choose-lobby.html';
     });
 
     /* ======================================================= */
