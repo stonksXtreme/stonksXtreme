@@ -29,12 +29,12 @@ $(function() {
 
     document.onkeydown = function(e) {
         switch(e.which) {
-            case 37: pos.x-=1;move();break;
-
+            // case 37: pos.x-=1;move();break;
+            case 37: socket.emit('position_debug', -1);break;
             case 38:pos.y-=1;move();break;
 
-            case 39:pos.x+=1;move();break;
-
+            // case 39:pos.x+=1;move();break;
+            case 39: socket.emit('position_debug', 1);break;
             case 40:pos.y+=1;move();break;
 
             default: return; // exit this handler for other keys
@@ -83,7 +83,10 @@ $(function() {
 
     socket.on('roll_dice', function(dices){
         $('.modalCloseButton').removeClass("hidden");
-
+        $('#exampleModal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        });
         let html = '<div class="center">'
 
         if(dices.length > 0){
