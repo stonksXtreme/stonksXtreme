@@ -172,13 +172,14 @@ $(function() {
     });
 
     socket.on('new message', function(data) {
-        if (data.user == "server"){
+        if (data.user === "server"){
             $chat.append(data.msg+'\n');
         }else{
             $chat.append(data.user+': '+data.msg+'\n');
         }
 
-        $chat.scrollTop($chat.scrollHeight);
+        const chat = document.querySelector('#chat')
+        chat.scrollTop = chat.scrollHeight;
     });
 
     $userForm.submit(function(e) {
