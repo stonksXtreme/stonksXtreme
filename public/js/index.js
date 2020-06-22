@@ -31,12 +31,12 @@ $(function() {
         switch(e.which) {
             // case 37: pos.x-=1;move();break;
             case 37: socket.emit('position_debug', -1);break;
-            case 38:pos.y-=1;move();break;
-
+            //case 38:pos.y-=1;move();break;
+            case 38: socket.emit('position_debug', 2);break;
             // case 39:pos.x+=1;move();break;
             case 39: socket.emit('position_debug', 1);break;
-            case 40:pos.y+=1;move();break;
-
+            //case 40:pos.y+=1;move();break;
+            case 40: socket.emit('position_debug', -2);break;
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)

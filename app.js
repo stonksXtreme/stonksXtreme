@@ -179,39 +179,17 @@ io.sockets.on('connection', socket => {
                         steps = random;
                     }
 
-
                     // wating for animation so set new position
                     setTimeout(() => {
-                        const index = findUserIndexByName(socket.username)
-                        if(index !== -1) {
-                            if(users[index].fieldIndex+steps >= field_positions.length-1){
-                                sendChatMessage(users[index].name + " hat gewonnen!");
-                                users[index].fieldIndex = field_positions.length - 1;
-                            }
-                            else if(users[index].fieldIndex+steps == 18) {
-                                // Special field - Black Friday
-                                users[index].fieldIndex += steps;
-                                sendChatMessage(socket.username + " auf Extrafeld Black Friday! Deine Augenzahl wird verdoppelt");
-                                users[index].fieldIndex += steps;
-                            }
-                            else if(users[index].fieldIndex+steps == 33) {
-                                // Special field - Black Thursday
-                                sendChatMessage(socket.username + ", der Black Thursday schlägt zu. Du gehst zurück auf Feld 1");
-                                users[index].fieldIndex += 1;
-                            }
-                            else{
-                                users[index].fieldIndex += steps;
-                            }
-                            setPositionFromJson(index);
-                            alignPlayers();
-                        }
                         setPosition(userIndex, steps);
-                    }, 3000);
-
-
+                    }, 3500);
                 }, 3000);
             } else {
                 sendChatMessage(socket.username + " hat die Frage falsch beantwortet.");
+                if(users[userIndex].fieldIndex === 33){
+                    sendChatMessage(socket.username + " zurück auf Start!");
+                    setPosition(userIndex, -users[userIndex].fieldIndex);
+                }
                 socket.emit('roll_dice', []);
             }
         }
@@ -288,7 +266,7 @@ io.sockets.on('connection', socket => {
                 if (users[userIndex].fieldIndex < 0) {
                     users[userIndex].fieldIndex = 0;
                 }
-                isSpecialPosition(userIndex);
+                isSpecialPosition(userIndex, steps);
             }
             setPositionFromJson(userIndex);
             alignPlayers();
@@ -300,33 +278,37 @@ io.sockets.on('connection', socket => {
         users[index].y = field_positions[users[index].fieldIndex].y;
     }
 
-    function isSpecialPosition(userIndex) {
+    function isSpecialPosition(userIndex, steps) {
         switch (users[userIndex].fieldIndex) {
             case 9:
-                sendChatMessage(users[userIndex].name + " green arrow");
+                sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                setPosition(userIndex, 25);
                 break;
             case 11:
                 sendChatMessage(users[userIndex].name + " BIP nicht erreicht");
+                setPosition(userIndex, -steps);
                 break;
             case 18:
                 sendChatMessage(users[userIndex].name + " BlackFriday");
+                setPosition(userIndex, steps);
                 break;
             case 22:
-                sendChatMessage(users[userIndex].name + " green arrow");
+                sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                setPosition(userIndex, 21);
                 break;
             case 24:
                 sendChatMessage(users[userIndex].name + " Steuerhinterziehung");
                 taxFraud(userIndex);
                 break;
             case 28:
-                sendChatMessage(users[userIndex].name + " Finanzkrise");
+                sendChatMessage(users[userIndex].name + ", Finanzkrise!");
                 financialCrisis(userIndex);
                 break;
             case 31:
-                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl")
+                sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl")
                 break;
             case 33:
-                sendChatMessage(users[userIndex].name + " Black Thursday")
+                sendChatMessage(users[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
                 break;
             case 35:
                 sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
@@ -336,36 +318,42 @@ io.sockets.on('connection', socket => {
                 jackpot(userIndex);
                 break;
             case 39:
-                sendChatMessage(users[userIndex].name + " red arrow")
+                sendChatMessage(users[userIndex].name + " wurde degradiert!")
+                setPosition(userIndex, -24);
                 break;
             case 42:
                 sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
                 break;
             case 49:
-                sendChatMessage(users[userIndex].name + " red arrow");
+                sendChatMessage(users[userIndex].name + " erlitt starke Verluste!");
+                setPosition(userIndex, -19);
                 break;
             case 55:
                 sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
                 break;
             case 58:
-                sendChatMessage(users[userIndex].name + " red arrow");
+                sendChatMessage(users[userIndex].name + " hat die Prüfung nicht bestanden!");
+                setPosition(userIndex, -12);
                 break;
             case 62:
-                sendChatMessage(users[userIndex].name + " red arrow");
+                sendChatMessage(users[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!!!");
+                setPosition(userIndex, -9);
                 break;
         }
     }
 
+    //go to the jail
     function taxFraud(userIndex) {
         users[userIndex].fieldIndex = 14;
         users[userIndex].inJail = true;
         jailDiceLoop(0, userIndex);
     }
 
-    function jailDiceLoop(count, userIndex){
+    //dices without drawing a card
+    function jailDiceLoop(count, userIndex) {
+        let random = getRandomInt(1, 6);
+        socket.emit('roll_dice', [random]);
         setTimeout(() => {
-            let random = getRandomInt(1, 6);
-            socket.emit('roll_dice', [random]);
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
             if (random === 6){
                 setPosition(userIndex, 1);
@@ -378,9 +366,10 @@ io.sockets.on('connection', socket => {
             else{
                 jailDiceLoop(count+1, userIndex);
             }
-        }, 3500);
+        },3500);
     }
 
+    //every player goes 1-6 steps back 
     function financialCrisis(userIndex) {
         const random = getRandomInt(1, 6);
         socket.emit('roll_dice', [random]);
@@ -392,6 +381,7 @@ io.sockets.on('connection', socket => {
         }
     }
 
+    //make a second turn 
     function jackpot(userIndex) {
         if (userIndex === 0) {
             nextPlayer(users.length - 1)
