@@ -187,7 +187,19 @@ io.sockets.on('connection', socket => {
                             if(users[index].fieldIndex+steps >= field_positions.length-1){
                                 sendChatMessage(users[index].name + " hat gewonnen!");
                                 users[index].fieldIndex = field_positions.length - 1;
-                            }else{
+                            }
+                            else if(users[index].fieldIndex+steps == 18) {
+                                // Special field - Black Friday
+                                users[index].fieldIndex += steps;
+                                sendChatMessage(socket.username + " auf Extrafeld Black Friday! Deine Augenzahl wird verdoppelt");
+                                users[index].fieldIndex += steps;
+                            }
+                            else if(users[index].fieldIndex+steps == 33) {
+                                // Special field - Black Thursday
+                                sendChatMessage(socket.username + ", der Black Thursday schlägt zu. Du gehst zurück auf Feld 1");
+                                users[index].fieldIndex += 1;
+                            }
+                            else{
                                 users[index].fieldIndex += steps;
                             }
                             setPositionFromJson(index);
