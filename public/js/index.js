@@ -168,6 +168,10 @@ $(function() {
         $users.html(html);
     });
 
+    socket.on('switchIdentity', function(users) {
+        
+    });
+
     $messageForm.submit(function(e) {
         e.preventDefault();
         socket.emit('send message', $message.val());

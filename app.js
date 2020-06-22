@@ -86,7 +86,8 @@ io.sockets.on('connection', socket => {
                             usedEasyQuestionIndices: [],
                             usedHardQuestionIndices: [],
                             activeTurn: false,
-                            inJail: false
+                            inJail: false,
+                            fibu_rounds: 0
                         });
                         alignPlayers();
                     } else {
@@ -263,7 +264,11 @@ io.sockets.on('connection', socket => {
         }
         if (!users[activeIndex].isConnected) {
             nextPlayer(activeIndex);
-        } else {
+        } else if(users[activeIndex].fibu_rounds > 0) {
+            sendChatMessage(users[activeIndex].name + " hat noch " + users[activeIndex].fibu_rounds + " Runden FiBu!");
+            users[activeIndex].fibu_rounds--;
+            nextPlayer(activeIndex);
+        } else{
             sendChatMessage("Next turn: " + users[activeIndex].name);
             users[activeIndex].activeTurn = true;
             io.sockets.emit('update', users);
@@ -323,13 +328,15 @@ io.sockets.on('connection', socket => {
                 financialCrisis(userIndex);
                 break;
             case 31:
-                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl")
+                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl");
+                socket.emit('switchIdentity', users);
                 break;
             case 33:
                 sendChatMessage(users[userIndex].name + " Black Thursday")
                 break;
             case 35:
                 sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
+                users[userIndex].fibu_rounds = 1;
                 break;
             case 37:
                 sendChatMessage(users[userIndex].name + " Jackpot")
@@ -340,12 +347,14 @@ io.sockets.on('connection', socket => {
                 break;
             case 42:
                 sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
+                users[userIndex].fibu_rounds = 2;
                 break;
             case 49:
                 sendChatMessage(users[userIndex].name + " red arrow");
                 break;
             case 55:
                 sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
+                users[userIndex].fibu_rounds = 3;
                 break;
             case 58:
                 sendChatMessage(users[userIndex].name + " red arrow");
