@@ -162,7 +162,7 @@ io.sockets.on('connection', socket => {
 
 
             // if answer is right
-            if (correctIndices.includes(parseInt(answerIndex))) {
+            if(correctIndices.includes(parseInt(answerIndex))) {
                 // waiting to see the answer before dice roll
                 setTimeout(() => {
                     let steps = 0;
@@ -182,6 +182,29 @@ io.sockets.on('connection', socket => {
 
                     // wating for animation so set new position
                     setTimeout(() => {
+                        const index = findUserIndexByName(socket.username)
+                        if(index !== -1) {
+                            if(users[index].fieldIndex+steps >= field_positions.length-1){
+                                sendChatMessage(users[index].name + " hat gewonnen!");
+                                users[index].fieldIndex = field_positions.length - 1;
+                            }
+                            else if(users[index].fieldIndex+steps == 18) {
+                                // Special field - Black Friday
+                                users[index].fieldIndex += steps;
+                                sendChatMessage(socket.username + " auf Extrafeld Black Friday! Deine Augenzahl wird verdoppelt");
+                                users[index].fieldIndex += steps;
+                            }
+                            else if(users[index].fieldIndex+steps == 33) {
+                                // Special field - Black Thursday
+                                sendChatMessage(socket.username + ", der Black Thursday schlägt zu. Du gehst zurück auf Feld 1");
+                                users[index].fieldIndex += 1;
+                            }
+                            else{
+                                users[index].fieldIndex += steps;
+                            }
+                            setPositionFromJson(index);
+                            alignPlayers();
+                        }
                         setPosition(userIndex, steps);
                     }, 3000);
 
