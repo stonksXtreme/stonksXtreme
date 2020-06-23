@@ -14,6 +14,8 @@ current_question = null;
 current_question_hard = false;
 firstStart = false;
 
+blockRound = false;
+
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
 hard_questions = JSON.parse(fs.readFileSync('json/questions_hard.json'));
@@ -219,7 +221,9 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('next_player', data => {
-        nextPlayer(findUserIndexByName(socket.username));
+        if(!blockRound) {
+            nextPlayer(findUserIndexByName(socket.username));
+        }
     })
 
     socket.on('position_debug', steps => {
@@ -265,8 +269,8 @@ io.sockets.on('connection', socket => {
         if (!users[activeIndex].isConnected) {
             nextPlayer(activeIndex);
         } else if(users[activeIndex].fibu_rounds > 0) {
-            sendChatMessage(users[activeIndex].name + " hat noch " + users[activeIndex].fibu_rounds + " Runden FiBu!");
             users[activeIndex].fibu_rounds--;
+            sendChatMessage(users[activeIndex].name + " hat noch " + users[activeIndex].fibu_rounds + " Runden FiBu!");
             nextPlayer(activeIndex);
         } else{
             sendChatMessage("Next turn: " + users[activeIndex].name);
@@ -328,8 +332,11 @@ io.sockets.on('connection', socket => {
                 financialCrisis(userIndex);
                 break;
             case 31:
-                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl");
-                socket.emit('switchIdentity', users);
+                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl! Bitte wähle eine Identitaet aus");
+                setTimeout(() => {
+                    socket.emit('switchIdentity', users);
+                }, 1000);
+                blockRound = true;
                 break;
             case 33:
                 sendChatMessage(users[userIndex].name + " Black Thursday")
@@ -364,6 +371,18 @@ io.sockets.on('connection', socket => {
                 break;
         }
     }
+
+    socket.on("switchIdentityTo", index => {
+        indexFrom = findUserIndexByName(socket.username);
+        fieldIndex = users[indexFrom].fieldIndex;
+        users[indexFrom].fieldIndex = users[index].fieldIndex;
+        users[index].fieldIndex = fieldIndex;
+        setPositionFromJson(indexFrom);
+        setPositionFromJson(index);
+        alignPlayers();
+        blockRound = false;
+        nextPlayer(indexFrom);
+    })
 
     function taxFraud(userIndex) {
         users[userIndex].fieldIndex = 14;

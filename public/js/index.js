@@ -26,17 +26,17 @@ $(function() {
         x: 20,
         y: 900
     }
+    var identitySwitch = -1;
 
     document.onkeydown = function(e) {
         switch(e.which) {
             // case 37: pos.x-=1;move();break;
             case 37: socket.emit('position_debug', -1);break;
-            case 38:pos.y-=1;move();break;
+            case 38:socket.emit('position_debug', 2);break;
 
             // case 39:pos.x+=1;move();break;
             case 39: socket.emit('position_debug', 1);break;
-            case 40:pos.y+=1;move();break;
-
+            case 40:socket.emit('position_debug', -2);break;
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)
@@ -138,7 +138,6 @@ $(function() {
     });
 
     socket.on('update', function(users){
-
         var html = '';
         // draw on canvas
         context.drawImage(background, 0, 0);
@@ -168,9 +167,34 @@ $(function() {
         $users.html(html);
     });
 
-    socket.on('switchIdentity', function(users) {
-        
+    socket.on('switchIdentity', function (users) {
+        var html = "";
+        for(let i in users) {
+            if(users[i].activeTurn) {
+                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+            }else{
+                if(users[i].isConnected){
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'<button id-index='+i+' class="btn-switch btn btn-primary">Wechsle Identität</button></li>';
+                }else{
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)<button id-index='+i+' class="btn-switch btn btn-primary">Wechsle Identität</button></li>';
+                }
+            }
+        }
+        $users.html(html);
+
     });
+
+    $(document).on('click',  '.box .mainContent .mainArea .sideBox .sideArea .card .card-body #users .btn-switch', function()  {
+        var index = $( this ).attr("id-index");
+        console.log(index);
+        switchIdentityTo(parseInt(index));
+    });
+
+    function switchIdentityTo(index) {
+        console.log("test");
+        socket.emit("switchIdentityTo", index);
+        socket.emit('next_player', null);
+    }
 
     $messageForm.submit(function(e) {
         e.preventDefault();
@@ -225,5 +249,4 @@ $(function() {
         $('.modalCloseButton').addClass("hidden");
         socket.emit('next_player', null);
     })
-
 });
