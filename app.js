@@ -35,18 +35,16 @@ io.sockets.on('connection', socket => {
     socket.on('disconnect', data => {
         const index = findUserIndexByName(socket.username);
         if (index >= 0) {
-            //users.splice(index, 1);
             users[index].isConnected = false;
             if (users[index].activeTurn) {
                 nextPlayer(index);
             }
-
         }
-
         io.sockets.emit('update', users);
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s socket connected', connections.length)
     });
+
     // Send message
     socket.on('send message', data => {
         console.log(socket.username + ': ' + data);
