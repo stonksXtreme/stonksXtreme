@@ -42,7 +42,7 @@ io.sockets.on('connection', socket => {
         }
         io.sockets.emit('update', users);
         connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s socket connected', connections.length)
+        console.log('Disconnected: %s socket connected', connections.length);
     });
 
     // Send message
@@ -53,7 +53,7 @@ io.sockets.on('connection', socket => {
 
     // New User
     socket.on('new user', function (data, callback) {
-        const colors = ["red", "green", "blue", "yellow", "black", "violet"]
+        const colors = ["red", "green", "blue", "yellow", "black", "violet"];
         socket.username = data;
         if (!isEmptyOrSpaces(socket.username)) {
             if (getConnectedUsers() < 6) {
@@ -130,7 +130,7 @@ io.sockets.on('connection', socket => {
                     do {
                         random = getRandomInt(0, hard_questions.length);
                     }
-                    while (usedQuestionIndices.includes(random))
+                    while (usedQuestionIndices.includes(random));
                     usedQuestionIndices.push(random);
                     current_question = hard_questions[random];
                     socket.emit('question_return', hard_questions[random]);
@@ -160,7 +160,7 @@ io.sockets.on('connection', socket => {
 
 
             // if answer is right
-            if(correctIndices.includes(parseInt(answerIndex))) {
+            if (correctIndices.includes(parseInt(answerIndex))) {
                 // waiting to see the answer before dice roll
                 setTimeout(() => {
                     let steps = 0;
@@ -184,7 +184,7 @@ io.sockets.on('connection', socket => {
                 }, 3000);
             } else {
                 sendChatMessage(socket.username + " hat die Frage falsch beantwortet.");
-                if(users[userIndex].fieldIndex === 33){
+                if (users[userIndex].fieldIndex === 33) {
                     sendChatMessage(socket.username + " zurück auf Start!");
                     setPosition(userIndex, -users[userIndex].fieldIndex);
                 }
@@ -353,18 +353,17 @@ io.sockets.on('connection', socket => {
         socket.emit('roll_dice', [random]);
         setTimeout(() => {
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
-            if (random === 6){
+            if (random === 6) {
                 setPosition(userIndex, 1);
                 users[userIndex].inJail = false;
                 nextPlayer(userIndex);
             }
-            if(count === 2){
+            if (count === 2) {
                 nextPlayer(userIndex);
+            } else {
+                jailDiceLoop(count + 1, userIndex);
             }
-            else{
-                jailDiceLoop(count+1, userIndex);
-            }
-        },3500);
+        }, 3500);
     }
 
     //every player goes 1-6 steps back 
