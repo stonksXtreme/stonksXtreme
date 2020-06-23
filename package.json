@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./app.js",
-    "dev": "nodemon ./app.js"
+    "test": "set NODE_ENV=TEST&& echo \"Error: no test specified\" && exit 1",
+    "start": "set NODE_ENV=START&& node ./app.js",
+    "dev": "set NODE_ENV=DEV&& nodemon ./app.js"
   },
   "author": "",
   "license": "ISC",

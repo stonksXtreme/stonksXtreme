@@ -5,6 +5,8 @@ const server = require("http").Server(app);
 const io = require("socket.io").listen(server);
 const fs = require('fs');
 
+const devMode = (process.env.NODE_ENV === 'DEV');
+
 connections = [];
 users = [];
 easy_questions = [];
@@ -19,6 +21,10 @@ easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
 hard_questions = JSON.parse(fs.readFileSync('json/questions_hard.json'));
 console.log("Reading field position json file...");
 field_positions = JSON.parse(fs.readFileSync('json/field_positions.json'));
+
+if(devMode){
+    console.log("Development Mode is enabled!!!");
+}
 
 
 server.listen(process.env.PORT || 3000);
@@ -109,7 +115,7 @@ io.sockets.on('connection', socket => {
             callback(1);
         }
         // round starts
-        if (!firstStart && users.length >= 6) {
+        if (!firstStart && users.length >= 2) {
             firstStart = true;
             const random = getRandomInt(0, users.length - 1);
             nextPlayer(random);
@@ -122,10 +128,9 @@ io.sockets.on('connection', socket => {
         if (userIndex !== -1 && users[userIndex].activeTurn && !users[userIndex].inJail) {
             current_question_hard = hard;
             let random;
-            let usedQuestionIndices;
             if (hard) {
-                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
-                if (usedQuestionIndices < hard_questions.length) {
+                let usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
+                if (usedQuestionIndices.length < hard_questions.length) {
                     sendChatMessage(socket.username + " hat eine schwere Karte ausgewählt.");
                     do {
                         random = getRandomInt(0, hard_questions.length);
@@ -137,8 +142,8 @@ io.sockets.on('connection', socket => {
                 }
 
             } else {
-                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
-                if (usedQuestionIndices < easy_questions.length) {
+                let usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
+                if (usedQuestionIndices.length < easy_questions.length) {
                     sendChatMessage(socket.username + " hat eine einfache Karte ausgewählt.");
                     do {
                         random = getRandomInt(0, easy_questions.length);
@@ -198,8 +203,10 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('position_debug', steps => {
-        const userIndex = findUserIndexByName(socket.username);
-        setPosition(userIndex, steps);
+        if(process.env.NODE_ENV == 'DEV'){
+            const userIndex = findUserIndexByName(socket.username);
+            setPosition(userIndex, steps);
+        }
     })
 
     function findUserIndexByName(username) {
@@ -256,16 +263,8 @@ io.sockets.on('connection', socket => {
 
     function setPosition(userIndex, steps) {
         if (userIndex !== -1) {
-            if (users[userIndex].fieldIndex + steps >= field_positions.length - 1) {
-                sendChatMessage(users[userIndex].name + " hat gewonnen!");
-                users[userIndex].fieldIndex = field_positions.length - 1;
-            } else {
-                users[userIndex].fieldIndex += steps;
-                if (users[userIndex].fieldIndex < 0) {
-                    users[userIndex].fieldIndex = 0;
-                }
-                isSpecialPosition(userIndex, steps);
-            }
+            users[userIndex].fieldIndex += steps;
+            isSpecialPosition(userIndex, steps);
             setPositionFromJson(userIndex);
             alignPlayers();
         }
@@ -277,66 +276,88 @@ io.sockets.on('connection', socket => {
     }
 
     function isSpecialPosition(userIndex, steps) {
-        switch (users[userIndex].fieldIndex) {
-            case 9:
-                sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
-                setPosition(userIndex, 25);
-                break;
-            case 11:
-                sendChatMessage(users[userIndex].name + " BIP nicht erreicht");
-                setPosition(userIndex, -steps);
-                break;
-            case 18:
-                sendChatMessage(users[userIndex].name + " BlackFriday");
-                setPosition(userIndex, steps);
-                break;
-            case 22:
-                sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
-                setPosition(userIndex, 21);
-                break;
-            case 24:
-                sendChatMessage(users[userIndex].name + " Steuerhinterziehung");
-                taxFraud(userIndex);
-                break;
-            case 28:
-                sendChatMessage(users[userIndex].name + ", Finanzkrise!");
-                financialCrisis(userIndex);
-                break;
-            case 31:
-                sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl")
-                break;
-            case 33:
-                sendChatMessage(users[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
-                break;
-            case 35:
-                sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
-                break;
-            case 37:
-                sendChatMessage(users[userIndex].name + " Jackpot")
-                jackpot(userIndex);
-                break;
-            case 39:
-                sendChatMessage(users[userIndex].name + " wurde degradiert!")
-                setPosition(userIndex, -24);
-                break;
-            case 42:
-                sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
-                break;
-            case 49:
-                sendChatMessage(users[userIndex].name + " erlitt starke Verluste!");
-                setPosition(userIndex, -19);
-                break;
-            case 55:
-                sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
-                break;
-            case 58:
-                sendChatMessage(users[userIndex].name + " hat die Prüfung nicht bestanden!");
-                setPosition(userIndex, -12);
-                break;
-            case 62:
-                sendChatMessage(users[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!!!");
-                setPosition(userIndex, -9);
-                break;
+        if (users[userIndex].fieldIndex >= field_positions.length - 1) {
+            // win game
+            users[userIndex].fieldIndex = field_positions.length - 1;
+            sendChatMessage(users[userIndex].name + " hat gewonnen!");
+            sendChatMessage("Lobby wird in 5 Sekunden neugestartet...");
+
+            // waiting 5 sec before reloading page and closing lobby
+            setTimeout(() => {
+                io.sockets.emit('refresh_page', []);
+                users = [];
+                current_question = null;
+                current_question_hard = false;
+                firstStart = false;
+            }, 5000);
+
+        } else if (users[userIndex].fieldIndex < 0) {
+            // before start
+            users[userIndex].fieldIndex = 0;
+
+        } else {
+            // special field
+            switch (users[userIndex].fieldIndex) {
+                case 9:
+                    sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                    setPosition(userIndex, 25);
+                    break;
+                case 11:
+                    sendChatMessage(users[userIndex].name + " BIP nicht erreicht");
+                    setPosition(userIndex, -steps);
+                    break;
+                case 18:
+                    sendChatMessage(users[userIndex].name + " BlackFriday");
+                    setPosition(userIndex, steps);
+                    break;
+                case 22:
+                    sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                    setPosition(userIndex, 21);
+                    break;
+                case 24:
+                    sendChatMessage(users[userIndex].name + " Steuerhinterziehung");
+                    taxFraud(userIndex);
+                    break;
+                case 28:
+                    sendChatMessage(users[userIndex].name + ", Finanzkrise!");
+                    financialCrisis(userIndex);
+                    break;
+                case 31:
+                    sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl")
+                    break;
+                case 33:
+                    sendChatMessage(users[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
+                    break;
+                case 35:
+                    sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
+                    break;
+                case 37:
+                    sendChatMessage(users[userIndex].name + " Jackpot")
+                    jackpot(userIndex);
+                    break;
+                case 39:
+                    sendChatMessage(users[userIndex].name + " wurde degradiert!")
+                    setPosition(userIndex, -24);
+                    break;
+                case 42:
+                    sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
+                    break;
+                case 49:
+                    sendChatMessage(users[userIndex].name + " erlitt starke Verluste!");
+                    setPosition(userIndex, -19);
+                    break;
+                case 55:
+                    sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
+                    break;
+                case 58:
+                    sendChatMessage(users[userIndex].name + " hat die Prüfung nicht bestanden!");
+                    setPosition(userIndex, -12);
+                    break;
+                case 62:
+                    sendChatMessage(users[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!!!");
+                    setPosition(userIndex, -9);
+                    break;
+            }
         }
     }
 
@@ -398,7 +419,7 @@ io.sockets.on('connection', socket => {
         }
 
         for (let arrayIndex in fields) {
-            if (fields[arrayIndex] !== null) {
+            if (devMode && fields[arrayIndex] !== null) {
                 console.log("Auf dem Feld " + arrayIndex + " stehen folgende spieler: " + fields[arrayIndex]);
             }
 
