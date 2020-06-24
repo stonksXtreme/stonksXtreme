@@ -186,12 +186,10 @@ $(function() {
 
     $(document).on('click',  '.box .mainContent .mainArea .sideBox .sideArea .card .card-body #users .btn-switch', function()  {
         var index = $( this ).attr("id-index");
-        console.log(index);
         switchIdentityTo(parseInt(index));
     });
 
     function switchIdentityTo(index) {
-        console.log("test");
         socket.emit("switchIdentityTo", index);
         socket.emit('next_player', null);
     }
