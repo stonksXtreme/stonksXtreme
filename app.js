@@ -115,7 +115,7 @@ io.sockets.on('connection', socket => {
             callback(1);
         }
         // round starts
-        if (!firstStart && users.length >= 2) {
+        if (!firstStart && users.length >= 6) {
             firstStart = true;
             const random = getRandomInt(0, users.length - 1);
             nextPlayer(random);
