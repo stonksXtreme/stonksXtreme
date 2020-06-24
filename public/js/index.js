@@ -81,15 +81,21 @@ $(function() {
         resize();
     });
 
-    socket.on('roll_dice', function(dices){
-        $('.modalCloseButton').removeClass("hidden");
-        $('#exampleModal').modal({
-            keyboard: false,
-            backdrop: 'static'
-        });
+    socket.on('roll_dice', function(dices, showExitButton){
+        if(showExitButton){
+            $('.modalCloseButton').removeClass("hidden");
+        }
+
         let html = '<div class="center">'
 
         if(dices.length > 0){
+            $('.box').addClass("blur");
+            $('#exampleModal').modal({
+                keyboard: false,
+                backdrop: 'static'
+            });
+            $('#exampleModal').modal('show');
+
             $('.modal-title').html('');
             html += '<video width="150" height="116" autoplay><source src="dices/animation' + dices[0] + '.mp4" type="video/mp4">Your browser does not support the video tag.</video>';
             if(dices.length === 2){
@@ -204,11 +210,6 @@ $(function() {
             });
         }
     });
-
-    $(".dice").click(function (e){
-        e.preventDefault();
-        socket.emit('dice');
-    })
 
     $(".easy_card").click(function (e){
         e.preventDefault();

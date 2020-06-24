@@ -55,6 +55,13 @@ io.sockets.on('connection', socket => {
     socket.on('send message', data => {
         console.log(socket.username + ': ' + data);
         io.sockets.emit('new message', {msg: data, user: socket.username});
+
+        if(devMode){
+            const user = users.find(x => x.activeTurn);
+            switch (data) {
+                case '/next': nextPlayer(findUserIndexByName(user.name)); break;
+            }
+        }
     });
 
     // New User
@@ -173,12 +180,12 @@ io.sockets.on('connection', socket => {
                         const random1 = getRandomInt(1, 6);
                         const random2 = getRandomInt(1, 6);
                         sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
-                        socket.emit('roll_dice', [random1, random2]);
+                        socket.emit('roll_dice', [random1, random2], true);
                         steps = random1 + random2;
                     } else {
                         const random = getRandomInt(1, 6);
                         sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
-                        socket.emit('roll_dice', [random]);
+                        socket.emit('roll_dice', [random] , true);
                         steps = random;
                     }
 
@@ -193,7 +200,7 @@ io.sockets.on('connection', socket => {
                     sendChatMessage(socket.username + " zurück auf Start!");
                     setPosition(userIndex, -users[userIndex].fieldIndex);
                 }
-                socket.emit('roll_dice', []);
+                socket.emit('roll_dice', [], true);
             }
         }
     })
@@ -203,7 +210,7 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('position_debug', steps => {
-        if(process.env.NODE_ENV == 'DEV'){
+        if(devMode){
             const userIndex = findUserIndexByName(socket.username);
             setPosition(userIndex, steps);
         }
@@ -237,6 +244,7 @@ io.sockets.on('connection', socket => {
     }
 
     function nextPlayer(activeIndex) {
+        //socket.emit('roll_dice', [5], false);
         users[activeIndex].activeTurn = false;
         if (activeIndex >= users.length - 1) {
             activeIndex = 0;
@@ -250,7 +258,7 @@ io.sockets.on('connection', socket => {
             users[activeIndex].activeTurn = true;
             io.sockets.emit('update', users);
             if (users[activeIndex].inJail) {
-                taxFraud(activeIndex);
+                jailDiceLoop(0, activeIndex);
             }
         }
     }
@@ -302,7 +310,7 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, 25);
                     break;
                 case 11:
-                    sendChatMessage(users[userIndex].name + " BIP nicht erreicht");
+                    sendChatMessage(users[userIndex].name + " BEP nicht erreicht");
                     setPosition(userIndex, -steps);
                     break;
                 case 18:
@@ -370,19 +378,22 @@ io.sockets.on('connection', socket => {
     //dices without drawing a card
     function jailDiceLoop(count, userIndex) {
         let random = getRandomInt(1, 6);
-        socket.emit('roll_dice', [random]);
+
+        const lastDice = (count === 2);
+        const isSix = (random === 6);
+
+        socket.emit('roll_dice', [random], (lastDice || isSix));
         setTimeout(() => {
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
-            if (random === 6) {
+            if (isSix) {
                 setPosition(userIndex, 1);
                 users[userIndex].inJail = false;
-                nextPlayer(userIndex);
+            }else{
+                if (!lastDice) {
+                    jailDiceLoop(count + 1, userIndex);
+                }
             }
-            if (count === 2) {
-                nextPlayer(userIndex);
-            } else {
-                jailDiceLoop(count + 1, userIndex);
-            }
+
         }, 3500);
     }
 
@@ -400,7 +411,7 @@ io.sockets.on('connection', socket => {
 
     //make a second turn 
     function jackpot(userIndex) {
-        if (userIndex === 0) {
+        if (userIndex === '0') {
             nextPlayer(users.length - 1)
         } else {
             nextPlayer(userIndex - 1);
