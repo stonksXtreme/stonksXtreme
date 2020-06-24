@@ -42,8 +42,12 @@ io.sockets.on('connection', socket => {
         const index = findUserIndexByName(socket.username);
         if (index >= 0) {
             users[index].isConnected = false;
-            if (users[index].activeTurn) {
-                nextPlayer(index);
+            if(users.filter(user => !user.isConnected).length === users.length){
+                endGame();
+            }else{
+                if (users[index].activeTurn) {
+                    nextPlayer(index);
+                }
             }
         }
         io.sockets.emit('update', users);
@@ -282,6 +286,15 @@ io.sockets.on('connection', socket => {
         users[index].y = field_positions[users[index].fieldIndex].y;
     }
 
+    function endGame() {
+        console.log('Clearing lobby');
+        users = [];
+        current_question = null;
+        current_question_hard = false;
+        firstStart = false;
+    }
+
+
     function isSpecialPosition(userIndex, steps) {
         if (users[userIndex].fieldIndex >= field_positions.length - 1) {
             // win game
@@ -292,10 +305,7 @@ io.sockets.on('connection', socket => {
             // waiting 5 sec before reloading page and closing lobby
             setTimeout(() => {
                 io.sockets.emit('refresh_page', []);
-                users = [];
-                current_question = null;
-                current_question_hard = false;
-                firstStart = false;
+                endGame();
             }, 5000);
 
         } else if (users[userIndex].fieldIndex < 0) {
