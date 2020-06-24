@@ -71,14 +71,14 @@
                 <h5 class="card-title">Join game...</h5>
                 <form id="userForm">
                     <div class="form-group">
-                        <label>Username</label>
+                        <label for="username">Username</label>
                         <input class="form-control" id="username" placeholder="StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}"/>
                         <br />
-                        <label>Lobby ID</label>
-                        <input class="form-control" id="" placeholder="1234"/>
+                        <label for="lobbyId">Lobby ID</label>
+                        <input type="number" class="form-control" id="lobbyId" placeholder="1234"/>
                         <br />
-                        <input type="submit" class="btn btn-primary" value="Join" />
-                        <input type="submit" class="btn btn-primary" value="Create" />
+                        <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Join" />
+                        <input type="button" id="loginCreateBtn" class="btn btn-primary" value="Create" />
                     </div>
                 </form>
             </div>
