@@ -233,8 +233,7 @@ io.sockets.on('connection', socket => {
     }
 
     function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-        // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+        return Math.floor(Math.random() * (max + 1 - min)) + min;
     }
 
     function nextPlayer(activeIndex) {
