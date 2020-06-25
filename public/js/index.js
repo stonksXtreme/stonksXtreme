@@ -96,7 +96,6 @@ $(function() {
             });
             $('#exampleModal').modal('show');
 
-        if(dices.length > 0){
             $('.modal-title').html('');
             html += '<video width="150" height="116" autoplay><source src="dices/animation' + dices[0] + '.mp4" type="video/mp4">Your browser does not support the video tag.</video>';
             if(dices.length === 2){

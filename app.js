@@ -104,7 +104,7 @@ io.sockets.on('connection', socket => {
                             usedHardQuestionIndices: [],
                             activeTurn: false,
                             inJail: false,
-                            fibu_rounds: 0
+                            fibuRounds: 0
                         });
                         alignPlayers();
                     } else {
@@ -225,6 +225,22 @@ io.sockets.on('connection', socket => {
         }
     })
 
+    socket.on("switchIdentityTo", index => {
+        indexFrom = findUserIndexByName(socket.username);
+        fieldIndex = users[indexFrom].fieldIndex;
+        users[indexFrom].fieldIndex = users[index].fieldIndex;
+        users[index].fieldIndex = fieldIndex;
+        if (users[index].inJail) {
+            users[index].injail = false;
+            users[indexFrom].inJail = true;
+        }
+        setPositionFromJson(indexFrom);
+        setPositionFromJson(index);
+        alignPlayers();
+        blockRound = false;
+        nextPlayer(indexFrom);
+    })
+
     function findUserIndexByName(username) {
         for (let i in users) {
             if (users[i].name === username) {
@@ -235,7 +251,7 @@ io.sockets.on('connection', socket => {
     }
 
     function getConnectedUsers() {
-        var connected = 0;
+        let connected = 0;
         for (let i in users) {
             if (users[i].isConnected) {
                 connected++;
@@ -393,23 +409,6 @@ io.sockets.on('connection', socket => {
             }
         }
     }
-
-
-    socket.on("switchIdentityTo", index => {
-        indexFrom = findUserIndexByName(socket.username);
-        fieldIndex = users[indexFrom].fieldIndex;
-        users[indexFrom].fieldIndex = users[index].fieldIndex;
-        users[index].fieldIndex = fieldIndex;
-        if (users[index].inJail) {
-            users[index].injail = false;
-            users[index].inJail = true;
-        }
-        setPositionFromJson(indexFrom);
-        setPositionFromJson(index);
-        alignPlayers();
-        blockRound = false;
-        nextPlayer(indexFrom);
-    })
 
     //go to the jail
     function taxFraud(userIndex) {
