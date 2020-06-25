@@ -26,17 +26,17 @@ $(function() {
         x: 20,
         y: 900
     }
-    var identitySwitch = -1;
 
     document.onkeydown = function(e) {
         switch(e.which) {
             // case 37: pos.x-=1;move();break;
             case 37: socket.emit('position_debug', -1);break;
-            case 38:socket.emit('position_debug', 2);break;
-
+            //case 38:pos.y-=1;move();break;
+            case 38: socket.emit('position_debug', 2);break;
             // case 39:pos.x+=1;move();break;
             case 39: socket.emit('position_debug', 1);break;
-            case 40:socket.emit('position_debug', -2);break;
+            //case 40:pos.y+=1;move();break;
+            case 40: socket.emit('position_debug', -2);break;
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)
@@ -81,13 +81,20 @@ $(function() {
         resize();
     });
 
-    socket.on('roll_dice', function(dices){
-        $('.modalCloseButton').removeClass("hidden");
-        $('#exampleModal').modal({
-            keyboard: false,
-            backdrop: 'static'
-        });
+    socket.on('roll_dice', function(dices, showExitButton){
+        if(showExitButton){
+            $('.modalCloseButton').removeClass("hidden");
+        }
+
         let html = '<div class="center">'
+
+        if(dices.length > 0){
+            $('.box').addClass("blur");
+            $('#exampleModal').modal({
+                keyboard: false,
+                backdrop: 'static'
+            });
+            $('#exampleModal').modal('show');
 
         if(dices.length > 0){
             $('.modal-title').html('');
@@ -167,6 +174,10 @@ $(function() {
         $users.html(html);
     });
 
+    socket.on('refresh_page', function(users){
+        location.reload();
+    });
+
     socket.on('switchIdentity', function (users) {
         var html = "";
         for(let i in users) {
@@ -211,12 +222,11 @@ $(function() {
         chat.scrollTop = chat.scrollHeight;
     });
 
-    $userForm.submit(function(e) {
-        e.preventDefault();
-        if($username.val().replace(/\s/g,"") === ""){
+    $('#loginJoinBtn').click(function() {
+        if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
-            socket.emit('new user', $username.val(), function(error_Code){
+            socket.emit('new user', $username.val(), $('#lobbyId').val(), function(error_Code) {
                 switch (error_Code) {
                     case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
                     case 1: alert("Invalid Username"); break;
@@ -227,10 +237,7 @@ $(function() {
         }
     });
 
-    $(".dice").click(function (e){
-        e.preventDefault();
-        socket.emit('dice');
-    })
+    $('#loginCreateBtn').click(function() {});
 
     $(".easy_card").click(function (e){
         e.preventDefault();
@@ -247,4 +254,5 @@ $(function() {
         $('.modalCloseButton').addClass("hidden");
         socket.emit('next_player', null);
     })
+
 });

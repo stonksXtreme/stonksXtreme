@@ -5,6 +5,8 @@ const server = require("http").Server(app);
 const io = require("socket.io").listen(server);
 const fs = require('fs');
 
+const devMode = (process.env.NODE_ENV === 'DEV');
+
 connections = [];
 users = [];
 easy_questions = [];
@@ -22,6 +24,10 @@ hard_questions = JSON.parse(fs.readFileSync('json/questions_hard.json'));
 console.log("Reading field position json file...");
 field_positions = JSON.parse(fs.readFileSync('json/field_positions.json'));
 
+if(devMode){
+    console.log("Development Mode is enabled!!!");
+}
+
 
 server.listen(process.env.PORT || 3000);
 console.log("Server running on http://localhost:3000");
@@ -37,28 +43,37 @@ io.sockets.on('connection', socket => {
     socket.on('disconnect', data => {
         const index = findUserIndexByName(socket.username);
         if (index >= 0) {
-            //users.splice(index, 1);
             users[index].isConnected = false;
-            if (users[index].activeTurn) {
-                nextPlayer(index);
+            if(users.filter(user => !user.isConnected).length === users.length){
+                endGame();
+            }else{
+                if (users[index].activeTurn) {
+                    nextPlayer(index);
+                }
             }
-
         }
-
         io.sockets.emit('update', users);
         connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s socket connected', connections.length)
+        console.log('Disconnected: %s socket connected', connections.length);
     });
+
     // Send message
     socket.on('send message', data => {
         console.log(socket.username + ': ' + data);
         io.sockets.emit('new message', {msg: data, user: socket.username});
+
+        if(devMode){
+            const user = users.find(x => x.activeTurn);
+            switch (data) {
+                case '/next': nextPlayer(findUserIndexByName(user.name)); break;
+            }
+        }
     });
 
     // New User
-    socket.on('new user', function (data, callback) {
-        const colors = ["red", "green", "blue", "yellow", "black", "violet"]
-        socket.username = data;
+    socket.on('new user', function (username, lobbyId, callback) {
+        const colors = ["red", "green", "blue", "yellow", "black", "violet"];
+        socket.username = username;
         if (!isEmptyOrSpaces(socket.username)) {
             if (getConnectedUsers() < 6) {
                 const index = findUserIndexByName(socket.username);
@@ -127,23 +142,22 @@ io.sockets.on('connection', socket => {
         if (userIndex !== -1 && users[userIndex].activeTurn && !users[userIndex].inJail) {
             current_question_hard = hard;
             let random;
-            let usedQuestionIndices;
             if (hard) {
-                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
-                if (usedQuestionIndices < hard_questions.length) {
+                let usedQuestionIndices = users[findUserIndexByName(socket.username)].usedHardQuestionIndices;
+                if (usedQuestionIndices.length < hard_questions.length) {
                     sendChatMessage(socket.username + " hat eine schwere Karte ausgewählt.");
                     do {
                         random = getRandomInt(0, hard_questions.length);
                     }
-                    while (usedQuestionIndices.includes(random))
+                    while (usedQuestionIndices.includes(random));
                     usedQuestionIndices.push(random);
                     current_question = hard_questions[random];
                     socket.emit('question_return', hard_questions[random]);
                 }
 
             } else {
-                usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
-                if (usedQuestionIndices < easy_questions.length) {
+                let usedQuestionIndices = users[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
+                if (usedQuestionIndices.length < easy_questions.length) {
                     sendChatMessage(socket.username + " hat eine einfache Karte ausgewählt.");
                     do {
                         random = getRandomInt(0, easy_questions.length);
@@ -165,7 +179,7 @@ io.sockets.on('connection', socket => {
 
 
             // if answer is right
-            if(correctIndices.includes(parseInt(answerIndex))) {
+            if (correctIndices.includes(parseInt(answerIndex))) {
                 // waiting to see the answer before dice roll
                 setTimeout(() => {
                     let steps = 0;
@@ -173,49 +187,27 @@ io.sockets.on('connection', socket => {
                         const random1 = getRandomInt(1, 6);
                         const random2 = getRandomInt(1, 6);
                         sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
-                        socket.emit('roll_dice', [random1, random2]);
+                        socket.emit('roll_dice', [random1, random2], true);
                         steps = random1 + random2;
                     } else {
                         const random = getRandomInt(1, 6);
                         sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
-                        socket.emit('roll_dice', [random]);
+                        socket.emit('roll_dice', [random] , true);
                         steps = random;
                     }
 
-
                     // wating for animation so set new position
                     setTimeout(() => {
-                        const index = findUserIndexByName(socket.username)
-                        if(index !== -1) {
-                            if(users[index].fieldIndex+steps >= field_positions.length-1){
-                                sendChatMessage(users[index].name + " hat gewonnen!");
-                                users[index].fieldIndex = field_positions.length - 1;
-                            }
-                            else if(users[index].fieldIndex+steps == 18) {
-                                // Special field - Black Friday
-                                users[index].fieldIndex += steps;
-                                sendChatMessage(socket.username + " auf Extrafeld Black Friday! Deine Augenzahl wird verdoppelt");
-                                users[index].fieldIndex += steps;
-                            }
-                            else if(users[index].fieldIndex+steps == 33) {
-                                // Special field - Black Thursday
-                                sendChatMessage(socket.username + ", der Black Thursday schlägt zu. Du gehst zurück auf Feld 1");
-                                users[index].fieldIndex += 1;
-                            }
-                            else{
-                                users[index].fieldIndex += steps;
-                            }
-                            setPositionFromJson(index);
-                            alignPlayers();
-                        }
                         setPosition(userIndex, steps);
-                    }, 3000);
-
-
+                    }, 3500);
                 }, 3000);
             } else {
                 sendChatMessage(socket.username + " hat die Frage falsch beantwortet.");
-                socket.emit('roll_dice', []);
+                if (users[userIndex].fieldIndex === 33) {
+                    sendChatMessage(socket.username + " zurück auf Start!");
+                    setPosition(userIndex, -users[userIndex].fieldIndex);
+                }
+                socket.emit('roll_dice', [], true);
             }
         }
     })
@@ -227,8 +219,10 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('position_debug', steps => {
-        const userIndex = findUserIndexByName(socket.username);
-        setPosition(userIndex, steps);
+        if(devMode){
+            const userIndex = findUserIndexByName(socket.username);
+            setPosition(userIndex, steps);
+        }
     })
 
     function findUserIndexByName(username) {
@@ -255,11 +249,11 @@ io.sockets.on('connection', socket => {
     }
 
     function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-        // alternative: https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new
+        return Math.floor(Math.random() * (max + 1 - min)) + min;
     }
 
     function nextPlayer(activeIndex) {
+        //socket.emit('roll_dice', [5], false);
         users[activeIndex].activeTurn = false;
         if (activeIndex >= users.length - 1) {
             activeIndex = 0;
@@ -277,7 +271,7 @@ io.sockets.on('connection', socket => {
             users[activeIndex].activeTurn = true;
             io.sockets.emit('update', users);
             if (users[activeIndex].inJail) {
-                taxFraud(activeIndex);
+                jailDiceLoop(0, activeIndex);
             }
         }
     }
@@ -289,16 +283,8 @@ io.sockets.on('connection', socket => {
 
     function setPosition(userIndex, steps) {
         if (userIndex !== -1) {
-            if (users[userIndex].fieldIndex + steps >= field_positions.length - 1) {
-                sendChatMessage(users[userIndex].name + " hat gewonnen!");
-                users[userIndex].fieldIndex = field_positions.length - 1;
-            } else {
-                users[userIndex].fieldIndex += steps;
-                if (users[userIndex].fieldIndex < 0) {
-                    users[userIndex].fieldIndex = 0;
-                }
-                isSpecialPosition(userIndex);
-            }
+            users[userIndex].fieldIndex += steps;
+            isSpecialPosition(userIndex, steps);
             setPositionFromJson(userIndex);
             alignPlayers();
         }
@@ -309,68 +295,105 @@ io.sockets.on('connection', socket => {
         users[index].y = field_positions[users[index].fieldIndex].y;
     }
 
-    function isSpecialPosition(userIndex) {
-        switch (users[userIndex].fieldIndex) {
-            case 9:
-                sendChatMessage(users[userIndex].name + " green arrow");
-                break;
-            case 11:
-                sendChatMessage(users[userIndex].name + " BIP nicht erreicht");
-                break;
-            case 18:
-                sendChatMessage(users[userIndex].name + " BlackFriday");
-                break;
-            case 22:
-                sendChatMessage(users[userIndex].name + " green arrow");
-                break;
-            case 24:
-                sendChatMessage(users[userIndex].name + " Steuerhinterziehung");
-                taxFraud(userIndex);
-                break;
-            case 28:
-                sendChatMessage(users[userIndex].name + " Finanzkrise");
-                financialCrisis(userIndex);
-                break;
-            case 31:
-                sendChatMessage(users[userIndex].name + " Identitaetsdiebstahl! Bitte wähle eine Identitaet aus");
-                setTimeout(() => {
-                    socket.emit('switchIdentity', users);
-                }, 1000);
-                blockRound = true;
-                break;
-            case 33:
-                sendChatMessage(users[userIndex].name + " Black Thursday")
-                break;
-            case 35:
-                sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
-                users[userIndex].fibu_rounds = 1;
-                break;
-            case 37:
-                sendChatMessage(users[userIndex].name + " Jackpot")
-                jackpot(userIndex);
-                break;
-            case 39:
-                sendChatMessage(users[userIndex].name + " red arrow")
-                break;
-            case 42:
-                sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
-                users[userIndex].fibu_rounds = 2;
-                break;
-            case 49:
-                sendChatMessage(users[userIndex].name + " red arrow");
-                break;
-            case 55:
-                sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
-                users[userIndex].fibu_rounds = 3;
-                break;
-            case 58:
-                sendChatMessage(users[userIndex].name + " red arrow");
-                break;
-            case 62:
-                sendChatMessage(users[userIndex].name + " red arrow");
-                break;
+    function endGame() {
+        console.log('Clearing lobby');
+        users = [];
+        current_question = null;
+        current_question_hard = false;
+        firstStart = false;
+    }
+
+
+    function isSpecialPosition(userIndex, steps) {
+        if (users[userIndex].fieldIndex >= field_positions.length - 1) {
+            // win game
+            users[userIndex].fieldIndex = field_positions.length - 1;
+            sendChatMessage(users[userIndex].name + " hat gewonnen!");
+            sendChatMessage("Lobby wird in 5 Sekunden neugestartet...");
+
+            // waiting 5 sec before reloading page and closing lobby
+            setTimeout(() => {
+                io.sockets.emit('refresh_page', []);
+                endGame();
+            }, 5000);
+
+        } else if (users[userIndex].fieldIndex < 0) {
+            // before start
+            users[userIndex].fieldIndex = 0;
+
+        } else {
+            // special field
+            switch (users[userIndex].fieldIndex) {
+                case 9:
+                    sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                    setPosition(userIndex, 25);
+                    break;
+                case 11:
+                    sendChatMessage(users[userIndex].name + " BEP nicht erreicht");
+                    setPosition(userIndex, -steps);
+                    break;
+                case 18:
+                    sendChatMessage(users[userIndex].name + " BlackFriday");
+                    setPosition(userIndex, steps);
+                    break;
+                case 22:
+                    sendChatMessage(users[userIndex].name + " ist auf der Karriereleiter aufgestiegen");
+                    setPosition(userIndex, 21);
+                    break;
+                case 24:
+                    sendChatMessage(users[userIndex].name + " Steuerhinterziehung");
+                    taxFraud(userIndex);
+                    break;
+                case 28:
+                    sendChatMessage(users[userIndex].name + ", Finanzkrise!");
+                    financialCrisis(userIndex);
+                    break;
+                case 31:
+                    sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl")
+                    setTimeout(() => {
+                        socket.emit('switchIdentity', users);
+                    }, 1000);
+                    blockRound = true;
+                    break;
+                case 33:
+                    sendChatMessage(users[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
+                    break;
+                case 35:
+                    sendChatMessage(users[userIndex].name + " 1 Runde Fibu")
+                    users[userIndex].fibu_rounds = 1;
+                    break;
+                case 37:
+                    sendChatMessage(users[userIndex].name + " Jackpot")
+                    jackpot(userIndex);
+                    break;
+                case 39:
+                    sendChatMessage(users[userIndex].name + " wurde degradiert!")
+                    setPosition(userIndex, -24);
+                    break;
+                case 42:
+                    sendChatMessage(users[userIndex].name + " 2 Runden Fibu")
+                    users[userIndex].fibu_rounds = 2;
+                    break;
+                case 49:
+                    sendChatMessage(users[userIndex].name + " erlitt starke Verluste!");
+                    setPosition(userIndex, -19);
+                    break;
+                case 55:
+                    sendChatMessage(users[userIndex].name + " 3 Runden Fibu");
+                    users[userIndex].fibu_rounds = 3;
+                    break;
+                case 58:
+                    sendChatMessage(users[userIndex].name + " hat die Prüfung nicht bestanden!");
+                    setPosition(userIndex, -12);
+                    break;
+                case 62:
+                    sendChatMessage(users[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!!!");
+                    setPosition(userIndex, -9);
+                    break;
+            }
         }
     }
+
 
     socket.on("switchIdentityTo", index => {
         indexFrom = findUserIndexByName(socket.username);
@@ -388,31 +411,36 @@ io.sockets.on('connection', socket => {
         nextPlayer(indexFrom);
     })
 
+    //go to the jail
     function taxFraud(userIndex) {
         users[userIndex].fieldIndex = 14;
         users[userIndex].inJail = true;
         jailDiceLoop(0, userIndex);
     }
 
-    function jailDiceLoop(count, userIndex){
+    //dices without drawing a card
+    function jailDiceLoop(count, userIndex) {
+        let random = getRandomInt(1, 6);
+
+        const lastDice = (count === 2);
+        const isSix = (random === 6);
+
+        socket.emit('roll_dice', [random], (lastDice || isSix));
         setTimeout(() => {
-            let random = getRandomInt(1, 6);
-            socket.emit('roll_dice', [random]);
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
-            if (random === 6){
+            if (isSix) {
                 setPosition(userIndex, 1);
                 users[userIndex].inJail = false;
-                nextPlayer(userIndex);
+            }else{
+                if (!lastDice) {
+                    jailDiceLoop(count + 1, userIndex);
+                }
             }
-            if(count === 2){
-                nextPlayer(userIndex);
-            }
-            else{
-                jailDiceLoop(count+1, userIndex);
-            }
+
         }, 3500);
     }
 
+    //every player goes 1-6 steps back
     function financialCrisis(userIndex) {
         const random = getRandomInt(1, 6);
         socket.emit('roll_dice', [random]);
@@ -424,8 +452,9 @@ io.sockets.on('connection', socket => {
         }
     }
 
+    //make a second turn
     function jackpot(userIndex) {
-        if (userIndex === 0) {
+        if (userIndex === '0') {
             nextPlayer(users.length - 1)
         } else {
             nextPlayer(userIndex - 1);
@@ -443,7 +472,7 @@ io.sockets.on('connection', socket => {
         }
 
         for (let arrayIndex in fields) {
-            if (fields[arrayIndex] !== null) {
+            if (devMode && fields[arrayIndex] !== null) {
                 console.log("Auf dem Feld " + arrayIndex + " stehen folgende spieler: " + fields[arrayIndex]);
             }
 
