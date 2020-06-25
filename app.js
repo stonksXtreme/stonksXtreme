@@ -377,6 +377,10 @@ io.sockets.on('connection', socket => {
         fieldIndex = users[indexFrom].fieldIndex;
         users[indexFrom].fieldIndex = users[index].fieldIndex;
         users[index].fieldIndex = fieldIndex;
+        if (users[index].inJail) {
+            users[index].injail = false;
+            users[index].inJail = true;
+        }
         setPositionFromJson(indexFrom);
         setPositionFromJson(index);
         alignPlayers();
