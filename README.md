@@ -24,6 +24,7 @@ Please read through the following links:
     │   └── questions_hard.json     # Datebase file for hard questions
     ├── public                      # All files in this folder are accesible from web
     │   ├── css                     # Style files for client
+    │   │   ├── lobby.css
     │   │   └── style.css
     │   ├── dices                   # Video files for dice animation
     │   ├── img                     # Images and Favicons

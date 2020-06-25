@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/lobby.css">
 
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -68,17 +69,19 @@
     <div class="loginContent">
         <div id="userFormArea" class="card">
             <div class="card-body">
-                <h5 class="card-title">Join game...</h5>
+                <h5 id="loginAction" class="card-title">Join game...</h5>
                 <form id="userForm">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input class="form-control" id="username" placeholder="StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}"/>
                         <br />
                         <label for="lobbyId">Lobby ID</label>
-                        <input type="number" class="form-control" id="lobbyId" placeholder="1234"/>
-                        <br />
-                        <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Join" />
-                        <input type="button" id="loginCreateBtn" class="btn btn-primary" value="Create" />
+                        <input type="text" class="form-control" id="lobbyId" placeholder="1234"/>
+                        <br/>
+                        <div id="joinLoginContainer">
+                            <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Join" />
+                            <a href="#" id="createLink">Create</a>
+                        </div>
                     </div>
                 </form>
             </div>

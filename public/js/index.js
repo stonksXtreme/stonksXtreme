@@ -13,19 +13,21 @@ function resize(){
 $(function() {
     // onload
     resize();
-    var socket = io.connect();
-    var $messageForm = $('#messageForm');
-    var $message = $('#message');
-    var $chat = $('#chat');
-    var $messageArea = $('#mainArea');
-    var $userFormArea = $('#userFormArea');
-    var $userForm = $('#userForm');
-    var $users = $('#users');
-    var $username = $('#username');
-    var pos = {
+    let socket = io.connect();
+    let $messageForm = $('#messageForm');
+    let $message = $('#message');
+    let $chat = $('#chat');
+    let $messageArea = $('#mainArea');
+    let $userFormArea = $('#userFormArea');
+    let $userForm = $('#userForm');
+    let $users = $('#users');
+    let $username = $('#username');
+    let pos = {
         x: 20,
         y: 900
     }
+
+    let $loginAction = $('#loginAction');
 
     document.onkeydown = function(e) {
         switch(e.which) {
@@ -210,7 +212,13 @@ $(function() {
         }
     });
 
-    $('#loginCreateBtn').click(function() {});
+    $('#createLink').click(function() {
+        $('label[for="lobbyId"], #lobbyId').toggle();
+        $('#lobbyId').next('br').toggle();
+        $loginAction.text($loginAction.text() === 'Join game...' ? 'Create game...' : 'Join game...');
+        $('#createLink').text($loginAction.text() === 'Join game...' ? 'Create' : 'Join');
+        $('#loginJoinBtn').val($loginAction.text() === 'Join game...' ? 'Join' : 'Create');
+    });
 
     $(".easy_card").click(function (e){
         e.preventDefault();
