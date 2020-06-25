@@ -195,12 +195,11 @@ $(function() {
         chat.scrollTop = chat.scrollHeight;
     });
 
-    $userForm.submit(function(e) {
-        e.preventDefault();
-        if($username.val().replace(/\s/g,"") === ""){
+    $('#loginJoinBtn').click(function() {
+        if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
-            socket.emit('new user', $username.val(), function(error_Code){
+            socket.emit('new user', $username.val(), $('#lobbyId').val(), function(error_Code) {
                 switch (error_Code) {
                     case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
                     case 1: alert("Invalid Username"); break;
@@ -210,6 +209,8 @@ $(function() {
             });
         }
     });
+
+    $('#loginCreateBtn').click(function() {});
 
     $(".easy_card").click(function (e){
         e.preventDefault();

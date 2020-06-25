@@ -69,9 +69,9 @@ io.sockets.on('connection', socket => {
     });
 
     // New User
-    socket.on('new user', function (data, callback) {
+    socket.on('new user', function (username, lobbyId, callback) {
         const colors = ["red", "green", "blue", "yellow", "black", "violet"];
-        socket.username = data;
+        socket.username = username;
         if (!isEmptyOrSpaces(socket.username)) {
             if (getConnectedUsers() < 6) {
                 const index = findUserIndexByName(socket.username);
@@ -407,7 +407,7 @@ io.sockets.on('connection', socket => {
         }, 3500);
     }
 
-    //every player goes 1-6 steps back 
+    //every player goes 1-6 steps back
     function financialCrisis(userIndex) {
         const random = getRandomInt(1, 6);
         socket.emit('roll_dice', [random]);
@@ -419,7 +419,7 @@ io.sockets.on('connection', socket => {
         }
     }
 
-    //make a second turn 
+    //make a second turn
     function jackpot(userIndex) {
         if (userIndex === '0') {
             nextPlayer(users.length - 1)
