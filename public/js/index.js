@@ -81,10 +81,20 @@ $(function() {
         resize();
     });
 
-    socket.on('roll_dice', function(dices, showExitButton){
+    socket.on('roll_dice', function(dices, showExitButton, actionAfterClose){
         if(showExitButton){
             $('.modalCloseButton').removeClass("hidden");
         }
+
+        $(".modalCloseButton").click(function (e){
+            $('.box').removeClass("blur");
+            $('.modalCloseButton').addClass("hidden");
+            switch (actionAfterClose) {
+                case 'next_player': socket.emit('next_player', null); break;
+                case 'switch_identity': switchIdentity(); break;
+            }
+
+        })
 
         let html = '<div class="center">'
 
@@ -144,7 +154,7 @@ $(function() {
     });
 
     socket.on('update', function(users){
-
+        this.users = users;
         var html = '';
         // draw on canvas
         context.drawImage(background, 0, 0);
@@ -160,23 +170,54 @@ $(function() {
             context.fill();
 
             // update list
-            if(users[i].activeTurn) {
-                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+            if(users[i].picksPlayer){
+                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
             }else{
-                if(users[i].isConnected){
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+                if(users[i].activeTurn) {
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
                 }else{
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+                    if(users[i].isConnected){
+                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+                    }else{
+                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+                    }
                 }
             }
+
         }
 
         $users.html(html);
     });
 
-    socket.on('refresh_page', function(users){
+    socket.on('refresh_page', function(){
         location.reload();
     });
+
+    socket.on('allow_identity_switch', function (users) {
+        var html = "";
+        for(let i in users) {
+            if(users[i].picksPlayer){
+                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
+            }else{
+                if(users[i].activeTurn) {
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+                }else{
+                    if(users[i].isConnected){
+                        html += '<li id-index='+i+' style="background-color: '+ users[i].color + '" class="list-group-item item-switch-id">'+users[i].name+'</li>';
+                    }else{
+                        html += '<li id-index='+i+' style="background-color: '+ users[i].color + '" class="list-group-item item-switch-id">'+users[i].name+' (Offline)</li>';
+                    }
+                }
+            }
+        }
+        $users.html(html);
+
+        $(".item-switch-id").click(function (e){
+            e.preventDefault()
+            var index = $( this ).attr("id-index");
+            socket.emit("selected_player_to_switch", parseInt(index));
+        });
+    })
 
     $messageForm.submit(function(e) {
         e.preventDefault();
@@ -220,12 +261,6 @@ $(function() {
     $(".hard_card").click(function (e){
         e.preventDefault();
         socket.emit('card', true);
-    })
-
-    $(".modalCloseButton").click(function (e){
-        $('.box').removeClass("blur");
-        $('.modalCloseButton').addClass("hidden");
-        socket.emit('next_player', null);
     })
 
 });

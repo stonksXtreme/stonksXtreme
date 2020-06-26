@@ -172,3 +172,12 @@ a {
   color: black;
 }
 
+.btn-switch {
+  float: right;
+  font-size: 12px;
+  padding: 1px;
+}
+
+.item-switch-id {
+  cursor: pointer;
+}
