@@ -16,15 +16,13 @@ current_question = null;
 current_question_hard = false;
 firstStart = false;
 
-blockRound = false;
-
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
 hard_questions = JSON.parse(fs.readFileSync('json/questions_hard.json'));
 console.log("Reading field position json file...");
 field_positions = JSON.parse(fs.readFileSync('json/field_positions.json'));
 
-if(devMode){
+if (devMode) {
     console.log("Development Mode is enabled!!!");
 }
 
@@ -44,9 +42,9 @@ io.sockets.on('connection', socket => {
         const index = findUserIndexByName(socket.username);
         if (index >= 0) {
             users[index].isConnected = false;
-            if(users.filter(user => !user.isConnected).length === users.length){
+            if (users.filter(user => !user.isConnected).length === users.length) {
                 endGame();
-            }else{
+            } else {
                 if (users[index].activeTurn) {
                     nextPlayer(index);
                 }
@@ -62,10 +60,12 @@ io.sockets.on('connection', socket => {
         console.log(socket.username + ': ' + data);
         io.sockets.emit('new message', {msg: data, user: socket.username});
 
-        if(devMode){
+        if (devMode) {
             const user = users.find(x => x.activeTurn);
             switch (data) {
-                case '/next': nextPlayer(findUserIndexByName(user.name)); break;
+                case '/next':
+                    nextPlayer(findUserIndexByName(user.name));
+                    break;
             }
         }
     });
@@ -104,7 +104,8 @@ io.sockets.on('connection', socket => {
                             usedHardQuestionIndices: [],
                             activeTurn: false,
                             inJail: false,
-                            fibuRounds: 0
+                            fibuRounds: 0,
+                            picksPlayer: false
                         });
                         alignPlayers();
                     } else {
@@ -139,7 +140,7 @@ io.sockets.on('connection', socket => {
     // picked up card
     socket.on('card', hard => {
         const userIndex = findUserIndexByName(socket.username);
-        if (userIndex !== -1 && users[userIndex].activeTurn && !users[userIndex].inJail) {
+        if (userIndex !== -1 && users[userIndex].activeTurn && !users[userIndex].inJail && !users[userIndex].picksPlayer) {
             current_question_hard = hard;
             let random;
             if (hard) {
@@ -186,14 +187,16 @@ io.sockets.on('connection', socket => {
                     if (current_question_hard) {
                         const random1 = getRandomInt(1, 6);
                         const random2 = getRandomInt(1, 6);
-                        sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
-                        socket.emit('roll_dice', [random1, random2], true);
                         steps = random1 + random2;
+
+                        sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
+                        socket.emit('roll_dice', [random1, random2], true, (isTargetIdentityChange(userIndex, steps) ? 'switch_identity' : 'next_player'));
+
                     } else {
-                        const random = getRandomInt(1, 6);
-                        sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
-                        socket.emit('roll_dice', [random] , true);
+                        const random = getRandomInt(1, 1);
                         steps = random;
+                        sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
+                        socket.emit('roll_dice', [random], true, (isTargetIdentityChange(userIndex, steps) ? 'switch_identity' : 'next_player'));
                     }
 
                     // wating for animation so set new position
@@ -207,7 +210,7 @@ io.sockets.on('connection', socket => {
                     sendChatMessage(socket.username + " zurück auf Start!");
                     setPosition(userIndex, -users[userIndex].fieldIndex);
                 }
-                socket.emit('roll_dice', [], true);
+                socket.emit('roll_dice', [], true, 'next_player');
             }
         }
     })
@@ -217,15 +220,15 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('position_debug', steps => {
-        if(devMode){
+        if (devMode) {
             const userIndex = findUserIndexByName(socket.username);
             setPosition(userIndex, steps);
         }
     })
 
-    socket.on("switchIdentityTo", index => {
-        indexFrom = findUserIndexByName(socket.username);
-        fieldIndex = users[indexFrom].fieldIndex;
+    socket.on("selected_player_to_switch", index => {
+        let indexFrom = findUserIndexByName(socket.username);
+        let fieldIndex = users[indexFrom].fieldIndex;
         users[indexFrom].fieldIndex = users[index].fieldIndex;
         users[index].fieldIndex = fieldIndex;
         if (users[index].inJail) {
@@ -235,7 +238,6 @@ io.sockets.on('connection', socket => {
         setPositionFromJson(indexFrom);
         setPositionFromJson(index);
         alignPlayers();
-        blockRound = false;
         nextPlayer(indexFrom);
     })
 
@@ -246,6 +248,10 @@ io.sockets.on('connection', socket => {
             }
         }
         return -1;
+    }
+
+    function isTargetIdentityChange(userIndex, steps) {
+        return (users[userIndex].fieldIndex + steps === 31)
     }
 
     function getConnectedUsers() {
@@ -267,13 +273,9 @@ io.sockets.on('connection', socket => {
     }
 
     function nextPlayer(activeIndex) {
-        // Block next Player if current has to change Identity
-        if(!blockRound) {
-            return;
-        }
-
         //socket.emit('roll_dice', [5], false);
         users[activeIndex].activeTurn = false;
+        users[activeIndex].picksPlayer = false;
         if (activeIndex >= users.length - 1) {
             activeIndex = 0;
         } else {
@@ -281,11 +283,11 @@ io.sockets.on('connection', socket => {
         }
         if (!users[activeIndex].isConnected) {
             nextPlayer(activeIndex);
-        } else if(users[activeIndex].fibu_rounds > 0) {
+        } else if (users[activeIndex].fibu_rounds > 0) {
             users[activeIndex].fibu_rounds--;
             sendChatMessage(users[activeIndex].name + " hat noch " + users[activeIndex].fibu_rounds + " Runden FiBu!");
             nextPlayer(activeIndex);
-        } else{
+        } else {
             sendChatMessage("Next turn: " + users[activeIndex].name);
             users[activeIndex].activeTurn = true;
             io.sockets.emit('update', users);
@@ -322,7 +324,6 @@ io.sockets.on('connection', socket => {
         firstStart = false;
     }
 
-
     function isSpecialPosition(userIndex, steps) {
         if (users[userIndex].fieldIndex >= field_positions.length - 1) {
             // win game
@@ -332,7 +333,7 @@ io.sockets.on('connection', socket => {
 
             // waiting 5 sec before reloading page and closing lobby
             setTimeout(() => {
-                io.sockets.emit('refresh_page', []);
+                io.sockets.emit('refresh_page');
                 endGame();
             }, 5000);
 
@@ -369,11 +370,9 @@ io.sockets.on('connection', socket => {
                     break;
                 case 31:
                     sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl!");
-                    sendChatMessage('Bitte wähle einen Spieler aus der Liste aus');
                     setTimeout(() => {
-                        socket.emit('switchIdentity', users);
+                        switchIdentity(userIndex);
                     }, 1000);
-                    blockRound = true;
                     break;
                 case 33:
                     sendChatMessage(users[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
@@ -414,6 +413,16 @@ io.sockets.on('connection', socket => {
         }
     }
 
+    function switchIdentity(userIndex) {
+        users[userIndex].picksPlayer = true;
+        socket.emit('new message', {
+            msg: 'Bitte wähle einen Spieler aus der Liste mit dem du die Position tauschen möchtest...',
+            user: "server"
+        });
+        io.sockets.emit('update', users);
+        socket.emit('allow_identity_switch', users);
+    }
+
     //go to the jail
     function taxFraud(userIndex) {
         users[userIndex].fieldIndex = 14;
@@ -428,13 +437,13 @@ io.sockets.on('connection', socket => {
         const lastDice = (count === 2);
         const isSix = (random === 6);
 
-        socket.emit('roll_dice', [random], (lastDice || isSix));
+        socket.emit('roll_dice', [random], (lastDice || isSix), 'next_player');
         setTimeout(() => {
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
             if (isSix) {
                 setPosition(userIndex, 1);
                 users[userIndex].inJail = false;
-            }else{
+            } else {
                 if (!lastDice) {
                     jailDiceLoop(count + 1, userIndex);
                 }
@@ -446,7 +455,7 @@ io.sockets.on('connection', socket => {
     //every player goes 1-6 steps back
     function financialCrisis(userIndex) {
         const random = getRandomInt(1, 6);
-        socket.emit('roll_dice', [random]);
+        socket.emit('roll_dice', [random], 'next_player');
         sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
         for (let userIndex in users) {
             if (!users[userIndex].inJail) {
