@@ -193,7 +193,7 @@ io.sockets.on('connection', socket => {
                         socket.emit('roll_dice', [random1, random2], true, isTargetIdentityChange(userIndex, steps));
 
                     } else {
-                        const random = getRandomInt(1, 1);
+                        const random = getRandomInt(1, 6);
                         steps = random;
                         sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
                         socket.emit('roll_dice', [random], true, isTargetIdentityChange(userIndex, steps));
