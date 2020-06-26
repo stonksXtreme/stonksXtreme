@@ -184,19 +184,24 @@ $(function() {
                 html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
             }else{
                 if(users[i].isConnected){
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'<button id-index='+i+' class="btn-switch btn btn-primary">Wechsle Identität</button></li>';
+                    html += '<li id-index='+i+' style="background-color: '+ users[i].color + '" class="list-group-item item-switch-id">'+users[i].name+'</li>';
                 }else{
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)<button id-index='+i+' class="btn-switch btn btn-primary">Wechsle Identität</button></li>';
+                    html += '<li id-index='+i+' style="background-color: '+ users[i].color + '" class="list-group-item item-switch-id">'+users[i].name+' (Offline)</li>';
                 }
             }
         }
         $users.html(html);
 
+        $(".item-switch-id").click(function (e){
+            e.preventDefault()
+            var index = $( this ).attr("id-index");
+            switchIdentityTo(parseInt(index));
+        });
+
     });
 
     $(document).on('click',  '.box .mainContent .mainArea .sideBox .sideArea .card .card-body #users .btn-switch', function()  {
-        var index = $( this ).attr("id-index");
-        switchIdentityTo(parseInt(index));
+        
     });
 
     function switchIdentityTo(index) {

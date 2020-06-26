@@ -213,9 +213,7 @@ io.sockets.on('connection', socket => {
     })
 
     socket.on('next_player', data => {
-        if(!blockRound) {
-            nextPlayer(findUserIndexByName(socket.username));
-        }
+        nextPlayer(findUserIndexByName(socket.username));
     })
 
     socket.on('position_debug', steps => {
@@ -269,6 +267,11 @@ io.sockets.on('connection', socket => {
     }
 
     function nextPlayer(activeIndex) {
+        // Block next Player if current has to change Identity
+        if(!blockRound) {
+            return;
+        }
+
         //socket.emit('roll_dice', [5], false);
         users[activeIndex].activeTurn = false;
         if (activeIndex >= users.length - 1) {
@@ -365,7 +368,8 @@ io.sockets.on('connection', socket => {
                     financialCrisis(userIndex);
                     break;
                 case 31:
-                    sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl")
+                    sendChatMessage(users[userIndex].name + ", Identitaetsdiebstahl!");
+                    sendChatMessage('Bitte wähle einen Spieler aus der Liste aus');
                     setTimeout(() => {
                         socket.emit('switchIdentity', users);
                     }, 1000);
