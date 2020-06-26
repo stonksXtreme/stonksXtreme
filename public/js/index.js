@@ -81,7 +81,7 @@ $(function() {
         resize();
     });
 
-    socket.on('roll_dice', function(dices, showExitButton, actionAfterClose){
+    socket.on('roll_dice', function(dices, showExitButton, nextPlayerAfterClose){
         if(showExitButton){
             $('.modalCloseButton').removeClass("hidden");
         }
@@ -89,11 +89,9 @@ $(function() {
         $(".modalCloseButton").click(function (e){
             $('.box').removeClass("blur");
             $('.modalCloseButton').addClass("hidden");
-            switch (actionAfterClose) {
-                case 'next_player': socket.emit('next_player', null); break;
-                case 'switch_identity': switchIdentity(); break;
+            if(nextPlayerAfterClose){
+                socket.emit('next_player', null);
             }
-
         })
 
         let html = '<div class="center">'

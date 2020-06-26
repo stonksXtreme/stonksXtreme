@@ -190,13 +190,13 @@ io.sockets.on('connection', socket => {
                         steps = random1 + random2;
 
                         sendChatMessage(socket.username + " hat " + random1 + " und " + random2 + " gewürfelt!");
-                        socket.emit('roll_dice', [random1, random2], true, (isTargetIdentityChange(userIndex, steps) ? 'switch_identity' : 'next_player'));
+                        socket.emit('roll_dice', [random1, random2], true, isTargetIdentityChange(userIndex, steps));
 
                     } else {
                         const random = getRandomInt(1, 1);
                         steps = random;
                         sendChatMessage(socket.username + " hat " + random + " gewürfelt!");
-                        socket.emit('roll_dice', [random], true, (isTargetIdentityChange(userIndex, steps) ? 'switch_identity' : 'next_player'));
+                        socket.emit('roll_dice', [random], true, isTargetIdentityChange(userIndex, steps));
                     }
 
                     // wating for animation so set new position
@@ -210,7 +210,7 @@ io.sockets.on('connection', socket => {
                     sendChatMessage(socket.username + " zurück auf Start!");
                     setPosition(userIndex, -users[userIndex].fieldIndex);
                 }
-                socket.emit('roll_dice', [], true, 'next_player');
+                socket.emit('roll_dice', [], true, true);
             }
         }
     })
@@ -251,7 +251,16 @@ io.sockets.on('connection', socket => {
     }
 
     function isTargetIdentityChange(userIndex, steps) {
-        return (users[userIndex].fieldIndex + steps === 31)
+        const position =  users[userIndex].fieldIndex + steps
+        if(position === 31){
+            return false;
+        }
+        else if(position >= field_positions.length - 1){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     function getConnectedUsers() {
@@ -437,7 +446,7 @@ io.sockets.on('connection', socket => {
         const lastDice = (count === 2);
         const isSix = (random === 6);
 
-        socket.emit('roll_dice', [random], (lastDice || isSix), 'next_player');
+        socket.emit('roll_dice', [random], (lastDice || isSix), true);
         setTimeout(() => {
             sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
             if (isSix) {
@@ -455,7 +464,7 @@ io.sockets.on('connection', socket => {
     //every player goes 1-6 steps back
     function financialCrisis(userIndex) {
         const random = getRandomInt(1, 6);
-        socket.emit('roll_dice', [random], 'next_player');
+        socket.emit('roll_dice', [random], true);
         sendChatMessage(users[userIndex].name + " hat " + random + " gewürfelt!");
         for (let userIndex in users) {
             if (!users[userIndex].inJail) {
