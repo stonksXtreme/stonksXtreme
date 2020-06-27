@@ -86,13 +86,13 @@ $(function() {
             $('.modalCloseButton').removeClass("hidden");
         }
 
-        $(".modalCloseButton").click(function (e){
+        document.getElementById('closeModal').onclick = function (ev) {
             $('.box').removeClass("blur");
             $('.modalCloseButton').addClass("hidden");
             if(nextPlayerAfterClose){
                 socket.emit('next_player', null);
             }
-        })
+        }
 
         let html = '<div class="center">'
 
@@ -122,7 +122,7 @@ $(function() {
         }
     });
 
-    socket.on('question_return', function(question){
+    socket.on('question_return', function(question, hard, questionIndex){
         $('.modal-title').html(question.question);
 
         var buttons = '';
@@ -147,7 +147,7 @@ $(function() {
             }
             $('.modal-body').html(buttons);
             $('#answer'+index).addClass("selectedButton");
-            socket.emit('answer_selected', index);
+            socket.emit('answer_selected', index, hard, questionIndex);
         })
     });
 
