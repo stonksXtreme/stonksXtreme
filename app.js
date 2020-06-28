@@ -9,6 +9,7 @@ const devMode = (process.env.NODE_ENV === 'DEV');
 
 connections = [];
 users = [];
+rooms = [];
 
 easy_questions = [];
 hard_questions = [];
@@ -60,7 +61,7 @@ io.sockets.on('connection', socket => {
 
     // Send message
     socket.on('send message', data => {
-        console.log(socket.username + ': ' + data);
+        console.log(socket.room + '-> ' + socket.username + ': ' + data);
         io.sockets.to(socket.room).emit('new message', {msg: data, user: socket.username});
 
         if (devMode) {
@@ -72,8 +73,50 @@ io.sockets.on('connection', socket => {
         }
     });
 
+    socket.on('create_room', (username, callback) => {
+        const colors = ["red", "green", "blue", "yellow", "black", "violet"];
+        socket.username = username;
+        socket.room = getRandomInt(1000, 9999);
+        socket.join(socket.room);
+        if (!isEmptyOrSpaces(socket.username)) {
+            const index = findUserIndexByName(socket.username);
+            if (index === -1) {
+                // new user
+                console.log("New user: " + socket.username + ' in ' + socket.room);
+
+                callback(0, socket.room);
+                users.push({
+                    name: socket.username,
+                    color: colors[getUsers().length],
+                    x: field_positions[0].x,
+                    y: field_positions[0].y,
+                    fieldIndex: 0,
+                    isConnected: true,
+                    usedEasyQuestionIndices: [],
+                    usedHardQuestionIndices: [],
+                    activeTurn: false,
+                    inJail: false,
+                    fibuRounds: 0,
+                    picksPlayer: false,
+                    room: socket.room
+                });
+                io.sockets.to(socket.room).emit('update', getUsers());
+            }
+        } else {
+            // invalid username
+            callback(1, '');
+        }
+        // round starts
+        if (getUsers().length >= 6) {
+            firstStart = true;
+            const random = getRandomInt(0, getUsers().length - 1);
+            nextPlayer(random);
+        }
+
+    });
+
     // New User
-    socket.on('new user', (username, room, callback) => {
+    socket.on('join_room', (username, room, callback) => {
         const colors = ["red", "green", "blue", "yellow", "black", "violet"];
         socket.username = username;
         socket.room = room;
@@ -84,19 +127,19 @@ io.sockets.on('connection', socket => {
                 if (getUsers().length === 6) {
                     if (index >= 0) {
                         // restore user
-                        callback(0);
+                        callback(0, '');
                         getUsers()[index].isConnected = true;
                         io.sockets.to(socket.room).emit('update', getUsers());
                     } else {
                         // lobby full
-                        callback(3);
+                        callback(3, '');
                     }
                 } else {
                     if (index === -1) {
                         // new user
                         console.log("New user: " + socket.username);
 
-                        callback(0);
+                        callback(0, socket.room);
                         users.push({
                             name: socket.username,
                             color: colors[getUsers().length],
@@ -117,22 +160,22 @@ io.sockets.on('connection', socket => {
                         if (index >= 0 && !getUsers()[index].isConnected) {
                             // restore user
                             // ok
-                            callback(0);
+                            callback(0, socket.room);
                             getUsers()[index].isConnected = true;
                             io.sockets.to(socket.room).emit('update', getUsers());
                         } else {
                             // user already exists
-                            callback(2);
+                            callback(2, '');
                         }
                     }
                 }
             } else {
                 // lobby full
-                callback(3);
+                callback(3, '');
             }
         } else {
             // invalid username
-            callback(1);
+            callback(1, '');
         }
         // round starts
         if (getUsers().length >= 6) {

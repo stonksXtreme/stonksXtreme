@@ -14,9 +14,9 @@ $(function() {
     // onload
     resize();
     var socket = io.connect();
-    var $messageForm = $('#messageForm');
-    var $message = $('#message');
-    var $chat = $('#chat');
+    var $messageForm = $('.messageForm');
+    var $message = $('.chatField');
+    var $chat = $('.chatWindow');
     var $messageArea = $('#mainArea');
     var $userFormArea = $('#userFormArea');
     var $userForm = $('#userForm');
@@ -228,6 +228,7 @@ $(function() {
     });
 
     socket.on('new message', function(data) {
+        console.log(data);
         if (data.user === "server"){
             $chat.append(data.msg+'\n');
         }else{
@@ -242,18 +243,32 @@ $(function() {
         if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
-            socket.emit('new user', $username.val(), $('#lobbyId').val(), function(error_Code) {
+            socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, room) {
                 switch (error_Code) {
                     case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
                     case 1: alert("Invalid Username"); break;
                     case 2: alert("Username already in use"); break;
-                    case 3: alert("Lobby full"); break;
+                    case 3: alert("Room full"); break;
+                    case 4: $('.loginContent').hide(); $('.waitingContent').show(); break;
                 }
+                $('.navbar-text').innerText = 'Room ' + room;
             });
         }
     });
 
-    $('#loginCreateBtn').click(function() {});
+    $('#loginCreateBtn').click(function() {
+        if($username.val().trim() === ""){
+            alert("Invalid Username")
+        }else{
+            socket.emit('create_room', $username.val(), function(error_Code, room) {
+                switch (error_Code) {
+                    case 0: $('.loginContent').hide(); $('.waitingContent').show(); break;
+                    case 1: alert("Invalid Username"); break;
+                }
+                $('.navbar-text').innerText = 'Room ' + room;
+            });
+        }
+    });
 
     $(".easy_card").click(function (e){
         e.preventDefault();

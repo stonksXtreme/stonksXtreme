@@ -60,6 +60,7 @@
                     <a class="nav-link" href="#">About</a>
                 </li>
             </ul>
+            <span class="navbar-text"></span>
         </div>
     </nav>
 
@@ -84,6 +85,32 @@
             </div>
         </div>
     </div>
+
+    <!-- Waiting -->
+
+    <div class="waitingContent">
+        <div id="waitingArea" class="card">
+            <div class="card-body">
+                <div class="waiting-chat">
+                    <textarea class="chatWindow form-control" id="waiting-chat" readonly rows="10"></textarea>
+                    <form class="messageForm">
+                        <div class="input-group">
+                            <input type="text"class="form-control chatField" placeholder="Enter message here" id="waiting-message"/>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary sendButton material-icons">send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               <div class="waiting-users">
+                   <h5 class="card-title">x players</h5>
+                   <ul class="list-group" id="waiting-users"></ul>
+               </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <!-- Main -->
 
@@ -112,8 +139,8 @@
                             <ul class="list-group" id="users"></ul>
                             <br/>
                             <h5 class="card-title">Chat</h5>
-                            <textarea class="form-control" id="chat" readonly rows="8"></textarea>
-                            <form id="messageForm">
+                            <textarea class="form-control chatWindow" id="chat" readonly rows="8"></textarea>
+                            <form class="messageForm">
                                 <div class="input-group">
 
                                     <input type="text" class="form-control chatField" placeholder="Enter message here" id="message"/>
