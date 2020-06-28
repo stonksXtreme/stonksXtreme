@@ -14,7 +14,7 @@ easy_questions = [];
 hard_questions = [];
 field_positions = [];
 
-//hello
+
 firstStart = false;
 
 console.log("Reading questions json files...");
