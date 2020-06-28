@@ -97,6 +97,8 @@ $(function() {
         let html = '<div class="center">'
 
         if(dices.length > 0){
+            $('.modal-content').removeClass("question-modal");
+            $('.modal-dialog').removeClass("modal-lg");
             $('.box').addClass("blur");
             $('#exampleModal').modal({
                 keyboard: false,
@@ -123,11 +125,13 @@ $(function() {
     });
 
     socket.on('question_return', function(question, hard, questionIndex){
-        $('.modal-title').html(question.question);
+        $('.modal-content').addClass("question-modal");
+        $('.modal-dialog').addClass("modal-lg");
+        $('.modal-title').html('<button type="button" class="btn btn-outline-primary btn-lg btn-block question-field" disabled>' +question.question+ '</button>');
 
-        var buttons = '';
+        let buttons = '';
         for(let answer in question.answers){
-            buttons += '<button type="button" id="answer' + answer + '" class="btn btn-primary btn-lg btn-block onc answerButton">' + question.answers[answer] + '</button>'
+            buttons += '<button type="button" id="answer' + answer + '" class="btn btn-outline-primary btn-lg btn-block onc answerButton">' + question.answers[answer] + '</button>'
         }
         $('.modal-body').html(buttons);
 
@@ -143,7 +147,7 @@ $(function() {
             const index = this.id.replace("answer", "");
             buttons = '';
             for(let answer in question.answers){
-                buttons += '<button type="button" id="answer' + answer + '" class="btn btn-secondary btn-lg btn-block onc" disabled>' + question.answers[answer] + '</button>'
+                buttons += '<button type="button" id="answer' + answer + '" class="btn btn-outline-primary btn-lg btn-block onc answerButton" disabled>' + question.answers[answer] + '</button>'
             }
             $('.modal-body').html(buttons);
             $('#answer'+index).addClass("selectedButton");
