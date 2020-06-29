@@ -6,6 +6,16 @@ a {
   color: #00B7FF;
 }
 
+div#joinLoginContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+a#roomIdA {
+  display: none;
+}
+
 .hidden{
   display: none;
 }

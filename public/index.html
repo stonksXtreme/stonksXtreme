@@ -66,7 +66,7 @@
     <div class="loginContent">
         <div id="userFormArea" class="card">
             <div class="card-body">
-                <h5 class="card-title">Spiel beitreten...</h5>
+                <h5 class="card-title" id="loginAction">Raum beitreten...</h5>
                 <form id="userForm">
                     <div class="form-group">
                         <label for="username">Spitzname</label>
@@ -74,9 +74,11 @@
                         <br />
                         <label for="lobbyId">Raum</label>
                         <input type="text" class="form-control" id="lobbyId" placeholder="eg. 1234" pattern="\d*" maxlength="4"/>
-                        <br />
-                        <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Beitreten" />
-                        <input type="button" id="loginCreateBtn" class="btn btn-primary" value="Erstellen" />
+                        <br/>
+                        <div id="joinLoginContainer">
+                            <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Beitreten" />
+                            <a href="#" id="createLink">Erstellen</a>
+                        </div>
                     </div>
                 </form>
             </div>

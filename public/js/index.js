@@ -27,6 +27,8 @@ $(function() {
     const $username = $('#username');
     const $ready_button = $("#readyButton");
     const audio = new Audio('img/next.mp3');
+    const $loginAction = $('#loginAction');
+    const $loginJoinBtn = $('#loginJoinBtn');
     var pos = {
         x: 20,
         y: 900
@@ -261,41 +263,36 @@ $(function() {
         chat.scrollTop = chat.scrollHeight;
     });
 
-    $('#loginJoinBtn').click(function() {
+    $loginJoinBtn.click(function() {
         username = $username.val();
         if($username.val().trim() === ""){
-            alert("Invalid Username")
+            alert("Ungüliger Spitzname")
         }else{
-            socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, room) {
-                switch (error_Code) {
-                    case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
-                    case 1: alert("Ungüliger Spitzname"); break;
-                    case 2: alert("Dieser Spitzname wird bereits verwendet!"); break;
-                    case 3: alert("Dieser Room ist voll!"); break;
-                    case 4: alert("Raum existiert nicht! Bitte erstelle einen neuen."); break;
-                    case 5: $('.loginContent').hide(); $('.waitingContent').show(); break;
-                }
-                if(room !== null){
-                    $('.navbar-text').text('Raum ' + room);
-                }
-            });
-        }
-    });
-
-    $('#loginCreateBtn').click(function() {
-        username = $username.val();
-        if($username.val().trim() === ""){
-            alert("Invalid Username")
-        }else{
-            socket.emit('create_room', $username.val(), function(error_Code, room) {
-                switch (error_Code) {
-                    case 0: $('.loginContent').hide(); $('.waitingContent').show(); break;
-                    case 1: alert("Ungüliger Spitzname"); break;
-                }
-                if(room !== null){
-                    $('.navbar-text').text('Raum ' + room);
-                }
-            });
+            if($loginAction.text() === 'Raum beitreten...'){
+                socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, room) {
+                    switch (error_Code) {
+                        case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
+                        case 1: alert("Ungüliger Spitzname"); break;
+                        case 2: alert("Dieser Spitzname wird bereits verwendet!"); break;
+                        case 3: alert("Dieser Room ist voll!"); break;
+                        case 4: alert("Raum existiert nicht! Bitte erstelle einen neuen."); break;
+                        case 5: $('.loginContent').hide(); $('.waitingContent').show(); break;
+                    }
+                    if(room !== null){
+                        $('.navbar-text').text('Raum ' + room);
+                    }
+                });
+            }else{
+                socket.emit('create_room', $username.val(), function(error_Code, room) {
+                    switch (error_Code) {
+                        case 0: $('.loginContent').hide(); $('.waitingContent').show(); break;
+                        case 1: alert("Ungüliger Spitzname"); break;
+                    }
+                    if(room !== null){
+                        $('.navbar-text').text('Raum ' + room);
+                    }
+                });
+            }
         }
     });
 
@@ -324,5 +321,13 @@ $(function() {
     $('#leaveButton').click(function (e) {
         location.reload();
     })
+
+    $('#createLink').click(function() {
+        $('label[for="lobbyId"], #lobbyId').toggle();
+        $('#lobbyId').next('br').toggle();
+        $loginAction.text($loginAction.text() === 'Raum beitreten...' ? 'Raum erstellen...' : 'Raum beitreten...');
+        $('#createLink').text($loginAction.text() === 'Raum beitreten...' ? 'Erstellen' : 'Beitreten');
+        $loginJoinBtn.val($loginAction.text() === 'Raum beitreten...' ? 'Beitreten' : 'Erstellen');
+    });
 
 });
