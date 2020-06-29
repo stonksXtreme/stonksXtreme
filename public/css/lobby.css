@@ -4,6 +4,6 @@ div#joinLoginContainer {
     justify-content: space-between;
 }
 
-a#createLink {
-
+a#roomIdA {
+    display: none;
 }

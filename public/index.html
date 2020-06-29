@@ -48,17 +48,8 @@
 
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a id="roomIdA">Room: <span id="roomIdValue"></span></a>
                 </li>
             </ul>
         </div>
@@ -75,8 +66,8 @@
                         <label for="username">Username</label>
                         <input class="form-control" id="username" placeholder="StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}"/>
                         <br />
-                        <label for="lobbyId">Lobby ID</label>
-                        <input type="text" class="form-control" id="lobbyId" placeholder="1234"/>
+                        <label for="lobbyId">Room</label>
+                        <input type="text" class="form-control" id="lobbyId" placeholder="ID"/>
                         <br/>
                         <div id="joinLoginContainer">
                             <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Join" />
@@ -135,13 +126,13 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content question-modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <div class="modal-title" id="exampleModalLabel">
                     Modal title
-                </h5>
-                <button type="button" class="close modalCloseButton hidden" data-dismiss="modal" aria-label="Close">
+                </div>
+                <button id="closeModal" type="button" class="close modalCloseButton hidden" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

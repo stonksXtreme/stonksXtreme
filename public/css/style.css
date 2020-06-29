@@ -145,30 +145,76 @@ a {
   filter: blur(4px);
 }
 
-.modal-xl{
-  width: 90%;
-}
 
-.modal-body_not {
-  background-image: url("/img/Spielkarten_A.png");
+.question-modal {
+  background-image: url("/img/Spielkarte_blank.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  min-height: 530px ;
 }
 
-.btn[disabled]{
+.question-modal > .modal-header{
+  border-bottom: 0 none;
+}
+
+.modal-title{
+  width: 100%;
+}
+
+.answerButton {
+  min-height: 10vh;
+}
+
+.btn-outline-primary {
+  background-color: #ffffffcc;
+  color: black;
+  border: 4px solid black;
+}
+
+.btn-outline-primary:hover{
+  background-color: #ffffffcc !important;
+  color: black !important;
+  border: 4px solid #f89123 !important;
+}
+
+.btn-outline-primary[disabled]{
   opacity: 1.0;
+  background-color: #ffffffcc !important;
+  color: black !important;
+  border: 4px solid dimgrey !important;
 }
 
 .greenButton[disabled]{
-  background-color: green;
+  background-color: #ffffffcc !important;
+  color: black !important;
+  border: 4px solid limegreen !important;
 }
 
 .redButton[disabled]{
-  background-color: red;
+  background-color: #ffffffcc !important;
+  color: black !important;
+  border: 4px solid red !important;
+}
+
+.question-field[disabled] {
+  border: 4px solid black !important;
+  min-height: 115px;
+  margin-bottom: 0;
+  font-size: x-large;
+  font-style: italic;
 }
 
 .list-group-item:nth-child(4){
   color: black;
 }
 
+.btn-switch {
+  float: right;
+  font-size: 12px;
+  padding: 1px;
+}
+
+.item-switch-id {
+  cursor: pointer;
+}
