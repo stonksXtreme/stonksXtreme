@@ -15,9 +15,6 @@ easy_questions = [];
 hard_questions = [];
 field_positions = [];
 
-
-firstStart = false;
-
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
 hard_questions = JSON.parse(fs.readFileSync('json/questions_hard.json'));
@@ -101,13 +98,6 @@ io.sockets.on('connection', socket => {
             // invalid username
             callback(1, null);
         }
-        // round starts
-        if (getUsers().length >= 6) {
-            firstStart = true;
-            const random = getRandomInt(0, getUsers().length - 1);
-            nextPlayer(random);
-        }
-
     });
 
     // New User
@@ -167,11 +157,6 @@ io.sockets.on('connection', socket => {
         } else {
             // invalid username
             callback(1, null);
-        }
-        // round starts
-        if (getUsers().length >= 6) {
-            firstStart = true;
-
         }
     });
 
@@ -300,6 +285,7 @@ io.sockets.on('connection', socket => {
             user.isReady = false;
         })
         roomState.set(socket.room, true);
+        io.sockets.to(socket.room).emit('update', getUsers());
         io.sockets.to(socket.room).emit('start_game');
         nextPlayer(getRandomInt(0, getUsers().length - 1));
     }
@@ -388,7 +374,7 @@ io.sockets.on('connection', socket => {
             sendChatMessage("Nächster: " + getUsers()[activeIndex].name);
             getUsers()[activeIndex].activeTurn = true;
             io.sockets.to(socket.room).emit('update', getUsers());
-
+            io.sockets.to(socket.room).emit('play_sound', getUsers()[activeIndex].name);
             if (getUsers()[activeIndex].inJail) {
                 jailDiceLoop(0, activeIndex);
             }
@@ -418,7 +404,6 @@ io.sockets.on('connection', socket => {
         console.log('Clearing lobby');
         users = users.filter(u => u.room !== socket.room);
         roomState.delete(socket.room);
-        firstStart = false;
     }
 
     function isSpecialPosition(userIndex, steps) {

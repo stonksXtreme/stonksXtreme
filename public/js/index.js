@@ -26,6 +26,7 @@ $(function() {
     const $waiting_users = $('#waiting-users');
     const $username = $('#username');
     const $ready_button = $("#readyButton");
+    const audio = new Audio('img/next.mp3');
     var pos = {
         x: 20,
         y: 900
@@ -183,9 +184,6 @@ $(function() {
                 }else{
                     if(users[i].activeTurn) {
                         html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Am Zug)</li>';
-                        if(users[i].name === username){
-                            playAudio();
-                        }
                     }else{
                         if(!users[i].isConnected){
                             html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
@@ -236,6 +234,13 @@ $(function() {
         $message.val('');
         $waiting_message.val('');
         $('.waitingContent').hide(); $('.mainContent').show();
+    });
+
+    socket.on('play_sound', function (name) {
+        if(name === username){
+            audio.volume = 0.5;
+            audio.play();
+        }
     });
 
     $messageForm.submit(function(e) {
@@ -319,11 +324,5 @@ $(function() {
     $('#leaveButton').click(function (e) {
         location.reload();
     })
-
-    function playAudio() {
-        const audio = new Audio('img/next.mp3');
-        audio.volume = 0.5;
-        audio.play();
-    }
 
 });
