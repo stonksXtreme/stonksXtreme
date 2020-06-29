@@ -13,15 +13,18 @@ function resize(){
 $(function() {
     // onload
     resize();
-    var socket = io.connect();
-    var $messageForm = $('#messageForm');
-    var $message = $('#message');
-    var $chat = $('#chat');
-    var $messageArea = $('#mainArea');
-    var $userFormArea = $('#userFormArea');
-    var $userForm = $('#userForm');
-    var $users = $('#users');
-    var $username = $('#username');
+    const socket = io.connect();
+    const $messageForm = $('.messageForm');
+    const $message = $('#message');
+    const $waiting_message = $('#waiting-message');
+    const $chat = $('.chatWindow');
+    const $messageArea = $('#mainArea');
+    const $userFormArea = $('#userFormArea');
+    const $userForm = $('#userForm');
+    const $users = $('#users');
+    const $waiting_users = $('#waiting-users');
+    const $username = $('#username');
+    const $ready_button = $("#readyButton");
     var pos = {
         x: 20,
         y: 900
@@ -156,10 +159,10 @@ $(function() {
     });
 
     socket.on('update', function(users){
-        this.users = users;
         var html = '';
         // draw on canvas
         context.drawImage(background, 0, 0);
+
         for(let i in users){
             context.beginPath();
             context.arc(users[i].x, users[i].y, 17, 0, 2 * Math.PI, true);
@@ -172,23 +175,28 @@ $(function() {
             context.fill();
 
             // update list
-            if(users[i].picksPlayer){
-                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
+            if(users[i].isReady){
+                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Bereit)</li>';
             }else{
-                if(users[i].activeTurn) {
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+                if(users[i].picksPlayer){
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
                 }else{
-                    if(users[i].isConnected){
-                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+                    if(users[i].activeTurn) {
+                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
                     }else{
-                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+                        if(!users[i].isConnected){
+                            html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
+                        }else{
+                            html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+'</li>';
+                        }
                     }
                 }
             }
-
         }
 
         $users.html(html);
+        $waiting_users.html(html);
+        $('#player_count').text(users.length + ' Spieler');
     });
 
     socket.on('refresh_page', function(){
@@ -219,12 +227,17 @@ $(function() {
             var index = $( this ).attr("id-index");
             socket.emit("selected_player_to_switch", parseInt(index));
         });
-    })
+    });
+
+    socket.on('start_game', function () {
+        $('.waitingContent').hide(); $('.mainContent').show();
+    });
 
     $messageForm.submit(function(e) {
         e.preventDefault();
-        socket.emit('send message', $message.val());
+        socket.emit('send message', ($message.val() + $waiting_message.val()));
         $message.val('');
+        $waiting_message.val('');
     });
 
     socket.on('new message', function(data) {
@@ -242,18 +255,37 @@ $(function() {
         if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
-            socket.emit('new user', $username.val(), $('#lobbyId').val(), function(error_Code) {
+            socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, room) {
                 switch (error_Code) {
                     case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
-                    case 1: alert("Invalid Username"); break;
-                    case 2: alert("Username already in use"); break;
-                    case 3: alert("Lobby full"); break;
+                    case 1: alert("Ungüliger Spitzname"); break;
+                    case 2: alert("Dieser Spitzname wird bereits verwendet!"); break;
+                    case 3: alert("Dieser Room ist voll!"); break;
+                    case 4: alert("Raum existiert nicht! Bitte erstelle einen neuen."); break;
+                    case 5: $('.loginContent').hide(); $('.waitingContent').show(); break;
+                }
+                if(room !== null){
+                    $('.navbar-text').text('Raum ' + room);
                 }
             });
         }
     });
 
-    $('#loginCreateBtn').click(function() {});
+    $('#loginCreateBtn').click(function() {
+        if($username.val().trim() === ""){
+            alert("Invalid Username")
+        }else{
+            socket.emit('create_room', $username.val(), function(error_Code, room) {
+                switch (error_Code) {
+                    case 0: $('.loginContent').hide(); $('.waitingContent').show(); break;
+                    case 1: alert("Ungüliger Spitzname"); break;
+                }
+                if(room !== null){
+                    $('.navbar-text').text('Raum ' + room);
+                }
+            });
+        }
+    });
 
     $(".easy_card").click(function (e){
         e.preventDefault();
@@ -263,6 +295,22 @@ $(function() {
     $(".hard_card").click(function (e){
         e.preventDefault();
         socket.emit('card', true);
+    })
+
+    $ready_button.click(function (e){
+        e.preventDefault();
+        socket.emit('toggle_ready_state', function (ready) {
+            console.log(ready);
+            if(ready){
+                $ready_button.val('Muss los')
+            }else{
+                $ready_button.val('Bereit')
+            }
+        });
+    })
+
+    $('#leaveButton').click(function (e) {
+        location.reload();
     })
 
 });

@@ -10,8 +10,16 @@ a {
   display: none;
 }
 
+.navbar{
+  z-index: 3;
+}
+
 
 .mainContent {
+  display: none;
+}
+
+.waitingContent {
   display: none;
 }
 
@@ -44,6 +52,15 @@ a {
   flex: 1 1 auto;
 }
 
+.box .waitingContent {
+  flex: 1 1 auto;
+  background-image: url("/img/Spielbrett_blur.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .center {
   text-align: center;
 }
@@ -54,6 +71,32 @@ a {
   top: 47%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+#waitingArea{
+  width: 50em;
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chatWindow{
+  resize: none;
+}
+
+.waiting-chat{
+  float: left;
+  width: 65%;
+}
+
+.waiting-users{
+  float: right;
+  width: calc(35% - 20px);
+}
+
+.waiting-buttons{
+  clear: both;
 }
 
 .mainArea {
