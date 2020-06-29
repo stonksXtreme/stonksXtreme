@@ -92,6 +92,11 @@ a {
 
 .waiting-users{
   float: right;
+  width: calc(35% - 20px);
+}
+
+.waiting-buttons{
+  clear: both;
 }
 
 .mainArea {

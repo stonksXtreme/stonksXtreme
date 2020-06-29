@@ -47,17 +47,14 @@
 
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="Spielanleitung.pdf">Regeln</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="#">Team</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#">Impressum</a>
                 </li>
             </ul>
             <span class="navbar-text"></span>
@@ -69,17 +66,17 @@
     <div class="loginContent">
         <div id="userFormArea" class="card">
             <div class="card-body">
-                <h5 class="card-title">Join game...</h5>
+                <h5 class="card-title">Spiel beitreten...</h5>
                 <form id="userForm">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input class="form-control" id="username" placeholder="StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}"/>
+                        <label for="username">Spitzname</label>
+                        <input class="form-control" id="username" placeholder="eg. StonksBoi" required="required" pattern="[A-Za-z0-9]{1,20}" maxlength="20"/>
                         <br />
-                        <label for="lobbyId">Room</label>
-                        <input type="number" class="form-control" id="lobbyId" placeholder="1234"/>
+                        <label for="lobbyId">Raum</label>
+                        <input type="text" class="form-control" id="lobbyId" placeholder="eg. 1234" pattern="\d*" maxlength="4"/>
                         <br />
-                        <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Join" />
-                        <input type="button" id="loginCreateBtn" class="btn btn-primary" value="Create" />
+                        <input type="button" id="loginJoinBtn" class="btn btn-primary" value="Beitreten" />
+                        <input type="button" id="loginCreateBtn" class="btn btn-primary" value="Erstellen" />
                     </div>
                 </form>
             </div>
@@ -95,7 +92,7 @@
                     <textarea class="chatWindow form-control" id="waiting-chat" readonly rows="10"></textarea>
                     <form class="messageForm">
                         <div class="input-group">
-                            <input type="text"class="form-control chatField" placeholder="Enter message here" id="waiting-message"/>
+                            <input type="text"class="form-control chatField" placeholder="Nachricht" id="waiting-message" autocomplete="off" maxlength="200"/>
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary sendButton material-icons">send</button>
                             </div>
@@ -103,10 +100,13 @@
                     </form>
                 </div>
                <div class="waiting-users">
-                   <h5 class="card-title">x players</h5>
+                   <h5 class="card-title" id="player_count">0 players</h5>
                    <ul class="list-group" id="waiting-users"></ul>
                </div>
-
+                <div class="waiting-buttons">
+                    <input type="button" id="readyButton" class="btn btn-primary" value="Bereit" />
+                    <input type="button" id="leaveButton" class="btn btn-primary" value="Verlassen" />
+                </div>
             </div>
         </div>
     </div>
@@ -143,7 +143,7 @@
                             <form class="messageForm">
                                 <div class="input-group">
 
-                                    <input type="text" class="form-control chatField" placeholder="Enter message here" id="message"/>
+                                    <input type="text" class="form-control chatField" placeholder="Nachricht" id="message" autocomplete="off" maxlength="200"/>
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-primary sendButton material-icons">send</button>
                                     </div>
