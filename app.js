@@ -75,8 +75,8 @@ io.sockets.on('connection', socket => {
             if (devMode) {
                 const user = getUsers().find(x => x.activeTurn);
                 switch (message) {
-                    case '/next':
-                        nextPlayer(findUserIndexByName(user.name)); break;
+                    case '/next': nextPlayer(findUserIndexByName(user.name)); break;
+                    case '/start': startGame(); break;
                 }
             }
         }
@@ -136,7 +136,6 @@ io.sockets.on('connection', socket => {
                             console.log("New user: " + socket.username);
                             addUser();
 
-                            console.log('running? ' + roomState.get(socket.room));
                             if(roomState.get(socket.room)){
                                 callback(0, socket.room);
                             }else{
@@ -184,7 +183,7 @@ io.sockets.on('connection', socket => {
             if (hard) {
                 let usedQuestionIndices = getUsers()[findUserIndexByName(socket.username)].usedHardQuestionIndices;
                 if (usedQuestionIndices.length < hard_questions.length) {
-                    sendChatMessage(socket.username + " hat eine schwere Karte ausgewählt.");
+                    sendChatMessage(socket.username + " hat eine schwere Karte gezogen.");
                     do {
                         random = getRandomInt(0, hard_questions.length);
                     }
@@ -196,7 +195,7 @@ io.sockets.on('connection', socket => {
             } else {
                 let usedQuestionIndices = getUsers()[findUserIndexByName(socket.username)].usedEasyQuestionIndices;
                 if (usedQuestionIndices.length < easy_questions.length) {
-                    sendChatMessage(socket.username + " hat eine einfache Karte ausgewählt.");
+                    sendChatMessage(socket.username + " hat eine einfache Karte gezogen.");
                     do {
                         random = getRandomInt(0, easy_questions.length);
                     }
@@ -279,6 +278,7 @@ io.sockets.on('connection', socket => {
         }
         setPositionFromJson(indexFrom);
         setPositionFromJson(index);
+        sendChatMessage(getUsers()[indexFrom].name +  " tauschte den Platz mit " + getUsers()[index].name);
         alignPlayers();
         nextPlayer(indexFrom);
     })
@@ -291,15 +291,18 @@ io.sockets.on('connection', socket => {
 
         // everybody is ready and more than 2 players
         if(getUsers().filter(user => user.isReady).length === getUsers().length && getUsers().length > 2){
-            // storte gam
-            getUsers().forEach(user => {
-                user.isReady = false;
-            })
-            roomState.set(socket.room, true);
-            io.sockets.to(socket.room).emit('start_game');
-            nextPlayer(getRandomInt(0, getUsers().length - 1));
+            startGame();
         }
     })
+
+    function startGame() {
+        getUsers().forEach(user => {
+            user.isReady = false;
+        })
+        roomState.set(socket.room, true);
+        io.sockets.to(socket.room).emit('start_game');
+        nextPlayer(getRandomInt(0, getUsers().length - 1));
+    }
 
     function findUserIndexByName(username) {
         for (let i in getUsers()) {
@@ -382,9 +385,10 @@ io.sockets.on('connection', socket => {
             sendChatMessage(getUsers()[activeIndex].name + " hat noch " + getUsers()[activeIndex].fibu_rounds + " Runden FiBu!");
             nextPlayer(activeIndex);
         } else {
-            sendChatMessage("Next turn: " + getUsers()[activeIndex].name);
+            sendChatMessage("Nächster: " + getUsers()[activeIndex].name);
             getUsers()[activeIndex].activeTurn = true;
             io.sockets.to(socket.room).emit('update', getUsers());
+
             if (getUsers()[activeIndex].inJail) {
                 jailDiceLoop(0, activeIndex);
             }
@@ -422,7 +426,7 @@ io.sockets.on('connection', socket => {
             // win game
             getUsers()[userIndex].fieldIndex = field_positions.length - 1;
             sendChatMessage(getUsers()[userIndex].name + " hat gewonnen!");
-            sendChatMessage("Lobby wird in 5 Sekunden neugestartet...");
+            sendChatMessage("Lobby wird in 5 Sekunden geschlossen...");
 
             // waiting 5 sec before reloading page and closing lobby
             setTimeout(() => {
@@ -442,11 +446,11 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, 25);
                     break;
                 case 11:
-                    sendChatMessage(getUsers()[userIndex].name + " BEP nicht erreicht");
+                    sendChatMessage(getUsers()[userIndex].name + " hat den BEP nicht erreicht! Zurück mit dir!");
                     setPosition(userIndex, -steps);
                     break;
                 case 18:
-                    sendChatMessage(getUsers()[userIndex].name + " BlackFriday");
+                    sendChatMessage("Black Friday für " + getUsers()[userIndex].name + "! Geh weiter!");
                     setPosition(userIndex, steps);
                     break;
                 case 22:
@@ -454,15 +458,14 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, 21);
                     break;
                 case 24:
-                    sendChatMessage(getUsers()[userIndex].name + " Steuerhinterziehung");
+                    sendChatMessage(getUsers()[userIndex].name + " hat Steuerhinterziehung begangen! (Wie kannst du nur?)");
                     taxFraud(userIndex);
                     break;
                 case 28:
-                    sendChatMessage(getUsers()[userIndex].name + ", Finanzkrise!");
+                    sendChatMessage(getUsers()[userIndex].name + " erlebt eine Finanzkrise!");
                     financialCrisis(userIndex);
                     break;
                 case 31:
-                    sendChatMessage(getUsers()[userIndex].name + ", Identitaetsdiebstahl!");
                     setTimeout(() => {
                         switchIdentity(userIndex);
                     }, 1000);
@@ -471,11 +474,11 @@ io.sockets.on('connection', socket => {
                     sendChatMessage(getUsers()[userIndex].name + ", jetzt wird's spannend! Black Thursday!")
                     break;
                 case 35:
-                    sendChatMessage(getUsers()[userIndex].name + " 1 Runde Fibu")
+                    sendChatMessage("Eine Runde Fibu für " + getUsers()[userIndex].name + "!")
                     getUsers()[userIndex].fibu_rounds = 1;
                     break;
                 case 37:
-                    sendChatMessage(getUsers()[userIndex].name + " Jackpot")
+                    sendChatMessage( " Jackpot für " + getUsers()[userIndex].name + "! Du darfst noch einmal ziehen!")
                     jackpot(userIndex);
                     break;
                 case 39:
@@ -483,7 +486,7 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, -24);
                     break;
                 case 42:
-                    sendChatMessage(getUsers()[userIndex].name + " 2 Runden Fibu")
+                    sendChatMessage("Zwei Runden Fibu für " + getUsers()[userIndex].name + "!")
                     getUsers()[userIndex].fibu_rounds = 2;
                     break;
                 case 49:
@@ -491,7 +494,7 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, -19);
                     break;
                 case 55:
-                    sendChatMessage(getUsers()[userIndex].name + " 3 Runden Fibu");
+                    sendChatMessage( "Drei Runden Fibu für " + getUsers()[userIndex].name + "!");
                     getUsers()[userIndex].fibu_rounds = 3;
                     break;
                 case 58:
@@ -499,7 +502,7 @@ io.sockets.on('connection', socket => {
                     setPosition(userIndex, -12);
                     break;
                 case 62:
-                    sendChatMessage(getUsers()[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!!!");
+                    sendChatMessage(getUsers()[userIndex].name + " hat 2018 in Bitcoin investiert und ist pleite!");
                     setPosition(userIndex, -9);
                     break;
             }

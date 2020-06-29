@@ -13,6 +13,7 @@ function resize(){
 $(function() {
     // onload
     resize();
+    let username;
     const socket = io.connect();
     const $messageForm = $('.messageForm');
     const $message = $('#message');
@@ -162,7 +163,6 @@ $(function() {
         var html = '';
         // draw on canvas
         context.drawImage(background, 0, 0);
-
         for(let i in users){
             context.beginPath();
             context.arc(users[i].x, users[i].y, 17, 0, 2 * Math.PI, true);
@@ -179,10 +179,13 @@ $(function() {
                 html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Bereit)</li>';
             }else{
                 if(users[i].picksPlayer){
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Wählt Spieler)</li>';
                 }else{
                     if(users[i].activeTurn) {
-                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+                        html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Am Zug)</li>';
+                        if(users[i].name === username){
+                            playAudio();
+                        }
                     }else{
                         if(!users[i].isConnected){
                             html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Offline)</li>';
@@ -207,10 +210,10 @@ $(function() {
         var html = "";
         for(let i in users) {
             if(users[i].picksPlayer){
-                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Picks Player)</li>';
+                html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Wählt Spieler)</li>';
             }else{
                 if(users[i].activeTurn) {
-                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Active)</li>';
+                    html += '<li style="background-color: '+ users[i].color + '" class="list-group-item">'+users[i].name+' (Am Zug)</li>';
                 }else{
                     if(users[i].isConnected){
                         html += '<li id-index='+i+' style="background-color: '+ users[i].color + '" class="list-group-item item-switch-id">'+users[i].name+'</li>';
@@ -230,6 +233,8 @@ $(function() {
     });
 
     socket.on('start_game', function () {
+        $message.val('');
+        $waiting_message.val('');
         $('.waitingContent').hide(); $('.mainContent').show();
     });
 
@@ -252,6 +257,7 @@ $(function() {
     });
 
     $('#loginJoinBtn').click(function() {
+        username = $username.val();
         if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
@@ -272,6 +278,7 @@ $(function() {
     });
 
     $('#loginCreateBtn').click(function() {
+        username = $username.val();
         if($username.val().trim() === ""){
             alert("Invalid Username")
         }else{
@@ -312,5 +319,11 @@ $(function() {
     $('#leaveButton').click(function (e) {
         location.reload();
     })
+
+    function playAudio() {
+        const audio = new Audio('img/next.mp3');
+        audio.volume = 0.5;
+        audio.play();
+    }
 
 });
