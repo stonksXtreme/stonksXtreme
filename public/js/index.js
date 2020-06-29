@@ -233,6 +233,8 @@ $(function() {
     });
 
     socket.on('start_game', function () {
+        $message.val('');
+        $waiting_message.val('');
         $('.waitingContent').hide(); $('.mainContent').show();
     });
 
