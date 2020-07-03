@@ -84,7 +84,6 @@ a#roomIdA {
 }
 
 #waitingArea{
-  width: 50em;
   position: absolute;
   top: 47%;
   left: 50%;
@@ -95,6 +94,14 @@ a#roomIdA {
   resize: none;
 }
 
+.waitingBody{
+  width: 50em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+
 .waiting-chat{
   float: left;
   width: 65%;
@@ -103,10 +110,25 @@ a#roomIdA {
 .waiting-users{
   float: right;
   width: calc(35% - 20px);
+  margin-left: 10px;
 }
 
 .waiting-buttons{
   clear: both;
+}
+
+.waitingBodyMobile{
+  width: 320px;
+}
+
+.waitingChatMobile{
+  width: 100%;
+}
+
+.waitingUsersMobile{
+  margin-left: 0;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .mainArea {

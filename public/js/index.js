@@ -2,11 +2,16 @@ function resize(){
     if ($(window).width() > 974) {
         // desktop
         $('.fieldCard').removeClass("mobileField");
+        $('.waitingBody').removeClass("waitingBodyMobile");
+        $('.waiting-chat').removeClass("waitingChatMobile");
+        $('.waiting-users').removeClass("waitingUsersMobile");
     }
     else {
         // mobile
         $('.fieldCard').addClass("mobileField");
-
+        $('.waitingBody').addClass("waitingBodyMobile");
+        $('.waiting-chat').addClass("waitingChatMobile");
+        $('.waiting-users').addClass("waitingUsersMobile");
     }
 }
 
@@ -14,6 +19,7 @@ $(function() {
     // onload
     resize();
     let username;
+    let room;
     const socket = io.connect();
     const $messageForm = $('.messageForm');
     const $message = $('#message');
@@ -253,8 +259,13 @@ $(function() {
     });
 
     socket.on('new message', function(data) {
-        if (data.user === "server"){
-            $chat.append(data.msg+'\n');
+        if (data.user === 'server'){
+            if(data.msg === username + ' ist dem Raum beigetreten.'){
+                $chat.append('Du bist dem Raum ' + room + ' beigetreten.\n');
+            }else{
+                $chat.append(data.msg+'\n');
+            }
+
         }else{
             $chat.append(data.user+': '+data.msg+'\n');
         }
@@ -269,7 +280,7 @@ $(function() {
             alert("Ungüliger Spitzname")
         }else{
             if($loginAction.text() === 'Raum beitreten...'){
-                socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, room) {
+                socket.emit('join_room', $username.val(), $('#lobbyId').val(), function(error_Code, roomId) {
                     switch (error_Code) {
                         case 0: $('.loginContent').hide(); $('.mainContent').show(); break;
                         case 1: alert("Ungüliger Spitzname"); break;
@@ -278,18 +289,21 @@ $(function() {
                         case 4: alert("Raum existiert nicht! Bitte erstelle einen neuen."); break;
                         case 5: $('.loginContent').hide(); $('.waitingContent').show(); break;
                     }
-                    if(room !== null){
-                        $('.navbar-text').text('Raum ' + room);
+                    if(roomId !== null){
+                        $('.navbar-text').text('Raum ' + roomId);
+                        console.log(roomId);
+                        room = roomId;
                     }
                 });
             }else{
-                socket.emit('create_room', $username.val(), function(error_Code, room) {
+                socket.emit('create_room', $username.val(), function(error_Code, roomId) {
                     switch (error_Code) {
                         case 0: $('.loginContent').hide(); $('.waitingContent').show(); break;
                         case 1: alert("Ungüliger Spitzname"); break;
                     }
-                    if(room !== null){
-                        $('.navbar-text').text('Raum ' + room);
+                    if(roomId !== null){
+                        $('.navbar-text').text('Raum ' + roomId);
+                        room = roomId;
                     }
                 });
             }

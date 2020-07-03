@@ -14,6 +14,7 @@ roomState = new Map();
 easy_questions = [];
 hard_questions = [];
 field_positions = [];
+const colors = ["red", "green", "blue", "yellow", "black", "violet"];
 
 console.log("Reading questions json files...");
 easy_questions = JSON.parse(fs.readFileSync('json/questions_easy.json'));
@@ -41,6 +42,7 @@ io.sockets.on('connection', socket => {
             const index = findUserIndexByName(socket.username);
             if (index >= 0) {
                 if(roomState.get(socket.room)){
+                    // if room is running
                     getUsers()[index].isConnected = false;
                     if (getUsers().filter(user => !user.isConnected).length === getUsers().length) {
                         endGame();
@@ -50,12 +52,13 @@ io.sockets.on('connection', socket => {
                         }
                     }
                 }else{
+                    io.sockets.to(socket.room).emit('new message', {msg: socket.username + ' hat den Raum verlassen.', user: "server"});
                     users = users.filter(value => !(value.name === socket.username && value.room === socket.room));
                     if(getUsers().length === 0){
                         endGame();
                     }
                 }
-
+                recolorPlayers();
             }
             io.sockets.to(socket.room).emit('update', getUsers());
         }
@@ -89,7 +92,6 @@ io.sockets.on('connection', socket => {
             if (index === -1) {
                 // new user
                 console.log("New user: " + socket.username + ' in ' + socket.room);
-
                 callback(0, socket.room);
                 addUser();
                 io.sockets.to(socket.room).emit('update', getUsers());
@@ -124,13 +126,14 @@ io.sockets.on('connection', socket => {
                         if (index === -1) {
                             // new user
                             console.log("New user: " + socket.username);
-                            addUser();
 
                             if(roomState.get(socket.room)){
                                 callback(0, socket.room);
                             }else{
                                 callback(5, socket.room);
                             }
+
+                            addUser();
 
                             alignPlayers();
                         } else {
@@ -280,6 +283,12 @@ io.sockets.on('connection', socket => {
         }
     })
 
+    function recolorPlayers() {
+        for (let i in getUsers()) {
+            getUsers()[i].color = colors[i];
+        }
+    }
+
     function startGame() {
         getUsers().forEach(user => {
             user.isReady = false;
@@ -304,8 +313,6 @@ io.sockets.on('connection', socket => {
     }
 
     function addUser() {
-        const colors = ["red", "green", "blue", "yellow", "black", "violet"];
-
         users.push({
             name: socket.username,
             color: colors[getUsers().length],
@@ -322,6 +329,7 @@ io.sockets.on('connection', socket => {
             room: socket.room,
             isReady: false
         });
+        io.sockets.to(socket.room).emit('new message', {msg: socket.username + ' ist dem Raum beigetreten.', user: "server"});
     }
 
     function isTargetIdentityChange(userIndex, steps) {
