@@ -83,7 +83,7 @@ io.sockets.on('connection', socket => {
     });
 
     socket.on('create_room', (username, callback) => {
-        socket.username = username;
+        socket.username = username.replace(/\s/g, '');
         socket.room = getRandomInt(1000, 9999);
         roomState.set(socket.room, false);
         socket.join(socket.room);
@@ -104,8 +104,7 @@ io.sockets.on('connection', socket => {
 
     // New User
     socket.on('join_room', (username, room, callback) => {
-        const colors = ["red", "green", "blue", "yellow", "black", "violet"];
-        socket.username = username;
+        socket.username = username.replace(/\s/g, '');
         socket.room = parseInt(room);
         socket.join(room);
         if (!isEmptyOrSpaces(socket.username) && socket.username.length <= 20) {
@@ -301,7 +300,7 @@ io.sockets.on('connection', socket => {
 
     function findUserIndexByName(username) {
         for (let i in getUsers()) {
-            if (getUsers()[i].name === username) {
+            if (getUsers()[i].name.toLowerCase() === username.toLowerCase() ) {
                 return i;
             }
         }
