@@ -1,5 +1,8 @@
 # stonksXtreme
-the repository for the stonksXtreme online game
+The repository for the stonksXtreme online game.
+It is a project of the computer science students of the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
+
+
 ## Local Setup
 1. Install Node.js: https://nodejs.org/en/
 2. `git clone` the repository to your computer.
